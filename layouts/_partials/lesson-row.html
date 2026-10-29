@@ -1,0 +1,14 @@
+{{- /*
+  One row in a lesson list.
+  Usage: partial "lesson-row.html" (dict "page" $p "n" 3 "highlight" true)
+*/ -}}
+{{- $p := .page -}}
+{{- $full := eq $p.Section "lektionen" -}}
+<a href="{{ partial "fn/href.html" $p }}" class="flex min-h-16 items-center gap-4 rounded-[14px] px-3 py-2 text-ink no-underline hover:bg-paper hover:text-ink {{ if .highlight }}bg-lime-soft{{ end }}">
+  <span class="inline-flex size-9 flex-none items-center justify-center rounded-full text-sm font-bold {{ if .highlight }}bg-lime text-ink{{ else }}bg-sand text-mute{{ end }}">{{ .n }}</span>
+  <span class="flex min-w-0 flex-auto flex-col gap-0.5">
+    <span class="text-base font-semibold">{{ $p.Title }}</span>
+    <span class="text-[13px] text-mute">{{ partial "fn/meta.html" $p }}</span>
+  </span>
+  <span class="text-[13px] font-semibold text-mute">{{ if $full }}Lektion{{ else if eq $p.Section "drills" }}Drill{{ else }}Wissen{{ end }}</span>
+</a>

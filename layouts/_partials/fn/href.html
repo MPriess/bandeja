@@ -1,0 +1,6 @@
+{{- /* Link target for a learning item. A lesson opens on its first chapter. */ -}}
+{{- $href := .RelPermalink -}}
+{{- if and (eq .Section "lektionen") (eq .Kind "section") -}}
+  {{- with (where .RegularPages "Layout" "ne" "quiz").ByWeight }}{{ $href = (index . 0).RelPermalink }}{{ end -}}
+{{- end -}}
+{{- return $href -}}

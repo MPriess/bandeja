@@ -1,0 +1,20 @@
+{{- /*
+  Pill-shaped link button.
+  Usage: partial "ui/button.html" (dict "href" "/lernpfad/" "label" "Kurs starten" "variant" "lime" "size" "lg" "icon" "arrow-right")
+  variant: lime | ink | paper | outline (on light ground) | ghost (outline on dark ground)
+  size: sm (44px) | md (48px) | lg (56px)
+*/ -}}
+{{- $variants := dict
+  "lime" "bg-lime text-ink hover:text-ink hover:bg-[#d9f25c] font-bold"
+  "ink" "bg-ink text-paper hover:text-lime font-bold"
+  "paper" "bg-paper text-ink hover:text-court font-bold"
+  "outline" "border-[1.5px] border-ink text-ink font-bold hover:bg-ink hover:text-paper"
+  "ghost" "border border-ink-line text-paper hover:text-lime hover:border-fog-3 font-semibold"
+-}}
+{{- $sizes := dict "sm" "min-h-11 px-4 text-sm" "md" "min-h-12 px-[22px] text-[15px]" "lg" "min-h-14 px-7 text-[17px]" -}}
+<a href="{{ .href }}" class="inline-flex items-center justify-center gap-2.5 rounded-full no-underline transition-colors {{ index $variants (.variant | default "lime") }} {{ index $sizes (.size | default "md") }} {{ .class }}">
+  {{- with .iconBefore }}{{ partial "ui/icon.html" (dict "name" . "class" "size-[18px]") }}{{ end -}}
+  {{ .label }}
+  {{- with .icon }}{{ partial "ui/icon.html" (dict "name" . "class" "size-[18px]" "stroke" 2.2) }}{{ end -}}
+</a>
+{{- /**/ -}}

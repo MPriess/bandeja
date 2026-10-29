@@ -1,0 +1,11 @@
+{{- /* One-line description of a learning item, e.g. "6 Kapitel · Quiz · Drill". */ -}}
+{{- $meta := "" -}}
+{{- if eq .Section "lektionen" -}}
+  {{- $n := len (where .RegularPages "Layout" "ne" "quiz") -}}
+  {{- $meta = printf "%d Kapitel · Quiz · Drill" $n -}}
+{{- else if eq .Section "drills" -}}
+  {{- $meta = printf "Drill · %s · %d Min" .Params.with .Params.minutes -}}
+{{- else -}}
+  {{- $meta = printf "%s · %d Min Lesezeit" .CurrentSection.Title (partial "fn/read-time.html" .) -}}
+{{- end -}}
+{{- return $meta -}}

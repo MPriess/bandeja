@@ -1,0 +1,15 @@
+{{- /* Large dark card that opens a lesson. Usage: partial "lernpfad/feature.html" (dict "page" $p "eyebrow" "Probelektion") */ -}}
+{{- $p := .page -}}
+<a href="{{ partial "fn/href.html" $p }}" class="flex min-w-0 flex-[2_1_460px] flex-wrap items-center gap-7 rounded-[22px] bg-ink p-7 text-paper no-underline hover:text-paper">
+  <div class="flex aspect-[16/10] flex-[1_1_220px] items-center justify-center rounded-2xl bg-court">
+    {{ partial "court.html" (dict "class" "w-[82%]" "d" (or $p.Params.diag (dict
+      "cap" "Padelcourt von oben"
+      "ball" "M 300 72 Q 170 20 52 182" "tx" 52 "ty" 182 "px" 300 "py" 72))) }}
+  </div>
+  <div class="flex flex-[1_1_220px] flex-col gap-3">
+    <p class="m-0 text-[13px] font-semibold tracking-[0.07em] text-lime uppercase">{{ .eyebrow }}</p>
+    <p class="m-0 font-display text-4xl leading-none font-bold uppercase">{{ $p.Title }}</p>
+    <p class="m-0 text-[15px] text-fog">{{ partial "fn/meta.html" $p }}</p>
+    <span class="inline-flex items-center gap-2 text-[15px] font-bold text-lime">Jetzt öffnen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
+  </div>
+</a>

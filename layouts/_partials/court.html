@@ -1,0 +1,46 @@
+{{- /*
+  Padel court seen from above (net in the middle), drawn as inline SVG.
+  Usage: partial "court.html" (dict "d" $diagram "class" "w-full" "service" 74)
+
+  $diagram keys (all optional, coordinates in a 440 × 230 box):
+    cap            caption, used as the accessible label
+    zx zy zw zh zo first highlighted zone (x, y, width, height, opacity)
+    yx yy yw yh yo second highlighted zone
+    ball           SVG path of the ball's flight (dashed, lime)
+    mv             SVG path of the player's movement
+    tx ty          ball target; ring = true adds a halo
+    px py          you
+    qx qy          your partner
+    gx gy          your earlier position (ghost)
+    ax ay, bx by   opponents
+    labels         list of {x, y, t} round markers with a letter (quiz)
+  service: x of the service lines on the left half (74 in articles, 81 in lessons).
+*/ -}}
+{{- $d := .d | default dict -}}
+{{- $s := .service | default 81 -}}
+{{- $s2 := sub 440 $s -}}
+<svg viewBox="0 0 440 230" class="block h-auto {{ .class | default "w-full" }}" role="img" aria-label="{{ $d.cap | default "Padelcourt von oben" }}">
+  <rect x="10" y="10" width="420" height="210" rx="4" fill="var(--color-court-2)" stroke="var(--color-paper)" stroke-width="3"/>
+  {{- with $d.zw }}<rect x="{{ $d.zx }}" y="{{ $d.zy }}" width="{{ . }}" height="{{ $d.zh }}" fill="var(--color-lime)" opacity="{{ $d.zo | default 0.4 }}"/>{{ end }}
+  {{- with $d.yw }}<rect x="{{ $d.yx }}" y="{{ $d.yy }}" width="{{ . }}" height="{{ $d.yh }}" fill="var(--color-lime)" opacity="{{ $d.yo | default 0.4 }}"/>{{ end }}
+  <line x1="220" y1="10" x2="220" y2="220" stroke="var(--color-ink)" stroke-width="4"/>
+  <line x1="{{ $s }}" y1="10" x2="{{ $s }}" y2="220" stroke="var(--color-paper)" stroke-width="2"/>
+  <line x1="{{ $s2 }}" y1="10" x2="{{ $s2 }}" y2="220" stroke="var(--color-paper)" stroke-width="2"/>
+  <line x1="{{ $s }}" y1="115" x2="{{ $s2 }}" y2="115" stroke="var(--color-paper)" stroke-width="2"/>
+  {{- with $d.ball }}<path d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7"/>{{ end }}
+  {{- with $d.mv }}<path d="{{ . }}" fill="none" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 5"/>{{ end }}
+  {{- if isset $d "tx" }}
+    <circle cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="8" fill="var(--color-lime)"/>
+    {{- if $d.ring }}<circle cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="18" fill="none" stroke="var(--color-lime)" stroke-width="2" opacity="0.5"/>{{ end }}
+  {{- end }}
+  {{- if isset $d "ax" }}<circle cx="{{ $d.ax }}" cy="{{ $d.ay }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
+  {{- if isset $d "bx" }}<circle cx="{{ $d.bx }}" cy="{{ $d.by }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
+  {{- if isset $d "gx" }}<circle cx="{{ $d.gx }}" cy="{{ $d.gy }}" r="13" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>{{ end }}
+  {{- if isset $d "qx" }}<circle cx="{{ $d.qx }}" cy="{{ $d.qy }}" r="12" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>{{ end }}
+  {{- if isset $d "px" }}<circle cx="{{ $d.px }}" cy="{{ $d.py }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>{{ end }}
+  {{- range $d.labels }}
+    <circle cx="{{ .x }}" cy="{{ .y }}" r="22" fill="var(--color-paper)"/>
+    <text x="{{ .x }}" y="{{ add .y 7 }}" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="20" fill="var(--color-ink)">{{ .t }}</text>
+  {{- end }}
+</svg>
+{{- /**/ -}}

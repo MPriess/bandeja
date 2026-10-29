@@ -1,0 +1,42 @@
+# bandeja.
+
+Offene Online-Padelschule: ein Lernpfad in vier Stufen, Lektionen mit Court-Grafiken, Drills für den Platz und 100 Seiten Padel-Wissen. Kostenlos, ohne Konto, ohne Anmeldung – und ohne JavaScript.
+
+Gebaut mit [Hugo](https://gohugo.io) und [Tailwind CSS](https://tailwindcss.com) v4.
+
+## Loslegen
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+```bash
+npm run build
+```
+
+Hugo und das Tailwind-CLI kommen über npm mit (`hugo-extended`, `@tailwindcss/cli`). Die Seite landet in `public/`. Vor dem Veröffentlichen `baseURL` in `hugo.toml` setzen und Impressum/Datenschutz (`content/impressum.md`, `content/datenschutz.md`) ausfüllen.
+
+## Aufbau
+
+| Pfad | Inhalt |
+| --- | --- |
+| `content/lernpfad/stufe-N/_index.md` | Eine Stufe: Lektionen, Drills und die Punkte für den Stufen-Check |
+| `content/lektionen/<lektion>/` | Eine Lektion: `_index.md` (Bewegungsablauf, Drill), je Kapitel eine Datei, `quiz.md` |
+| `content/drills/` | Drills für den Court |
+| `content/wissen/<kategorie>/` | Die 100 Wissensseiten; Farben der Kategorie in `_index.md` |
+| `layouts/_partials/ui/` | Basis-Bausteine: Button, Icon, Chip, Logo, Fortschrittsbalken |
+| `layouts/_partials/court.html` | Der Padelcourt als SVG (Positionen, Flugbahn, Zielzonen) |
+| `assets/css/main.css` | Tailwind-Import, Design-Tokens (`@theme`), Schriften, Zähler |
+
+## Interaktion ohne JavaScript
+
+- **Ansicht umschalten** (Court / Bewegungsablauf) und **Quiz-Feedback**: Radio-Buttons plus CSS `:has()`.
+- **Quiz-Punktzahl** und **Treffer im Drill**: CSS-Counter (`.tally` in `main.css`).
+- **Neu starten**: `<button type="reset">`.
+- Nichts wird gespeichert; Kapitel, Stufen und Seiten sind einfache Links.
+
+Schriften (Barlow Condensed, Inter) werden über `@fontsource` selbst gehostet – keine Anfragen an Drittanbieter.

@@ -1,0 +1,34 @@
+{{- /*
+  Dark top bar used on content pages.
+  Usage: partial "site-header.html" (dict "page" . "crumbs" (slice (dict "title" "Wissen" "href" "/wissen/")) "width" "max-w-[1240px]")
+*/ -}}
+{{- $p := .page -}}
+{{- $nav := slice
+  (dict "title" "Lernpfad" "href" "/lernpfad/")
+  (dict "title" "Lektionen" "href" "/lektionen/")
+  (dict "title" "Drills" "href" "/drills/")
+  (dict "title" "Wissen" "href" "/wissen/")
+-}}
+<header class="bg-ink text-paper">
+  <div class="mx-auto flex flex-wrap items-center justify-between gap-4 px-6 py-4 {{ .width | default "max-w-[1240px]" }}">
+    <div class="flex flex-wrap items-center gap-5">
+      {{ partial "ui/logo.html" (dict "class" "text-[30px]") }}
+      {{- with .crumbs }}
+      <nav aria-label="Brotkrumen" class="flex items-center gap-2 text-sm text-fog-2">
+        {{- range $i, $c := . }}
+          {{- if $i }}<span aria-hidden="true">›</span>{{ end }}
+          {{- if $c.href }}<a href="{{ $c.href | relURL }}" class="link-light font-semibold">{{ $c.title }}</a>{{ else }}<span>{{ $c.title }}</span>{{ end }}
+        {{- end }}
+      </nav>
+      {{- end }}
+    </div>
+    <nav aria-label="Hauptnavigation" class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] font-medium">
+      {{- range $nav }}
+        {{- $active := hasPrefix $p.RelPermalink (.href | relURL) }}
+        <a href="{{ .href | relURL }}" class="link-light inline-flex min-h-11 items-center no-underline {{ if $active }}text-lime{{ end }}" {{ if $active }}aria-current="page"{{ end }}>{{ .title }}</a>
+      {{- end }}
+      {{ partial "ui/button.html" (dict "href" ("/lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
+    </nav>
+  </div>
+</header>
+{{- /**/ -}}

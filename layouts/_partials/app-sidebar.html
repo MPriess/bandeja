@@ -1,0 +1,37 @@
+{{- /*
+  Dark sidebar of the learning area (stacks on top on small screens).
+  Usage: partial "app-sidebar.html" (dict "active" "lernpfad" "level" $levelPage)
+*/ -}}
+{{- $level := .level -}}
+{{- $stufe := 1 -}}
+{{- with $level }}{{ $stufe = .Params.stufe }}{{ end -}}
+{{- $check := site.GetPage (printf "/lernpfad/stufe-%d/check" $stufe) -}}
+{{- $items := slice
+  (dict "key" "lernpfad" "title" "Lernpfad" "icon" "path" "href" ("/lernpfad/" | relURL))
+  (dict "key" "lektionen" "title" "Lektionen" "icon" "court" "href" ("/lektionen/" | relURL))
+  (dict "key" "wissen" "title" "Wissen" "icon" "book" "href" ("/wissen/" | relURL))
+  (dict "key" "drills" "title" "Drills" "icon" "calendar" "href" ("/drills/" | relURL))
+  (dict "key" "check" "title" "Stufen-Check" "icon" "trophy" "href" $check.RelPermalink)
+-}}
+<aside class="box-border flex max-w-full flex-[1_1_240px] flex-col gap-8 bg-ink px-5 py-7 text-paper md:min-h-screen md:max-w-[280px]">
+  <div class="px-3">{{ partial "ui/logo.html" (dict "class" "text-[30px]") }}</div>
+  <nav aria-label="Lernbereich" class="flex flex-col gap-1 text-[15px] font-semibold">
+    {{- range $items }}
+      {{- $on := eq .key $.active }}
+      <a href="{{ .href }}" {{ if $on }}aria-current="page"{{ end }} class="flex min-h-11 items-center gap-3 rounded-xl px-3 no-underline {{ if $on }}bg-ink-2 text-paper hover:text-paper{{ else }}text-fog hover:bg-ink-2 hover:text-paper{{ end }}">
+        {{ partial "ui/icon.html" (dict "name" .icon "class" (cond $on "size-5 text-lime" "size-5")) }}{{ .title }}
+      </a>
+    {{- end }}
+  </nav>
+  <div class="mt-auto flex flex-col gap-2.5 rounded-2xl bg-court p-[18px]">
+    {{- if $level }}
+      <p class="m-0 text-sm font-bold">Stufen-Check</p>
+      <p class="m-0 text-[13px] leading-normal text-sky">Am Ende von Stufe {{ $level.Params.stufe }} prüfst du mit einer kurzen Checkliste, ob alles sitzt.</p>
+      {{ partial "ui/button.html" (dict "href" $check.RelPermalink "label" "Zur Checkliste" "variant" "paper" "size" "sm" "class" "w-full") }}
+    {{- else }}
+      <p class="m-0 text-sm font-bold">Ohne Anmeldung</p>
+      <p class="m-0 text-[13px] leading-normal text-sky">Alle Stufen sind offen. Kein Konto, kein Einstufungstest – such dir aus, wo du einsteigst.</p>
+      {{ partial "ui/button.html" (dict "href" ("/lernpfad/stufe-1/" | relURL) "label" "Mit Stufe 1 starten" "variant" "paper" "size" "sm" "class" "w-full") }}
+    {{- end }}
+  </div>
+</aside>

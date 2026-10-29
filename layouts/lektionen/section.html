@@ -1,0 +1,23 @@
+{{ define "main" }}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt">
+    {{ partial "page-hero.html" (dict "eyebrow" "Lektionen" "title" "Schritt für Schritt zum Schlag" "text" .Description) }}
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-10 px-6 pt-12 pb-20">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(460px,100%),1fr))] gap-5">
+        {{- range .Sections.ByWeight }}
+          {{ partial "lernpfad/feature.html" (dict "page" . "eyebrow" (printf "Stufe %d · %s" (int .Params.stufe) .Params.stufeName)) }}
+        {{- end }}
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-5 rounded-[22px] bg-sand p-7">
+        <div class="flex max-w-[640px] flex-col gap-2">
+          <h2 class="m-0 text-xl font-bold">Alle Themen im Lernpfad</h2>
+          <p class="m-0 text-[15px] leading-normal text-mute">Jede Stufe im Lernpfad bündelt Lektionen und Wissensseiten zu Griff, Schlägen, Regeln und Taktik – in der Reihenfolge, in der du sie brauchst.</p>
+        </div>
+        {{ partial "ui/button.html" (dict "href" ("/lernpfad/" | relURL) "label" "Zum Lernpfad" "variant" "ink" "icon" "arrow-right") }}
+      </div>
+    </div>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

@@ -1,0 +1,8 @@
+{{- /* Legend for court diagrams. Usage: partial "court-legend.html" (dict "partner" true "class" "text-sky") */ -}}
+<div class="flex flex-wrap gap-4 text-[13px] {{ .class | default "text-sky" }}">
+  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-paper bg-ink"></span>Du</span>
+  {{- if .partner }}<span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-paper bg-ink opacity-60"></span>Partner</span>{{ end }}
+  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-dashed border-paper"></span>Gegner</span>
+  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full bg-lime"></span>{{ .ball | default "Ball / Ziel" }}</span>
+</div>
+{{- /**/ -}}

@@ -1,0 +1,104 @@
+{{ define "main" }}
+{{- $root := site.GetPage "/lernpfad" -}}
+{{- $levels := $root.Sections.ByWeight -}}
+{{- $isRoot := eq . $root -}}
+{{- $bandeja := site.GetPage "/lektionen/bandeja" -}}
+<div class="flex min-h-screen flex-wrap bg-paper">
+  {{ partial "app-sidebar.html" (dict "active" "lernpfad" "level" (cond $isRoot false .)) }}
+
+  <main id="inhalt" class="box-border flex min-w-0 flex-[999_1_560px] flex-col gap-7 px-6 pt-9 pb-12 md:px-10">
+    {{/* Title row with level switcher */}}
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div class="flex flex-col gap-1.5">
+        <p class="m-0 text-[15px] text-mute">{{ if $isRoot }}Offen für alle · ohne Anmeldung{{ else }}Lernpfad · {{ len .Params.lessons }} Lektionen{{ end }}</p>
+        <h1 class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-[52px]">{{ if $isRoot }}Dein Lernpfad{{ else }}{{ .Title }}{{ end }}</h1>
+      </div>
+      <nav aria-label="Stufen" class="flex flex-wrap gap-2">
+        {{- range $levels }}
+          {{- $on := eq . $ }}
+          <a href="{{ .RelPermalink }}" {{ if $on }}aria-current="page"{{ end }} class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold no-underline {{ if $on }}bg-ink text-paper hover:text-lime{{ else }}border border-line-2 bg-white text-ink hover:border-ink{{ end }}">Stufe {{ .Params.stufe }}</a>
+        {{- end }}
+      </nav>
+    </div>
+
+    {{- if $isRoot }}
+      {{/* Overview of all levels */}}
+      <div class="flex flex-wrap gap-5">
+        {{ partial "lernpfad/feature.html" (dict "page" $bandeja "eyebrow" "Probelektion") }}
+        <div class="flex min-w-0 flex-[1_1_260px] flex-col gap-4 rounded-[22px] border border-line bg-white p-6">
+          <p class="m-0 text-[15px] font-bold">So funktioniert's</p>
+          <ol class="m-0 flex list-none flex-col gap-3 p-0 text-sm leading-normal text-mute">
+            {{- range $i, $t := slice "Wähle die Stufe, die zu dir passt – alle sind frei zugänglich." "Arbeite die Lektionen durch und nimm die Drills mit auf den Court." "Geh am Ende die Checkliste im Stufen-Check durch." }}
+            <li class="flex items-start gap-3"><span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-ink text-[13px] font-bold text-lime">{{ add $i 1 }}</span><span class="pt-1">{{ $t }}</span></li>
+            {{- end }}
+          </ol>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
+        {{- range $levels }}
+        <a href="{{ .RelPermalink }}" class="flex flex-col gap-4 rounded-[22px] border border-line bg-white p-6 text-ink no-underline hover:border-court hover:text-ink">
+          <p class="m-0 font-display text-[56px] leading-none font-extrabold text-court">{{ printf "%02d" .Params.stufe }}</p>
+          <h2 class="m-0 text-[22px] font-bold">{{ .Params.name }}</h2>
+          <p class="m-0 text-[15px] leading-normal text-mute">{{ .Description }}</p>
+          <p class="m-0 mt-auto text-sm font-semibold">{{ len .Params.lessons }} Lektionen · {{ len .Params.drills }} Drills →</p>
+        </a>
+        {{- end }}
+      </div>
+
+    {{- else }}
+      {{/* One level */}}
+      {{- $lessons := slice }}
+      {{- range .Params.lessons }}{{ with site.GetPage . }}{{ $lessons = $lessons | append . }}{{ end }}{{ end }}
+      {{- $featured := index $lessons 0 }}
+      {{- range $lessons }}{{ if eq .Section "lektionen" }}{{ $featured = . }}{{ end }}{{ end }}
+
+      <div class="flex flex-wrap gap-5">
+        {{ partial "lernpfad/feature.html" (dict "page" $featured "eyebrow" (cond (eq $featured.Section "lektionen") "Herzstück dieser Stufe" "Hier beginnst du")) }}
+        <div class="flex min-w-0 flex-[1_1_260px] flex-col gap-3 rounded-[22px] border border-line bg-white p-6">
+          <p class="m-0 text-[15px] font-bold">Drills dieser Stufe</p>
+          <ul class="m-0 flex list-none flex-col p-0">
+            {{- range .Params.drills }}{{ with site.GetPage . }}
+            <li class="border-b border-sand last:border-0">
+              <a href="{{ .RelPermalink }}" class="flex min-h-12 items-center gap-3 text-sm font-semibold no-underline">
+                {{ partial "ui/icon.html" (dict "name" "drill" "class" "size-[18px] flex-none text-court") }}{{ .Title }}
+              </a>
+            </li>
+            {{- end }}{{ end }}
+          </ul>
+          <a href="{{ "/drills/" | relURL }}" class="mt-auto inline-flex min-h-11 items-center text-sm font-bold">Alle Drills →</a>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-start gap-5">
+        <section aria-labelledby="lektionen" class="flex min-w-0 flex-[2_1_460px] flex-col gap-1.5 rounded-[22px] border border-line bg-white p-6">
+          <div class="flex items-center justify-between gap-3 pb-2.5">
+            <h2 id="lektionen" class="m-0 text-lg font-bold">Lektionen in Stufe {{ .Params.stufe }}</h2>
+            <span class="text-sm text-mute">{{ len $lessons }} Lektionen</span>
+          </div>
+          {{- range $i, $l := $lessons }}
+            {{ partial "lesson-row.html" (dict "page" $l "n" (add $i 1) "highlight" (eq $l $featured)) }}
+          {{- end }}
+        </section>
+
+        <section aria-labelledby="ziel" class="flex min-w-0 flex-[1_1_260px] flex-col gap-4 rounded-[22px] bg-sand p-6">
+          <h2 id="ziel" class="m-0 text-lg font-bold">Darum geht's</h2>
+          <p class="m-0 text-sm leading-normal text-mute">{{ .Description }}</p>
+          <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
+            {{- range .Params.tags }}<li>{{ partial "ui/chip.html" (dict "text" . "class" "bg-white") }}</li>{{ end }}
+          </ul>
+          <p class="m-0 text-sm font-bold">Danach kannst du …</p>
+          <ul class="m-0 flex list-none flex-col gap-2 p-0 text-sm leading-normal">
+            {{- range first 3 .Params.check }}
+            <li class="flex items-start gap-2.5">{{ partial "ui/icon.html" (dict "name" "check" "class" "mt-0.5 size-4 flex-none text-court" "stroke" 2.6) }}<span>{{ . }}</span></li>
+            {{- end }}
+          </ul>
+          {{- with site.GetPage (printf "%s/check" .Path) }}
+          <a href="{{ .RelPermalink }}" class="rounded-[14px] bg-white p-3.5 text-sm leading-normal no-underline"><strong>Nächster Schritt:</strong> Stufen-Check mit allen Punkten →</a>
+          {{- end }}
+        </section>
+      </div>
+    {{- end }}
+  </main>
+</div>
+{{ end }}

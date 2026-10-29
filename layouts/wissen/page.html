@@ -1,0 +1,123 @@
+{{ define "main" }}
+{{- $cat := .CurrentSection -}}
+{{- $all := (site.GetPage "/wissen").RegularPagesRecursive.ByWeight -}}
+{{- $pos := 0 -}}
+{{- range $i, $p := $all }}{{ if eq $p $ }}{{ $pos = $i }}{{ end }}{{ end -}}
+{{- $prev := cond (gt $pos 0) (index $all (sub $pos 1)) false -}}
+{{- $next := cond (lt $pos (sub (len $all) 1)) (index $all (add $pos 1)) false -}}
+{{- $p := .Params -}}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" . "width" "max-w-[1180px]" "crumbs" (slice (dict "title" "Wissen" "href" "/wissen/") (dict "title" $cat.Title "href" $cat.RelPermalink))) }}
+
+  <main id="inhalt">
+    <section class="px-6 pt-14 pb-16 {{ $cat.Params.style.hero }}">
+      <div class="mx-auto flex max-w-[1180px] flex-col gap-[18px]">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a href="{{ $cat.RelPermalink }}" class="rounded-full px-3 py-1.5 text-[13px] font-bold no-underline {{ $cat.Params.style.chip }} hover:opacity-90">{{ $cat.Title }}</a>
+          <span class="text-sm font-semibold opacity-85">Seite {{ add $pos 1 }} von {{ len $all }} · {{ partial "fn/read-time.html" . }} Min Lesezeit</span>
+        </div>
+        <h1 class="m-0 max-w-[960px] font-display text-5xl leading-[0.92] font-extrabold uppercase md:text-[76px]">{{ .Title }}</h1>
+        <p class="m-0 max-w-[760px] text-xl leading-relaxed opacity-90">{{ .Description }}</p>
+      </div>
+    </section>
+
+    <div class="mx-auto flex max-w-[1180px] flex-wrap items-start gap-8 px-6 pt-12 pb-14">
+      <article class="flex min-w-0 flex-[999_1_560px] flex-col gap-8">
+        {{- with $p.diag }}
+        <figure class="m-0 flex flex-col gap-3.5 rounded-[22px] bg-court p-6 text-paper">
+          {{ partial "court.html" (dict "d" . "service" 74) }}
+          <figcaption class="text-[15px] leading-normal font-semibold">{{ .cap }}</figcaption>
+          {{ partial "court-legend.html" (dict "partner" true) }}
+        </figure>
+        {{- end }}
+
+        {{- range $p.sections }}
+        <section class="flex flex-col gap-2.5">
+          <h2 class="m-0 text-[26px] leading-tight font-bold">{{ .h }}</h2>
+          <p class="m-0 text-[17px] leading-[1.7] text-body">{{ .p }}</p>
+        </section>
+        {{- end }}
+
+        {{- with $p.steps }}
+        <section class="flex flex-col gap-3.5">
+          <h2 class="m-0 text-[26px] font-bold">{{ $p.stepsTitle | default "Schritt für Schritt" }}</h2>
+          <ol class="m-0 flex list-none flex-col gap-2.5 p-0">
+            {{- range $i, $t := . }}
+            <li class="flex items-start gap-3.5 rounded-2xl border border-line bg-white px-[18px] py-4">
+              <span class="inline-flex size-8 flex-none items-center justify-center rounded-full bg-ink text-sm font-bold text-lime">{{ add $i 1 }}</span>
+              <span class="pt-1 text-base leading-normal">{{ $t }}</span>
+            </li>
+            {{- end }}
+          </ol>
+        </section>
+        {{- end }}
+
+        {{- with $p.mistake }}
+        <div class="flex items-start gap-3.5 rounded-[18px] bg-warn-soft px-5 py-[18px]">
+          {{ partial "ui/icon.html" (dict "name" "warn" "class" "size-6 flex-none text-warn") }}
+          <p class="m-0 text-base leading-relaxed"><strong>Typischer Fehler:</strong> {{ . }}</p>
+        </div>
+        {{- end }}
+
+        {{- with $p.tips }}
+        <section class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-[26px] text-paper">
+          <h2 class="m-0 text-sm font-bold tracking-[0.07em] text-lime uppercase">Merke dir</h2>
+          <ul class="m-0 flex list-none flex-col gap-2.5 p-0">
+            {{- range . }}
+            <li class="flex items-start gap-3 text-base leading-normal">
+              {{ partial "ui/icon.html" (dict "name" "check" "class" "mt-0.5 size-5 flex-none text-lime" "stroke" 2.6) }}
+              <span>{{ . }}</span>
+            </li>
+            {{- end }}
+          </ul>
+        </section>
+        {{- end }}
+
+        {{- with partial "fn/level-of.html" . }}
+        <p class="m-0 rounded-[18px] bg-lime-soft px-5 py-4 text-[15px] leading-normal">Diese Seite gehört zu <a href="{{ .RelPermalink }}" class="font-bold">{{ .Title }}</a> im Lernpfad.</p>
+        {{- end }}
+
+        <nav aria-label="Weiterblättern" class="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
+          <a href="{{ with $prev }}{{ .RelPermalink }}{{ else }}{{ "/wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] border border-line bg-white px-5 py-[18px] text-ink no-underline hover:border-ink hover:text-ink">
+            <span class="text-[13px] font-semibold text-mute">← Vorherige Seite</span>
+            <span class="text-[17px] font-bold">{{ with $prev }}{{ .Title }}{{ else }}Übersicht{{ end }}</span>
+          </a>
+          <a href="{{ with $next }}{{ .RelPermalink }}{{ else }}{{ "/wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] bg-ink px-5 py-[18px] text-right text-paper no-underline hover:text-paper">
+            <span class="text-[13px] font-semibold text-lime">Nächste Seite →</span>
+            <span class="text-[17px] font-bold">{{ with $next }}{{ .Title }}{{ else }}Zurück zur Übersicht{{ end }}</span>
+          </a>
+        </nav>
+      </article>
+
+      <aside class="flex min-w-0 flex-[1_1_300px] flex-col gap-5">
+        {{- with $p.facts }}
+        <section class="flex flex-col gap-1 rounded-[20px] border border-line bg-white p-[22px]">
+          <h2 class="m-0 mb-2 text-base font-bold">Auf einen Blick</h2>
+          <dl class="m-0 flex flex-col">
+            {{- range . }}
+            <div class="flex flex-col gap-0.5 border-t border-sand py-3">
+              <dt class="text-[13px] font-semibold text-mute">{{ .k }}</dt>
+              <dd class="m-0 text-base font-bold">{{ .v }}</dd>
+            </div>
+            {{- end }}
+          </dl>
+        </section>
+        {{- end }}
+
+        <nav aria-label="Seiten dieser Kategorie" class="flex flex-col gap-0.5 rounded-[20px] bg-sand p-[18px]">
+          <h2 class="m-0 mb-2 ml-2 text-base font-bold">{{ $cat.Title }}</h2>
+          {{- range $cat.RegularPages.ByWeight }}
+            {{- $cur := eq . $ }}
+            <a href="{{ .RelPermalink }}" {{ if $cur }}aria-current="page"{{ end }} class="flex min-h-11 items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm text-ink no-underline hover:bg-white/60 {{ if $cur }}bg-white font-bold{{ else }}font-medium{{ end }}">
+              <span class="w-9 flex-none text-xs font-bold text-mute">{{ .Params.id }}</span>
+              <span>{{ .Title }}</span>
+            </a>
+          {{- end }}
+        </nav>
+      </aside>
+    </div>
+  </main>
+
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

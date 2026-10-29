@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="flex min-h-screen flex-col">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt" class="flex-1 px-6 pt-14 pb-20">
+    <article class="mx-auto flex max-w-[760px] flex-col gap-6">
+      <h1 class="m-0 font-display text-6xl leading-[0.95] font-extrabold uppercase">{{ .Title }}</h1>
+      <div class="prose-bandeja">{{ .Content }}</div>
+    </article>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

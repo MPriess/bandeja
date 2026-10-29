@@ -1,0 +1,5 @@
+{{- /* Minutes to read a Wissen article (lead + sections, ~900 characters per minute, at least 2). */ -}}
+{{- $chars := len (.Description | default "") -}}
+{{- range .Params.sections }}{{ $chars = add $chars (len .p) }}{{ end -}}
+{{- $min := int (math.Max 2 (math.Round (div (float $chars) 900))) -}}
+{{- return $min -}}

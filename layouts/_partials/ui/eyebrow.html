@@ -1,0 +1,3 @@
+{{- /* Small uppercase label above headings. Usage: partial "ui/eyebrow.html" (dict "text" "…" "class" "text-court") */ -}}
+<p class="m-0 text-sm font-semibold tracking-[0.08em] uppercase {{ .class | default "text-court" }}">{{ .text }}</p>
+{{- /**/ -}}

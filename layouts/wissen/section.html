@@ -1,0 +1,56 @@
+{{ define "main" }}
+{{- $root := site.GetPage "/wissen" -}}
+{{- $isRoot := eq . $root -}}
+{{- $cats := $root.Sections.ByWeight -}}
+{{- $shown := cond $isRoot $cats (slice .) -}}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" . "crumbs" (cond $isRoot slice (slice (dict "title" "Wissen" "href" "/wissen/") (dict "title" .Title)))) }}
+
+  <main id="inhalt">
+    <section class="bg-ink px-6 pt-10 pb-16 text-paper">
+      <div class="mx-auto flex max-w-[1240px] flex-col gap-6">
+        {{ partial "ui/eyebrow.html" (dict "text" "Padel-Wissen" "class" "text-lime") }}
+        {{- if $isRoot }}
+          <h1 class="m-0 max-w-[960px] font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-8xl">{{ len $root.RegularPagesRecursive }} Seiten.<br>Alles, was du über Padel wissen musst.</h1>
+        {{- else }}
+          <h1 class="m-0 max-w-[960px] font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-8xl">{{ .Title }}</h1>
+        {{- end }}
+        <p class="m-0 max-w-[640px] text-[19px] leading-relaxed text-fog">{{ .Description }}</p>
+      </div>
+    </section>
+
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-8 px-6 pt-8 pb-18">
+      <nav aria-label="Kategorie filtern" class="flex flex-wrap gap-2.5">
+        {{- $chips := slice (dict "title" "Alle" "count" (len $root.RegularPagesRecursive) "href" $root.RelPermalink "on" $isRoot) -}}
+        {{- range $cats }}{{ $chips = $chips | append (dict "title" .Title "count" (len .RegularPages) "href" .RelPermalink "on" (eq . $)) }}{{ end -}}
+        {{- range $chips }}
+          <a href="{{ .href }}" {{ if .on }}aria-current="page"{{ end }} class="inline-flex min-h-11 items-center gap-1.5 rounded-full px-[18px] text-[15px] font-semibold no-underline {{ if .on }}border-2 border-ink bg-ink text-paper hover:text-lime{{ else }}border border-line-2 bg-white text-ink hover:border-ink{{ end }}">{{ .title }} <span class="opacity-70">{{ .count }}</span></a>
+        {{- end }}
+      </nav>
+
+      {{- range $shown }}
+      <section class="flex flex-col gap-4" aria-labelledby="kat-{{ .Params.key }}">
+        <div class="flex flex-wrap items-center gap-3.5">
+          <span class="size-3.5 rounded {{ .Params.style.dot }}"></span>
+          <h2 id="kat-{{ .Params.key }}" class="m-0 font-display text-[40px] leading-none font-extrabold uppercase">
+            {{- if $isRoot }}<a href="{{ .RelPermalink }}" class="no-underline">{{ .Title }}</a>{{ else }}{{ .Title }}{{ end -}}
+          </h2>
+          <span class="text-[15px] text-mute">{{ len .RegularPages }} Seiten</span>
+        </div>
+        {{- if $isRoot }}<p class="m-0 max-w-[720px] text-base text-mute">{{ .Description }}</p>{{ end }}
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-2.5">
+          {{- range .RegularPages.ByWeight }}
+          <a href="{{ .RelPermalink }}" class="flex min-h-[60px] items-center gap-3 rounded-[14px] border border-line bg-white px-4 py-2.5 text-ink no-underline hover:border-ink hover:text-ink">
+            <span class="w-10 flex-none text-xs font-bold text-mute">{{ .Params.id }}</span>
+            <span class="text-[15px] leading-snug font-semibold">{{ .Title }}</span>
+          </a>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    </div>
+  </main>
+
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

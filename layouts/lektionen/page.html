@@ -1,0 +1,140 @@
+{{ define "main" }}
+{{- $lesson := .CurrentSection -}}
+{{- $chapters := (where $lesson.RegularPages "Layout" "ne" "quiz").ByWeight -}}
+{{- $quiz := index (where $lesson.RegularPages "Layout" "quiz") 0 -}}
+{{- $level := partial "fn/level-of.html" $lesson -}}
+{{- $pos := 0 -}}
+{{- range $i, $c := $chapters }}{{ if eq $c $ }}{{ $pos = $i }}{{ end }}{{ end -}}
+{{- $total := len $chapters -}}
+{{- $isLast := eq $pos (sub $total 1) -}}
+{{- $court := merge (dict "ax" 130 "ay" 70 "bx" 140 "by" 165) (.Params.court | default dict) -}}
+{{- $lessonNo := 0 -}}
+{{- $backHref := "/lektionen/" | relURL -}}
+{{- with $level }}
+  {{- $backHref = .RelPermalink }}
+  {{- range $i, $l := .Params.lessons }}{{ if eq $l $lesson.Path }}{{ $lessonNo = add $i 1 }}{{ end }}{{ end }}
+{{- end -}}
+<div class="min-h-screen">
+  <header class="bg-ink text-paper">
+    <div class="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
+      <div class="flex flex-wrap items-center gap-4">
+        <a href="{{ $backHref }}" aria-label="Zurück zum Lernpfad" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[13px] text-fog-2">{{ with $level }}{{ .Title }} · Lektion {{ $lessonNo }}{{ else }}Lektion{{ end }}</span>
+          <span class="font-display text-[26px] leading-none font-bold uppercase">{{ $lesson.Title }}</span>
+        </div>
+      </div>
+      <div class="flex min-w-[220px] items-center gap-3.5">
+        {{ partial "ui/progress.html" (dict "value" (mul (div (float (add $pos 1)) $total) 100) "label" (printf "Kapitel %d von %d" (add $pos 1) $total) "class" "flex-[1_1_160px]") }}
+        <span class="text-sm font-semibold whitespace-nowrap">Kapitel {{ add $pos 1 }} / {{ $total }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="inhalt" class="mx-auto flex max-w-[1360px] flex-wrap items-start gap-6 px-6 pt-7 pb-12">
+    <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
+
+      {{/* Court view / movement view, switched with radio buttons and :has() — no JavaScript */}}
+      <div class="group/view overflow-hidden rounded-[22px] bg-ink text-paper">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-2 px-[18px] py-3.5">
+          <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink-2 p-1">
+            <label class="inline-flex min-h-10 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+              <input type="radio" name="ansicht" id="ansicht-court" class="sr-only" checked>Court-Ansicht
+            </label>
+            <label class="inline-flex min-h-10 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+              <input type="radio" name="ansicht" id="ansicht-flow" class="sr-only">Bewegungsablauf
+            </label>
+          </div>
+          {{ partial "court-legend.html" (dict "class" "text-fog" "ball" "Ball") }}
+        </div>
+
+        <div class="hidden flex-col items-center gap-[18px] bg-court p-7 group-has-[#ansicht-court:checked]/view:flex">
+          {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]") }}
+          <p class="m-0 max-w-[620px] text-center text-base font-semibold">{{ $court.cap }}</p>
+        </div>
+
+        <div class="hidden grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5 p-6 group-has-[#ansicht-flow:checked]/view:grid">
+          {{- range $i, $ph := $lesson.Params.phases }}
+          <div class="flex flex-col gap-3 rounded-[18px] bg-ink-2 p-5">
+            <span class="font-display text-[44px] leading-none font-extrabold text-lime">{{ printf "%02d" (add $i 1) }}</span>
+            <span class="text-lg font-bold">{{ $ph.title }}</span>
+            <ul class="m-0 flex flex-col gap-1.5 pl-[18px] text-sm leading-normal text-fog">
+              {{- range $ph.items }}<li>{{ . }}</li>{{ end }}
+            </ul>
+          </div>
+          {{- end }}
+        </div>
+      </div>
+
+      <section aria-labelledby="kap" class="flex flex-col gap-[18px] rounded-[22px] border border-line bg-white p-7">
+        {{ partial "ui/eyebrow.html" (dict "text" (printf "Kapitel %d · %s Lesezeit" (add $pos 1) .Params.dauer) "class" "text-[13px] text-court") }}
+        <h1 id="kap" class="m-0 font-display text-[44px] leading-none font-extrabold uppercase">{{ .Title }}</h1>
+        <p class="m-0 max-w-[720px] text-[17px] leading-relaxed text-mute">{{ .Params.intro }}</p>
+        <ol class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3 p-0">
+          {{- range $i, $t := .Params.points }}
+          <li class="flex items-start gap-3 rounded-2xl bg-paper p-[18px]">
+            <span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-ink text-[13px] font-bold text-lime">{{ add $i 1 }}</span>
+            <span class="text-[15px] leading-normal">{{ $t }}</span>
+          </li>
+          {{- end }}
+        </ol>
+        {{- with .Params.mistake }}
+        <div class="flex items-start gap-3 rounded-2xl bg-warn-soft px-[18px] py-4">
+          {{ partial "ui/icon.html" (dict "name" "warn" "class" "size-[22px] flex-none text-warn") }}
+          <p class="m-0 text-[15px] leading-normal"><strong>Typischer Fehler:</strong> {{ . }}</p>
+        </div>
+        {{- end }}
+        <nav aria-label="Kapitel blättern" class="flex flex-wrap justify-between gap-3 pt-1.5">
+          {{- if gt $pos 0 }}
+            {{ partial "ui/button.html" (dict "href" (index $chapters (sub $pos 1)).RelPermalink "label" "← Vorheriges Kapitel" "variant" "outline") }}
+          {{- else }}
+            {{ partial "ui/button.html" (dict "href" $backHref "label" "← Zur Übersicht" "variant" "outline") }}
+          {{- end }}
+          {{- if $isLast }}
+            {{ with $quiz }}{{ partial "ui/button.html" (dict "href" .RelPermalink "label" "Zum Lektions-Quiz →") }}{{ end }}
+          {{- else }}
+            {{ partial "ui/button.html" (dict "href" (index $chapters (add $pos 1)).RelPermalink "label" "Nächstes Kapitel →" "variant" "ink") }}
+          {{- end }}
+        </nav>
+      </section>
+    </div>
+
+    <aside class="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
+      <nav aria-label="Kapitel" class="flex flex-col gap-1 rounded-[22px] border border-line bg-white p-[18px]">
+        <p class="m-0 mb-2 ml-2 text-base font-bold">Kapitel</p>
+        {{- range $i, $c := $chapters }}
+          {{- $cur := eq $i $pos }}{{ $before := lt $i $pos }}
+          <a href="{{ $c.RelPermalink }}" {{ if $cur }}aria-current="step"{{ end }} class="flex min-h-14 items-center gap-3 rounded-[14px] px-2.5 py-2 text-ink no-underline hover:bg-paper hover:text-ink {{ if $cur }}bg-lime-soft{{ end }}">
+            <span class="inline-flex size-8 flex-none items-center justify-center rounded-full text-[13px] font-bold {{ if $cur }}bg-lime text-ink{{ else if $before }}bg-court text-paper{{ else }}bg-sand text-mute{{ end }}">
+              {{- if $before }}{{ partial "ui/icon.html" (dict "name" "check" "class" "size-4" "stroke" 3) }}<span class="sr-only">Gelesen: </span>{{ else }}{{ add $i 1 }}{{ end -}}
+            </span>
+            <span class="flex-auto text-[15px] font-semibold">{{ $c.Title }}</span>
+            <span class="text-[13px] whitespace-nowrap text-mute">{{ $c.Params.dauer }}</span>
+          </a>
+        {{- end }}
+        {{- with $quiz }}
+        <a href="{{ .RelPermalink }}" class="mt-1.5 flex min-h-14 items-center gap-3 rounded-[14px] border-t border-sand px-2.5 py-2 text-ink no-underline hover:bg-paper hover:text-ink">
+          <span class="inline-flex size-8 flex-none items-center justify-center rounded-full bg-sand">{{ partial "ui/icon.html" (dict "name" "question" "class" "size-4" "stroke" 2.2) }}</span>
+          <span class="flex-auto text-[15px] font-semibold">Lektions-Quiz</span>
+          <span class="text-[13px] text-mute">{{ len .Params.questions }} Fragen</span>
+        </a>
+        {{- end }}
+      </nav>
+
+      {{- with site.GetPage $lesson.Params.drill }}
+      <section aria-labelledby="drill" class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-6 text-paper">
+        {{ partial "ui/eyebrow.html" (dict "text" "Drill zur Lektion" "class" "text-[13px] text-lime") }}
+        <h2 id="drill" class="m-0 text-xl font-bold">{{ .Title }}</h2>
+        <p class="m-0 text-sm leading-normal text-fog">{{ .Description }}</p>
+        <div class="flex flex-wrap gap-2">
+          {{ partial "ui/chip.html" (dict "text" .Params.with "class" "bg-ink-2") }}
+          {{ partial "ui/chip.html" (dict "text" (printf "%d Min" .Params.minutes) "class" "bg-ink-2") }}
+          {{ partial "ui/chip.html" (dict "text" (printf "%d × %d Bälle" .Params.sets .Params.balls) "class" "bg-ink-2") }}
+        </div>
+        {{ partial "ui/button.html" (dict "href" .RelPermalink "label" "Drill öffnen") }}
+      </section>
+      {{- end }}
+    </aside>
+  </main>
+</div>
+{{ end }}

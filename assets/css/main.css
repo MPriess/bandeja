@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@source "hugo_stats.json";
+
+/* Fonts are self-hosted from @fontsource (mounted to /fonts in hugo.toml). */
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+/* Design tokens. `static` keeps every variable in the output so SVG fills can use them. */
+@theme static {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+
+  --color-ink: #0c1a24;
+  --color-ink-2: #22323e;
+  --color-ink-line: #3a4a56;
+  --color-paper: #f3f4ee;
+  --color-sand: #ebeee3;
+  --color-line: #daddd3;
+  --color-line-2: #c5cabd;
+  --color-mute: #4a5a66;
+  --color-body: #2e3e49;
+  --color-fog: #c9d2d8;
+  --color-fog-2: #b9c4cc;
+  --color-fog-3: #8e9ca6;
+
+  --color-lime: #cdeb3b;
+  --color-lime-soft: #f1f7d4;
+  --color-court: #1e4fa0;
+  --color-court-2: #2a63be;
+  --color-court-soft: #e4ecf8;
+  --color-court-pale: #8da9d6;
+  --color-sky: #e2e9f5;
+  --color-sky-2: #d6e0f0;
+  --color-warn: #a3431f;
+  --color-warn-soft: #fbede6;
+  --color-warn-bright: #e07a52;
+  --color-clay: #c2552e;
+  --color-moss: #3a6e3a;
+
+  /* Wissen categories */
+  --color-cat-r: #1e4fa0;
+  --color-cat-t: #24603a;
+  --color-cat-s: #8a3b1f;
+  --color-cat-z: #4f3a86;
+  --color-cat-b: #cdeb3b;
+  --color-cat-b-dot: #8c9a1e;
+  --color-cat-tr: #0c1a24;
+  --color-cat-m: #0e5e6f;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+  a {
+    @apply text-ink;
+  }
+  a:hover {
+    @apply text-court;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-lime;
+  }
+}
+
+/* A white-on-dark link keeps its colour on hover. */
+@utility link-light {
+  color: var(--color-paper);
+  &:hover {
+    color: var(--color-lime);
+  }
+}
+
+/*
+  Counting without JavaScript: inside a .tally element every checked input with
+  [data-tally] adds one, and .tally-out prints the total. Used for the quiz score
+  and the ball count on drill pages. The output must come after the inputs.
+*/
+@layer components {
+  .tally {
+    counter-reset: tally;
+  }
+  .tally input[data-tally]:checked {
+    counter-increment: tally;
+  }
+  .tally-out::before {
+    content: counter(tally);
+  }
+}
+
+/* Markdown pages such as Impressum and Datenschutz. */
+@layer components {
+  .prose-bandeja {
+    @apply flex flex-col gap-4 text-[17px] leading-[1.7] text-body;
+  }
+  .prose-bandeja h2 {
+    @apply mt-4 mb-0 text-[26px] leading-tight font-bold text-ink;
+  }
+  .prose-bandeja p {
+    @apply m-0;
+  }
+}

@@ -1,0 +1,101 @@
+{{ define "main" }}
+{{- $level := .Parent -}}
+{{- $n := int $level.Params.stufe -}}
+{{- $next := site.GetPage (printf "/lernpfad/stufe-%d" (add $n 1)) -}}
+{{- $lessons := slice -}}
+{{- range $level.Params.lessons }}{{ with site.GetPage . }}{{ $lessons = $lessons | append . }}{{ end }}{{ end -}}
+<div class="min-h-screen">
+  <section class="bg-ink px-6 pt-7 pb-18 text-paper">
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-12">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        {{ partial "ui/logo.html" (dict "class" "text-[30px]") }}
+        {{ partial "ui/button.html" (dict "href" $level.RelPermalink "label" (printf "Zurück zu Stufe %d" $n) "variant" "ghost" "size" "sm") }}
+      </div>
+      <div class="flex flex-wrap items-center gap-12">
+        <div class="flex flex-none items-center gap-[18px]" aria-hidden="true">
+          <div class="flex size-[140px] flex-col items-center justify-center rounded-full bg-lime text-ink">
+            <span class="text-[13px] font-bold tracking-[0.08em] uppercase">Stufe</span>
+            <span class="font-display text-7xl leading-[0.9] font-extrabold">{{ $n }}</span>
+          </div>
+          {{- with $next }}
+          {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-10 text-lime" "stroke" 2.2) }}
+          <div class="flex size-[140px] flex-col items-center justify-center rounded-full border-[3px] border-ink-line text-fog-3">
+            <span class="text-[13px] font-bold tracking-[0.08em] uppercase">Stufe</span>
+            <span class="font-display text-7xl leading-[0.9] font-extrabold">{{ .Params.stufe }}</span>
+          </div>
+          {{- end }}
+        </div>
+        <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-4">
+          {{ partial "ui/eyebrow.html" (dict "text" (printf "Stufen-Check · %s" $level.Title) "class" "text-lime") }}
+          <h1 class="m-0 font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-[88px]">{{ $level.Params.checkTitle }}</h1>
+          <p class="m-0 max-w-[560px] text-lg leading-relaxed text-fog">Geh die Punkte ehrlich durch. Was du abhaken kannst, sitzt. Was noch hakt, wiederholst du mit den passenden Lektionen. Nichts davon wird gespeichert – die Liste ist nur für dich.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="inhalt" class="px-6 pt-14 pb-18">
+    <div class="mx-auto flex max-w-[1240px] flex-wrap items-start gap-6">
+      <form class="flex min-w-0 flex-[1_1_380px] flex-col gap-4 rounded-[22px] border border-line bg-white p-7" aria-labelledby="kann">
+        <h2 id="kann" class="m-0 text-xl font-bold">Das solltest du können</h2>
+        <ul class="m-0 flex list-none flex-col gap-1 p-0">
+          {{- range $i, $t := $level.Params.check }}
+          <li>
+            <label class="flex min-h-[60px] cursor-pointer items-center gap-3.5 border-b border-sand py-2 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+              <input type="checkbox" name="punkt-{{ $i }}" class="peer sr-only">
+              <span class="inline-flex size-8 flex-none items-center justify-center rounded-full border-2 border-line-2 text-transparent peer-checked:border-court peer-checked:bg-court peer-checked:text-paper">
+                {{ partial "ui/icon.html" (dict "name" "check" "class" "size-4" "stroke" 3) }}
+              </span>
+              <span class="flex-auto text-base font-semibold">{{ $t }}</span>
+            </label>
+          </li>
+          {{- end }}
+        </ul>
+        <button type="reset" class="inline-flex min-h-11 cursor-pointer items-center self-start text-sm font-bold underline-offset-4 hover:underline">Alle Häkchen entfernen</button>
+      </form>
+
+      <section class="flex min-w-0 flex-[1_1_380px] flex-col gap-4 rounded-[22px] bg-sand p-7" aria-labelledby="wiederholen">
+        <h2 id="wiederholen" class="m-0 text-xl font-bold">Wenn's noch hakt</h2>
+        <p class="m-0 text-[15px] leading-normal text-mute">Alle Lektionen dieser Stufe auf einen Blick. Nimm dir die vor, die zu deinen offenen Punkten passen.</p>
+        <ul class="m-0 flex list-none flex-col gap-1 p-0">
+          {{- range $lessons }}
+          <li>
+            <a href="{{ partial "fn/href.html" . }}" class="flex min-h-11 items-center justify-between gap-3 rounded-xl px-3 py-2 text-[15px] font-semibold no-underline hover:bg-white">
+              <span>{{ .Title }}</span><span aria-hidden="true">→</span>
+            </a>
+          </li>
+          {{- end }}
+        </ul>
+      </section>
+
+      <div class="flex flex-[1_1_100%] flex-wrap items-center gap-7 rounded-[22px] bg-ink p-8 text-paper">
+        {{- with $next }}
+        <div class="flex flex-[1_1_360px] flex-col gap-2.5">
+          {{ partial "ui/eyebrow.html" (dict "text" (printf "Als Nächstes · Stufe %d" (int .Params.stufe)) "class" "text-[13px] text-lime") }}
+          <h2 class="m-0 font-display text-[44px] leading-none font-extrabold uppercase">{{ .Params.name }}</h2>
+          <ul class="m-0 flex list-none flex-wrap gap-2 p-0">
+            {{- range .Params.lessons }}{{ with site.GetPage . }}<li>{{ partial "ui/chip.html" (dict "text" .Title "class" "bg-ink-2 text-sm px-3 py-2") }}</li>{{ end }}{{ end }}
+          </ul>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          {{ partial "ui/button.html" (dict "href" $level.RelPermalink "label" (printf "Stufe %d wiederholen" $n) "variant" "ghost" "size" "lg") }}
+          {{ partial "ui/button.html" (dict "href" .RelPermalink "label" (printf "Stufe %d starten" (int .Params.stufe)) "size" "lg" "icon" "arrow-right") }}
+        </div>
+        {{- else }}
+        <div class="flex flex-[1_1_360px] flex-col gap-2.5">
+          {{ partial "ui/eyebrow.html" (dict "text" "Lernpfad abgeschlossen" "class" "text-[13px] text-lime") }}
+          <h2 class="m-0 font-display text-[44px] leading-none font-extrabold uppercase">Ab ins Turnier</h2>
+          <p class="m-0 max-w-[560px] text-base leading-relaxed text-fog">Du hast alle vier Stufen durch. Such dir eine Spielform aus und probier dein Können im Match aus.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          {{ partial "ui/button.html" (dict "href" ("/wissen/spielmodi/" | relURL) "label" "Spielmodi ansehen" "variant" "ghost" "size" "lg") }}
+          {{ with site.GetPage "/wissen/spielmodi/m12" }}{{ partial "ui/button.html" (dict "href" .RelPermalink "label" .Title "size" "lg" "icon" "arrow-right") }}{{ end }}
+        </div>
+        {{- end }}
+      </div>
+    </div>
+  </main>
+
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

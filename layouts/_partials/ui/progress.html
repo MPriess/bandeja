@@ -1,0 +1,5 @@
+{{- /* Progress bar. Usage: partial "ui/progress.html" (dict "value" 50 "label" "…" "track" "bg-ink-2" "bar" "bg-lime") */ -}}
+<div class="h-2 overflow-hidden rounded-full {{ .track | default "bg-ink-2" }} {{ .class }}" role="img" aria-label="{{ .label }}">
+  <div class="h-full rounded-full {{ .bar | default "bg-lime" }}" style="width: {{ .value }}%"></div>
+</div>
+{{- /**/ -}}

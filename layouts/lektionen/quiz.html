@@ -1,0 +1,101 @@
+{{ define "main" }}
+{{- /*
+  Lesson quiz without JavaScript. Every answer is a radio button:
+  - :has() shows the right answer and the explanation once a question is answered,
+  - CSS counters (.tally in main.css) add up the score,
+  - a reset button starts over.
+*/ -}}
+{{- $lesson := .CurrentSection -}}
+{{- $chapters := (where $lesson.RegularPages "Layout" "ne" "quiz").ByWeight -}}
+{{- $qs := .Params.questions -}}
+{{- $total := len $qs -}}
+{{- $keys := slice "A" "B" "C" "D" -}}
+<form class="tally group/quiz flex min-h-screen flex-col" aria-label="Lektions-Quiz">
+  <header class="bg-ink text-paper">
+    <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
+      <div class="flex items-center gap-4">
+        <a href="{{ (index $chapters (sub (len $chapters) 1)).RelPermalink }}" aria-label="Zurück zur Lektion" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "close") }}</a>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[13px] text-fog-2">Lektions-Quiz</span>
+          <span class="font-display text-[26px] leading-none font-bold uppercase">{{ $lesson.Title }}</span>
+        </div>
+      </div>
+      <div class="flex gap-2" aria-hidden="true">
+        {{- range $qi, $q := $qs }}
+        <span class="h-2 w-10 rounded-full bg-ink-line group-has-[[name=frage-{{ $qi }}]:checked]/quiz:bg-warn-bright group-has-[[name=frage-{{ $qi }}][data-correct]:checked]/quiz:bg-lime"></span>
+        {{- end }}
+      </div>
+    </div>
+  </header>
+
+  <main id="inhalt" class="flex-auto px-6 pt-12 pb-16">
+    <div class="mx-auto flex max-w-[880px] flex-col gap-16">
+      {{- range $qi, $q := $qs }}
+      <section class="group/q flex flex-col gap-6" aria-labelledby="frage-{{ $qi }}-titel">
+        <div class="flex flex-col gap-2.5">
+          {{ partial "ui/eyebrow.html" (dict "text" (printf "Frage %d von %d" (add $qi 1) $total)) }}
+          <h2 id="frage-{{ $qi }}-titel" class="m-0 font-display text-4xl leading-[0.98] font-extrabold uppercase md:text-[52px]">{{ $q.text }}</h2>
+        </div>
+
+        {{- with $q.court }}
+        <div class="flex justify-center rounded-[20px] bg-court p-[22px]">
+          {{ partial "court.html" (dict "d" . "class" "w-full max-w-[560px]") }}
+        </div>
+        {{- end }}
+
+        <div role="radiogroup" aria-labelledby="frage-{{ $qi }}-titel" class="flex flex-col gap-3">
+          {{- range $oi, $o := $q.options }}
+            {{- $right := eq $oi $q.right }}
+            <label class="group/o flex min-h-[68px] cursor-pointer items-center gap-4 rounded-2xl border border-line bg-white px-[18px] py-3.5 text-ink hover:border-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-court
+              {{- if $right }} group-has-[:checked]/q:border-2 group-has-[:checked]/q:border-court group-has-[:checked]/q:bg-court-soft{{ else }} has-[:checked]:border-2 has-[:checked]:border-warn has-[:checked]:bg-warn-soft{{ end }}">
+              <input type="radio" name="frage-{{ $qi }}" value="{{ $oi }}" class="sr-only" {{ if $right }}data-correct data-tally{{ end }}>
+              <span class="inline-flex size-[34px] flex-none items-center justify-center rounded-[10px] bg-sand font-bold
+                {{- if $right }} group-has-[:checked]/q:bg-court group-has-[:checked]/q:text-paper{{ else }} group-has-[:checked]/o:bg-warn group-has-[:checked]/o:text-paper{{ end }}">{{ index $keys $oi }}</span>
+              <span class="flex-auto text-[17px] font-semibold">{{ $o }}</span>
+              {{- if $right }}
+                <span class="hidden text-sm font-bold text-court group-has-[:checked]/q:inline">Richtig</span>
+              {{- else }}
+                <span class="hidden text-sm font-bold text-warn group-has-[:checked]/o:inline">Deine Wahl</span>
+              {{- end }}
+            </label>
+          {{- end }}
+        </div>
+
+        <div class="hidden items-start gap-3.5 rounded-[18px] bg-court-soft p-5 group-has-[[data-correct]:checked]/q:flex" role="status">
+          <span class="inline-flex size-9 flex-none items-center justify-center rounded-full bg-court text-paper">{{ partial "ui/icon.html" (dict "name" "check" "class" "size-[18px]" "stroke" 3) }}</span>
+          <div class="flex flex-col gap-1">
+            <p class="m-0 text-[17px] font-bold">Genau richtig.</p>
+            <p class="m-0 text-[15px] leading-normal">{{ $q.why }}</p>
+          </div>
+        </div>
+        <div class="hidden items-start gap-3.5 rounded-[18px] bg-warn-soft p-5 group-has-[input:not([data-correct]):checked]/q:flex" role="status">
+          <span class="inline-flex size-9 flex-none items-center justify-center rounded-full bg-warn font-extrabold text-paper">!</span>
+          <div class="flex flex-col gap-1">
+            <p class="m-0 text-[17px] font-bold">Nicht ganz.</p>
+            <p class="m-0 text-[15px] leading-normal">{{ $q.why }}</p>
+          </div>
+        </div>
+      </section>
+      {{- end }}
+
+      <section aria-labelledby="ergebnis" class="flex flex-col items-center gap-6 border-t border-line pt-14 text-center">
+        <div class="flex size-[180px] flex-col items-center justify-center rounded-full bg-ink text-paper">
+          <span class="font-display text-7xl leading-[0.9] font-extrabold text-lime"><span class="tally-out"></span>/{{ $total }}</span>
+          <span class="text-sm text-fog">richtig</span>
+        </div>
+        <h2 id="ergebnis" class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-6xl">Dein Ergebnis</h2>
+        <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">Ab 3 richtigen Antworten hast du die {{ $lesson.Title }} verstanden – jetzt kommt der wichtigste Teil: der Drill auf dem Court. Weniger? Schau dir die Kapitel zu Treffpunkt und Zielen noch einmal an.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <button type="reset" class="inline-flex min-h-[52px] cursor-pointer items-center rounded-full border-[1.5px] border-ink bg-transparent px-6 text-base font-bold text-ink hover:bg-ink hover:text-paper">Quiz wiederholen</button>
+          {{- with site.GetPage $lesson.Params.drill }}
+            {{ partial "ui/button.html" (dict "href" .RelPermalink "label" "Jetzt auf dem Court üben →" "size" "lg") }}
+          {{- end }}
+        </div>
+        {{- with partial "fn/level-of.html" $lesson }}
+        <a href="{{ .RelPermalink }}" class="inline-flex min-h-11 items-center text-[15px] font-semibold">Zurück zu {{ .Title }}</a>
+        {{- end }}
+      </section>
+    </div>
+  </main>
+</form>
+{{ end }}

@@ -1,0 +1,21 @@
+{{- /* Inline stroke icon. Usage: partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-5") */ -}}
+{{- $paths := dict
+  "arrow-right" `<path d="M5 12h14M13 6l6 6-6 6"/>`
+  "chevron-left" `<path d="M15 6l-6 6 6 6"/>`
+  "close" `<path d="M18 6L6 18M6 6l12 12"/>`
+  "court" `<rect x="3" y="5" width="18" height="14" rx="1"/><path d="M12 5v14M3 12h4M17 12h4"/>`
+  "drill" `<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>`
+  "trend" `<path d="M4 19l5-6 4 3 7-9"/><path d="M15 7h5v5"/>`
+  "path" `<path d="M4 19l5-6 4 3 7-9"/>`
+  "book" `<path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h8M8 11h6"/>`
+  "calendar" `<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>`
+  "trophy" `<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>`
+  "warn" `<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>`
+  "check" `<path d="M5 12l5 5 9-10"/>`
+  "question" `<path d="M9 9a3 3 0 1 1 4 2.8c-.6.3-1 .9-1 1.6V14M12 17h.01"/>`
+  "info" `<path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="10"/>`
+  "open" `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>`
+  "users" `<circle cx="9" cy="8" r="4"/><path d="M2 21c1.2-3.5 3.8-5 7-5s5.8 1.5 7 5"/><path d="M16 4a4 4 0 0 1 0 8M18 16c2 .6 3.3 2.2 4 5"/>`
+-}}
+<svg class="{{ .class | default "size-5" }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{ .stroke | default 2 }}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ index $paths .name | safeHTML }}</svg>
+{{- /**/ -}}

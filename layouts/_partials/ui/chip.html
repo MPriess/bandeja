@@ -1,0 +1,3 @@
+{{- /* Small rounded tag. Usage: partial "ui/chip.html" (dict "text" "Bandeja" "class" "bg-sand") */ -}}
+<span class="inline-flex rounded-full px-2.5 py-1.5 text-[13px] font-semibold {{ .class | default "bg-sand" }}">{{ .text }}</span>
+{{- /**/ -}}

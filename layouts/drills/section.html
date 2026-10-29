@@ -1,0 +1,45 @@
+{{ define "main" }}
+{{- $training := site.GetPage "/wissen/training" -}}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt">
+    {{ partial "page-hero.html" (dict "eyebrow" "Drills" "title" "Ab auf den Court" "text" .Description) }}
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-12 px-6 pt-12 pb-20">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-5">
+        {{- range .RegularPages.ByWeight }}
+        <a href="{{ .RelPermalink }}" class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-6 text-paper no-underline hover:text-paper">
+          {{ partial "ui/eyebrow.html" (dict "text" "Drill zur Lektion" "class" "text-[13px] text-lime") }}
+          <h2 class="m-0 text-xl font-bold">{{ .Title }}</h2>
+          <p class="m-0 text-sm leading-normal text-fog">{{ .Description }}</p>
+          <div class="flex flex-wrap gap-2">
+            {{ partial "ui/chip.html" (dict "text" .Params.with "class" "bg-ink-2") }}
+            {{ partial "ui/chip.html" (dict "text" (printf "%d Min" .Params.minutes) "class" "bg-ink-2") }}
+            {{ partial "ui/chip.html" (dict "text" (printf "%d × %d Bälle" .Params.sets .Params.balls) "class" "bg-ink-2") }}
+          </div>
+          <span class="mt-auto inline-flex items-center gap-2 text-[15px] font-bold text-lime">Drill öffnen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
+        </a>
+        {{- end }}
+      </div>
+
+      {{- with $training }}
+      <section class="flex flex-col gap-4" aria-labelledby="mehr">
+        <div class="flex flex-wrap items-center gap-3.5">
+          <span class="size-3.5 rounded {{ .Params.style.dot }}"></span>
+          <h2 id="mehr" class="m-0 font-display text-[40px] leading-none font-extrabold uppercase">Mehr Übungen</h2>
+        </div>
+        <p class="m-0 max-w-[720px] text-base text-mute">Aufwärmen, Drills allein, zu zweit und zu viert und Pläne für deine Woche – aus dem Bereich {{ .Title }}.</p>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-2.5">
+          {{- range .RegularPages.ByWeight }}
+          <a href="{{ .RelPermalink }}" class="flex min-h-[60px] items-center gap-3 rounded-[14px] border border-line bg-white px-4 py-2.5 text-ink no-underline hover:border-ink hover:text-ink">
+            <span class="w-10 flex-none text-xs font-bold text-mute">{{ .Params.id }}</span>
+            <span class="text-[15px] leading-snug font-semibold">{{ .Title }}</span>
+          </a>
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    </div>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

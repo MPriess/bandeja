@@ -1,0 +1,42 @@
+baseURL = 'https://example.org/'
+locale = 'de-DE'
+defaultContentLanguage = 'de'
+title = 'bandeja.'
+disableKinds = ['taxonomy', 'term', 'rss']
+enableRobotsTXT = true
+
+[params]
+  description = 'Offene Online-Padelschule: Lektionen mit Court-Grafiken, Drills für deinen Platz und 100 Seiten Padel-Wissen. Kostenlos, ohne Anmeldung.'
+
+[markup.goldmark.renderer]
+  unsafe = false
+
+[build]
+  [build.buildStats]
+    enable = true
+  [[build.cachebusters]]
+    source = 'assets/notwatching/hugo_stats\.json'
+    target = 'css'
+
+[module]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    disableWatch = true
+    source = 'hugo_stats.json'
+    target = 'assets/notwatching/hugo_stats.json'
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+  [[module.mounts]]
+    source = 'node_modules/@fontsource/barlow-condensed/files'
+    target = 'static/fonts'
+    files = ['barlow-condensed-latin-[678]00-normal.woff2']
+  [[module.mounts]]
+    source = 'node_modules/@fontsource-variable/inter/files'
+    target = 'static/fonts'
+    files = ['inter-latin-wght-normal.woff2']
+
+[security.exec]
+  allow = ['^((dart-)?sass|git|go|npx|node|postcss|tailwindcss)$']

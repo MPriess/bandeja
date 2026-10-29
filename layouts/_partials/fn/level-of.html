@@ -1,0 +1,7 @@
+{{- /* The Lernpfad level (section page) that lists the given page, or nothing. */ -}}
+{{- $found := false -}}
+{{- $path := .Path -}}
+{{- range (site.GetPage "/lernpfad").Sections -}}
+  {{- if and (not $found) (in (.Params.lessons | default slice) $path) }}{{ $found = . }}{{ end -}}
+{{- end -}}
+{{- return $found -}}
