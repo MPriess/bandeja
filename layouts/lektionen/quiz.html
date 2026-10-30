@@ -2,7 +2,8 @@
 {{- /*
   Lesson quiz without JavaScript. Every answer is a radio button:
   - :has() shows the right answer and the explanation once a question is answered,
-  - CSS counters (.tally in main.css) add up the score,
+  - CSS counters (.tally in main.css) add up the score, a second counter (.quiz-open) the open questions,
+  - the score only shows once every question is answered (generated selectors below),
   - a reset button starts over.
 */ -}}
 {{- $lesson := .CurrentSection -}}
@@ -10,7 +11,14 @@
 {{- $qs := .Params.questions -}}
 {{- $total := len $qs -}}
 {{- $keys := slice "A" "B" "C" "D" -}}
-<form class="tally group/quiz flex min-h-screen flex-col" aria-label="Lektions-Quiz">
+{{- $unanswered := slice -}}
+{{- $answered := "" -}}
+{{- range $qi, $q := $qs }}
+  {{- $unanswered = $unanswered | append (printf ".quiz:not(:has([name=frage-%d]:checked)) .quiz-done" $qi) }}
+  {{- $answered = printf "%s:has([name=frage-%d]:checked)" $answered $qi }}
+{{- end }}
+<style>{{ delimit $unanswered ", " | safeCSS }} { display: none } .quiz{{ $answered | safeCSS }} .quiz-pending { display: none }</style>
+<form class="quiz tally group/quiz flex min-h-screen flex-col" style="counter-reset: tally quiz-open {{ $total }}" aria-label="Lektions-Quiz">
   <header class="bg-ink text-paper">
     <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
       <div class="flex items-center gap-4">
@@ -79,12 +87,20 @@
       {{- end }}
 
       <section aria-labelledby="ergebnis" class="flex flex-col items-center gap-6 border-t border-line pt-14 text-center">
-        <div class="flex size-[180px] flex-col items-center justify-center rounded-full bg-ink text-paper">
-          <span class="font-display text-7xl leading-[0.9] font-extrabold text-lime"><span class="tally-out"></span>/{{ $total }}</span>
-          <span class="text-sm text-fog">richtig</span>
+        <div class="quiz-pending flex flex-col items-center gap-4">
+          <h2 class="m-0 font-display text-4xl leading-[0.95] font-extrabold uppercase md:text-5xl">Fast geschafft</h2>
+          <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">Noch offen: <strong class="text-ink"><span class="quiz-open-out"></span> von {{ $total }} Fragen</strong>. Beantworte alle, dann siehst du dein Ergebnis.</p>
         </div>
-        <h2 id="ergebnis" class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-6xl">Dein Ergebnis</h2>
-        <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">Ab 3 richtigen Antworten hast du die {{ $lesson.Title }} verstanden – jetzt kommt der wichtigste Teil: der Drill auf dem Court. Weniger? Schau dir die Kapitel zu Treffpunkt und Zielen noch einmal an.</p>
+        <div class="quiz-done flex flex-col items-center gap-6">
+          <div class="flex size-[180px] flex-col items-center justify-center rounded-full bg-ink text-paper">
+            <span class="font-display text-7xl leading-[0.9] font-extrabold text-lime"><span class="tally-out"></span>/{{ $total }}</span>
+            <span class="text-sm text-fog">richtig</span>
+          </div>
+          <h2 id="ergebnis" class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-6xl">Dein Ergebnis</h2>
+          {{- with .Params.ergebnis }}
+          <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">{{ . }}</p>
+          {{- end }}
+        </div>
         <div class="flex flex-wrap justify-center gap-3">
           <button type="reset" class="inline-flex min-h-[52px] cursor-pointer items-center rounded-full border-[1.5px] border-ink bg-transparent px-6 text-base font-bold text-ink hover:bg-ink hover:text-paper">Quiz wiederholen</button>
           {{- with site.GetPage $lesson.Params.drill }}

@@ -115,6 +115,16 @@
   .tally-out::before {
     content: counter(tally);
   }
+  /* Quiz: every answered question counts the open questions down. */
+  .quiz input[type="radio"]:checked {
+    counter-increment: quiz-open -1;
+  }
+  .quiz input[type="radio"][data-tally]:checked {
+    counter-increment: tally quiz-open -1;
+  }
+  .quiz-open-out::before {
+    content: counter(quiz-open);
+  }
 }
 
 /* Markdown pages such as Impressum and Datenschutz. */

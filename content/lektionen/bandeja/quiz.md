@@ -2,6 +2,7 @@
 title: "Quiz: Die Bandeja"
 layout: quiz
 weight: 100
+ergebnis: Ab 3 richtigen Antworten hast du die Bandeja verstanden – jetzt kommt der wichtigste Teil, der Drill auf dem Court. Weniger? Schau dir die Kapitel zu Treffpunkt und Zielen noch einmal an.
 questions:
   - text: Wann ist die Bandeja die richtige Wahl?
     options: [Der Ball kommt knapp über das Netz, "Ein hoher Lob, und du willst das Netz halten", Der Ball kommt flach aus der Rückwand]
