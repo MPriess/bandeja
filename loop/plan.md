@@ -26,6 +26,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Animation: „Du“ erscheint doppelt (statischer Kreis bleibt am Start, bewegter Marker mit Lime-Rand läuft los; Marker fehlt in der Legende). Bei Animation mit Laufweg: bewegter Marker sieht aus wie „Du“ und ist den ganzen Zyklus sichtbar (steht vor dem Loslaufen am Start, danach am Ziel), statischer „Du“-Kreis wird währenddessen ausgeblendet; ohne Bewegung/reduziert bleibt die statische Grafik. Prüfung: während der Animation genau ein sichtbares „Du“.
 - [x] Wissen-Übersicht auf dem Handy ~9.500 px lang (alle 100 Titel untereinander). Je Kategorie die ersten 5 zeigen, Rest per `<details>` „Alle N zeigen“ (ohne JS); Desktop darf mehr zeigen. Prüfung: Seitenhöhe bei 360 px ≤ 4.000 px.
 - [x] Ballwege laufen durch unbeteiligte Personen (z. B. t18, Rückwand-Kapitel 1–3: gegnerischer Ball fliegt durch deinen Partner am Netz) – sieht aus wie ein Treffer. Court-Regel: Ballweg hält ≥ 15 px Abstand zu allen Personen außer Schlagendem und Annehmendem; betroffene Grafiken korrigieren.
+- [ ] Startseite „Beliebte Lektionen“: zeigt 3 Wissensartikel statt der 6 echten Lektionen, und „beliebt“ ist unbelegt. Überschrift sachlich („Eine Lektion für jede Stufe“, aus dem Content), Auswahl je Stufe eine Lektion.
 
 ## 1 · Fundament: Prüfungen
 
