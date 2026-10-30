@@ -22,7 +22,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Drill: Fortschrittsring um „3 × 10“ ist fest zu ~60 % gefüllt und täuscht Fortschritt vor. Ring als vollen, neutralen Kreis zeichnen oder per CSS-Zähler/`:has()` an die Treffer koppeln (ohne JS); Prüfung, dass der Ring ohne Treffer leer ist.
 - [x] Ballwege verlassen in der Draufsicht den Court (t07: Lob-Bogen 6 px über die Seitenlinie – wirkt wie „Aus“). Bogen ins Feld legen; Court-Regel: alle Punkte eines Ballwegs liegen im Feld (Wandkontakt erlaubt).
 - [x] Drill am Desktop: einspaltige Handy-Ansicht wirkt verloren auf 1280 px. Ab 1024 px zweispaltig (links Ablauf und Fokus, rechts Ring, Zähler und „Was hat gehakt?“), auf dem Handy unverändert.
-- [ ] Kopfzeile und Inhalt fluchten nicht: bei 1280 px steht das Logo 24 px weiter rechts als der Seiteninhalt (Innenabstand in `site-header` innerhalb der Max-Breite, im Inhalt außerhalb). Einheitlich lösen; Prüfung: linke Kante von Logo und `<h1>` gleich (± 1 px) auf Wissen-Seiten bei 1280 px.
+- [x] Kopfzeile und Inhalt fluchten nicht: bei 1280 px steht das Logo 24 px weiter rechts als der Seiteninhalt (Innenabstand in `site-header` innerhalb der Max-Breite, im Inhalt außerhalb). Einheitlich lösen; Prüfung: linke Kante von Logo und `<h1>` gleich (± 1 px) auf Wissen-Seiten bei 1280 px.
 
 ## 1 · Fundament: Prüfungen
 
