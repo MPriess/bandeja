@@ -84,16 +84,16 @@
           <p class="m-0 text-[15px] leading-normal"><strong>Typischer Fehler:</strong> {{ . }}</p>
         </div>
         {{- end }}
-        <nav aria-label="Kapitel blättern" class="flex flex-wrap justify-between gap-3 pt-1.5">
+        <nav aria-label="Kapitel blättern" class="flex flex-col-reverse gap-3 pt-1.5 sm:flex-row sm:justify-between">
           {{- if gt $pos 0 }}
-            {{ partial "ui/button.html" (dict "href" (index $chapters (sub $pos 1)).RelPermalink "label" "← Vorheriges Kapitel" "variant" "outline") }}
+            {{ partial "ui/button.html" (dict "href" (index $chapters (sub $pos 1)).RelPermalink "label" "← Vorheriges Kapitel" "variant" "outline" "class" "w-full sm:w-auto") }}
           {{- else }}
-            {{ partial "ui/button.html" (dict "href" $backHref "label" "← Zur Übersicht" "variant" "outline") }}
+            {{ partial "ui/button.html" (dict "href" $backHref "label" "← Zur Übersicht" "variant" "outline" "class" "w-full sm:w-auto") }}
           {{- end }}
           {{- if $isLast }}
-            {{ with $quiz }}{{ partial "ui/button.html" (dict "href" .RelPermalink "label" "Zum Lektions-Quiz →") }}{{ end }}
+            {{ with $quiz }}{{ partial "ui/button.html" (dict "href" .RelPermalink "label" "Zum Lektions-Quiz →" "class" "w-full sm:w-auto") }}{{ end }}
           {{- else }}
-            {{ partial "ui/button.html" (dict "href" (index $chapters (add $pos 1)).RelPermalink "label" "Nächstes Kapitel →" "variant" "ink") }}
+            {{ partial "ui/button.html" (dict "href" (index $chapters (add $pos 1)).RelPermalink "label" "Nächstes Kapitel →" "variant" "ink" "class" "w-full sm:w-auto") }}
           {{- end }}
         </nav>
       </section>

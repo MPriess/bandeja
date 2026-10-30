@@ -15,7 +15,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Court-Grafik auf dem Handy größer: weniger Innenabstand um den Court (Wissen, Quiz), Markierungen und Legende gut lesbar bei 360 px.
 - [x] Kopfzeile auf dem Handy kompakter (Navigation zweizeilig plus Button nimmt viel Platz ein), z. B. Navigation als horizontale Leiste.
 - [x] Lektion auf dem Handy: Ansichts-Umschalter bricht um („Court-/Ansicht“) – kürzere Beschriftung („Court“ / „Ablauf“); Legende unter den Court statt darüber (3 Zeilen über der Grafik).
-- [ ] Kapitel-Blättern auf dem Handy: beide Buttons volle Breite, „Nächstes Kapitel“ zuerst (Hauptaktion oben), am Desktop wie bisher nebeneinander.
+- [x] Kapitel-Blättern auf dem Handy: beide Buttons volle Breite, „Nächstes Kapitel“ zuerst (Hauptaktion oben), am Desktop wie bisher nebeneinander.
 - [ ] Wissen-Artikel: Seitenliste der Kategorie (bis zu 23 Einträge) unterhalb von 1024 px einklappbar (`<details>`, aktuelle Seite sichtbar); „Auf einen Blick“ vor die Seitenliste.
 
 ## 1 · Fundament: Prüfungen

@@ -15,10 +15,21 @@ export default async ({ pub }) => {
         const legend = document.querySelector('[aria-label="Legende"]');
         return {
           tall: labels.filter((l) => l.getBoundingClientRect().height > 44).map((l) => l.textContent.trim()),
+          pager: (() => {
+            const links = [...document.querySelectorAll('nav[aria-label="Kapitel blättern"] a')];
+            const box = document.querySelector('nav[aria-label="Kapitel blättern"]').getBoundingClientRect();
+            const next = links.find((a) => /→/.test(a.textContent));
+            return {
+              narrow: links.filter((a) => a.getBoundingClientRect().width < box.width - 1).length,
+              nextFirst: !!next && links.every((a) => a === next || a.getBoundingClientRect().top > next.getBoundingClientRect().top),
+            };
+          })(),
           legendBelow: !!legend && legend.getBoundingClientRect().top >= svg.getBoundingClientRect().bottom,
         };
       });
       for (const t of r.tall) errors.push(`${w} px: Umschalter „${t}“ bricht um`);
+      if (r.pager.narrow) errors.push(`${w} px: Kapitel-Buttons nicht in voller Breite`);
+      if (!r.pager.nextFirst) errors.push(`${w} px: „Nächstes Kapitel“ steht nicht oben`);
       if (!r.legendBelow) errors.push(`${w} px: Legende steht nicht unter dem Court`);
       await page.close();
     }
