@@ -47,7 +47,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Wissen-Artikel von JSON auf YAML-Frontmatter umstellen (Skript, Inhalt unverändert; Build-Ausgabe vorher/nachher vergleichen).
 - [x] Fest eingebaute Bandeja-Texte entfernen: Quiz-Ergebnistext aus `quiz.md` (`bestanden_ab`, `hinweis`), Probelektion im Lernpfad aus `content/lernpfad/_index.md`.
 - [x] `archetypes/` für Lektion, Kapitel, Quiz, Drill, Wissensartikel; `PFLEGE.md` mit Anleitung zum Anlegen und Prüfen.
-- [ ] 404-Seite im Stil der Seite.
+- [x] 404-Seite im Stil der Seite.
 - [ ] Prüfung „Pflichtfelder“ je Inhaltsart (z. B. Quiz: genau ein `right` im Bereich; Drill: `sets`, `balls`, `pause`, `steps`).
 
 ## 4 · Inhalte
