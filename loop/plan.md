@@ -73,4 +73,4 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Schriftpfade relativ zur `baseURL`, damit die Seite auch in einem Unterordner läuft.
 - [x] Baustein Produktempfehlung (Affiliate, gekennzeichnet, per `hugo.toml` abschaltbar, standardmäßig aus).
 - [x] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
-- [ ] Performance-Budget-Prüfung: CSS ≤ 40 kB, Seiten-HTML ≤ 60 kB, keine Bilder > 200 kB.
+- [x] Performance-Budget-Prüfung: CSS ≤ 40 kB, Seiten-HTML ≤ 60 kB, keine Bilder > 200 kB.
