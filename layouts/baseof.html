@@ -6,6 +6,7 @@
   <title>{{ if .IsHome }}{{ site.Title }} Online-Padelschule{{ else if eq .Kind "404" }}Seite nicht gefunden · {{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ .Description | default site.Params.description }}">
   <meta name="theme-color" content="#0C1A24">
+  {{ partial "seo.html" . }}
   <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
   <link rel="preload" href="{{ "fonts/barlow-condensed-latin-800-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ "fonts/inter-latin-wght-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>

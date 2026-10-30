@@ -69,7 +69,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 
 ## 5 · Live-Vorbereitung und Monetarisierung (ohne Hosting)
 
-- [ ] SEO-Grundlagen: Canonical, Open-Graph-Tags, Vorschaubild (SVG→PNG beim Build oder statisch), strukturierte Daten für Kurs/Artikel; Prüfung dafür.
+- [x] SEO-Grundlagen: Canonical, Open-Graph-Tags, Vorschaubild (SVG→PNG beim Build oder statisch), strukturierte Daten für Kurs/Artikel; Prüfung dafür.
 - [ ] Schriftpfade relativ zur `baseURL`, damit die Seite auch in einem Unterordner läuft.
 - [ ] Baustein Produktempfehlung (Affiliate, gekennzeichnet, per `hugo.toml` abschaltbar, standardmäßig aus).
 - [ ] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
