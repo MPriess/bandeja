@@ -1,12 +1,13 @@
 ---
-title: "Ball hinter dir: Spiel mit der Rückwand"
-description: Regeln und Grundidee, wenn der Ball von der Rückwand zurückkommt – leicht erklärt.
+title: "Ball vom Glas: Rückhand nach der Rückwand"
+description: Wie du die Rückhand nach dem Abprall von der Rückwand richtig spielst – PadelCity Academy.
 weight: 3
-youtube: B6MVv93EHOg
+youtube: VoQnN9U_94o
 start: 0
+kanal: PadelCity TV
 sprache: Deutsch
 lektion: /lektionen/spiel-mit-der-rueckwand
 review: true
-situation: Ein langer Ball fliegt an dir vorbei Richtung Rückwand. Statt panisch zurückzuspielen, lässt du ihn an die Wand und nimmst ihn nach dem Abprall.
+situation: Ein langer Ball fliegt auf deiner Rückhandseite an dir vorbei Richtung Rückwand. Du lässt ihn ans Glas, gehst nach dem Abprall mit ihm nach vorn und spielst ihn mit der Rückhand sicher zurück.
 achte: [Seitlich zur Wand drehen, 1–2 m Abstand zur Wand halten, Nach dem Abprall mit dem Ball nach vorn gehen]
 ---

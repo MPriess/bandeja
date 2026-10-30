@@ -1,9 +1,10 @@
 ---
 title: "Lob auf die Vorhandseite: die Vibora"
-description: Wie man eine Vibora spielt – der Überkopfball mit Seitschnitt, Folge der Reihe „Padel-Schule“.
+description: Kurze Tipps für deine Vibora – wie du den Schläger im Treffpunkt drehst – PadelCity Academy.
 weight: 5
-youtube: qvONv_iRVQ8
+youtube: 8_WrOsmh5ek
 start: 0
+kanal: PadelCity TV
 sprache: Deutsch
 lektion: /lektionen/die-vibora
 review: true

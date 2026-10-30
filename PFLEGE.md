@@ -54,6 +54,8 @@ Ein Video ist eine Datei in `content/videos/`. Es erscheint in der Video-Übersi
 | `situation` | Ein bis zwei Sätze: Was passiert auf dem Court? |
 | `achte` | Zwei bis drei Punkte, worauf man im Video achtet |
 
+Wir nehmen nur Videos vom YouTube-Kanal **PadelCity TV** (PadelCity Academy mit Coach Hank), damit Sprache, Stil und Fachbegriffe einheitlich bleiben.
+
 `review: true` heißt: Video noch nicht angeschaut – Inhalt und Startzeit prüfen, dann auf `false` setzen. Der YouTube-Player lädt nur auf der Video-Seite selbst; Lektionen zeigen eine Karte ohne Bild von YouTube. Bitte keine Vorschaubilder von YouTube einbauen, sonst lädt jede Lektion wieder Daten von Google.
 
 ## Court-Grafiken
