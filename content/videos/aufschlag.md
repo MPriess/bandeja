@@ -1,10 +1,10 @@
 ---
 title: "Aufschlag: der Start in den Punkt"
-description: Der Aufschlag von unten – Technik und erste Ziele, erklärt von der Deutschen Padel Akademie.
+description: Grundtechnik des Aufschlags und drei Varianten – erklärt von Coach Hank (PadelCity Academy).
 weight: 1
-youtube: TGqQuKUYwvY
+youtube: BXwrbE9704A
 start: 0
-kanal: Deutsche Padel Akademie
+kanal: PadelCity TV
 sprache: Deutsch
 lektion: /lektionen/der-aufschlag
 review: true

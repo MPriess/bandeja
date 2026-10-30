@@ -8,7 +8,8 @@ youtube: XXXXXXXXXXX
 # Optional: Start und Ende in Sekunden, um genau die Szene zu zeigen
 start: 0
 # ende: 90
-kanal: Name des Kanals
+# Nur Videos von PadelCity TV (siehe PFLEGE.md)
+kanal: PadelCity TV
 sprache: Deutsch
 lektion: /lektionen/bandeja
 draft: true
