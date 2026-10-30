@@ -8,6 +8,7 @@ tags: [Volley, Lob, Rückwand]
 lessons:
   - /wissen/schlagtechniken/t03
   - /wissen/regeln/r10
+  - /lektionen/spiel-mit-der-rueckwand
   - /wissen/schlagtechniken/t18
   - /wissen/schlagtechniken/t19
   - /wissen/regeln/r09
@@ -16,6 +17,7 @@ lessons:
   - /wissen/schlagtechniken/t09
   - /wissen/schlagtechniken/t10
 drills:
+  - /drills/rueckwand-zuspiel
   - /wissen/training/tr04
   - /wissen/training/tr06
   - /wissen/training/tr07
