@@ -9,7 +9,7 @@
 {{- $isLast := eq $pos (sub $total 1) -}}
 {{- $court := merge (dict "ax" 130 "ay" 70 "bx" 140 "by" 165) (.Params.court | default dict) -}}
 {{- $lessonNo := 0 -}}
-{{- $backHref := "/lektionen/" | relURL -}}
+{{- $backHref := "lektionen/" | relURL -}}
 {{- with $level }}
   {{- $backHref = .RelPermalink }}
   {{- range $i, $l := .Params.lessons }}{{ if eq $l $lesson.Path }}{{ $lessonNo = add $i 1 }}{{ end }}{{ end }}

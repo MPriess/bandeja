@@ -14,7 +14,7 @@
           <h2 class="m-0 text-xl font-bold">Alle Themen im Lernpfad</h2>
           <p class="m-0 text-[15px] leading-normal text-mute">Jede Stufe im Lernpfad bündelt Lektionen und Wissensseiten zu Griff, Schlägen, Regeln und Taktik – in der Reihenfolge, in der du sie brauchst.</p>
         </div>
-        {{ partial "ui/button.html" (dict "href" ("/lernpfad/" | relURL) "label" "Zum Lernpfad" "variant" "ink" "icon" "arrow-right") }}
+        {{ partial "ui/button.html" (dict "href" ("lernpfad/" | relURL) "label" "Zum Lernpfad" "variant" "ink" "icon" "arrow-right") }}
       </div>
     </div>
   </main>

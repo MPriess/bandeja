@@ -10,7 +10,7 @@
 {{- $cats := $root.Sections.ByWeight -}}
 {{- $shown := cond $isRoot $cats (slice .) -}}
 <div class="min-h-screen">
-  {{ partial "site-header.html" (dict "page" . "crumbs" (cond $isRoot slice (slice (dict "title" "Wissen" "href" "/wissen/") (dict "title" .Title)))) }}
+  {{ partial "site-header.html" (dict "page" . "crumbs" (cond $isRoot slice (slice (dict "title" "Wissen" "href" "wissen/") (dict "title" .Title)))) }}
 
   <main id="inhalt">
     <section class="bg-ink px-6 pt-8 pb-10 text-paper sm:pt-10 sm:pb-16">

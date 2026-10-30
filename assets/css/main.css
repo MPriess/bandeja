@@ -7,28 +7,28 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("/fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
+  src: url("../fonts/barlow-condensed-latin-600-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Barlow Condensed";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
+  src: url("../fonts/barlow-condensed-latin-700-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Barlow Condensed";
   font-style: normal;
   font-weight: 800;
   font-display: swap;
-  src: url("/fonts/barlow-condensed-latin-800-normal.woff2") format("woff2");
+  src: url("../fonts/barlow-condensed-latin-800-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Inter";
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  src: url("../fonts/inter-latin-wght-normal.woff2") format("woff2");
 }
 
 /* Design tokens. `static` keeps every variable in the output so SVG fills can use them. */

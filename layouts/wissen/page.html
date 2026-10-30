@@ -7,7 +7,7 @@
 {{- $next := cond (lt $pos (sub (len $all) 1)) (index $all (add $pos 1)) false -}}
 {{- $p := .Params -}}
 <div class="min-h-screen">
-  {{ partial "site-header.html" (dict "page" . "width" "max-w-[1180px]" "crumbs" (slice (dict "title" "Wissen" "href" "/wissen/") (dict "title" $cat.Title "href" $cat.RelPermalink))) }}
+  {{ partial "site-header.html" (dict "page" . "width" "max-w-[1180px]" "crumbs" (slice (dict "title" "Wissen" "href" "wissen/") (dict "title" $cat.Title "href" $cat.RelPermalink))) }}
 
   <main id="inhalt">
     <section class="px-6 pt-14 pb-16 {{ $cat.Params.style.hero }}">
@@ -78,11 +78,11 @@
         {{- end }}
 
         <nav aria-label="Weiterblättern" class="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3.5">
-          <a href="{{ with $prev }}{{ .RelPermalink }}{{ else }}{{ "/wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] border border-line bg-white px-5 py-[18px] text-ink no-underline hover:border-ink hover:text-ink">
+          <a href="{{ with $prev }}{{ .RelPermalink }}{{ else }}{{ "wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] border border-line bg-white px-5 py-[18px] text-ink no-underline hover:border-ink hover:text-ink">
             <span class="text-[13px] font-semibold text-mute">← Vorherige Seite</span>
             <span class="text-[17px] font-bold">{{ with $prev }}{{ .Title }}{{ else }}Übersicht{{ end }}</span>
           </a>
-          <a href="{{ with $next }}{{ .RelPermalink }}{{ else }}{{ "/wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] bg-ink px-5 py-[18px] text-right text-paper no-underline hover:text-paper">
+          <a href="{{ with $next }}{{ .RelPermalink }}{{ else }}{{ "wissen/" | relURL }}{{ end }}" class="flex min-h-11 flex-col gap-1.5 rounded-[18px] bg-ink px-5 py-[18px] text-right text-paper no-underline hover:text-paper">
             <span class="text-[13px] font-semibold text-lime">Nächste Seite →</span>
             <span class="text-[17px] font-bold">{{ with $next }}{{ .Title }}{{ else }}Zurück zur Übersicht{{ end }}</span>
           </a>
