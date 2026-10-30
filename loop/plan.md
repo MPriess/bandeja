@@ -57,7 +57,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Drill zum Aufschlag; Stufe 1 auf Lektion und Drill verweisen lassen.
 - [x] Lektion „Spiel mit der Rückwand“ (Stufe 2).
 - [x] Drill zur Rückwand; Stufe 2 verlinken.
-- [ ] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.
+- [x] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.
 - [ ] Lektion „Die Vibora“ (Stufe 3).
 - [ ] Drill zur Vibora; Stufe 3 verlinken.
 - [ ] Lektion „Der Smash“ (Stufe 4).

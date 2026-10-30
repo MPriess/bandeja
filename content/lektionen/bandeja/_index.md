@@ -3,6 +3,7 @@ title: Die Bandeja
 description: Der kontrollierte Überkopfball, mit dem du nach einem Lob die Netzposition hältst – in sechs Kapiteln mit Court-Grafiken, Quiz und Drill.
 stufe: 3
 stufeName: Taktik
+review: true
 quizFragen: 4
 drill: /drills/bandeja-an-die-seitenwand
 # Grafik auf Vorschau-Karten (Lernpfad, Lektionen)

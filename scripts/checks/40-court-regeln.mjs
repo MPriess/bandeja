@@ -171,6 +171,13 @@ export function checkCourt(d) {
       const mover = ["p", "g"].map((k) => people[k]).filter(Boolean);
       const ends = [pts[0], pts.at(-1)];
       if (!mover.some((m) => ends.some((x) => dist(m, x) <= 40))) e.push("Laufweg (`mv`) beginnt oder endet nicht bei dir");
+      for (const k of ["q", "a", "b"]) if (people[k] && dist(people[k], pts.at(-1)) < 30) e.push(`Laufweg (\`mv\`) endet auf ${PERSONS[k]}`);
+      // After your own shot you move towards the net (not backwards).
+      if (d.ball && !d.ohneNetz) {
+        const s0 = parsePath(d.ball).start;
+        const hit = Object.entries(people).sort((x, y) => dist(x[1], s0) - dist(y[1], s0))[0];
+        if (hit && ["p", "g"].includes(hit[0]) && fromNet(pts.at(-1).x) > fromNet(pts[0].x) + 2) e.push("Laufweg (`mv`) führt nach deinem Schlag vom Netz weg – nach dem Schlag geht es nach vorn");
+      }
     } catch (err) { e.push(`mv: ${err.message}`); }
   }
   return e;
