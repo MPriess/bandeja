@@ -160,6 +160,10 @@
     .court-pause-control {
       display: inline-flex;
     }
+    /* While you walk, the moving marker is you; the static circle shows the end state without motion. */
+    .court-anim-static {
+      display: none;
+    }
     .court-scope:has(.court-pause:checked) .court-anim {
       animation-play-state: paused;
     }

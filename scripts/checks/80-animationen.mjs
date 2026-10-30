@@ -5,7 +5,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { length, parsePath, dist, samePath } from "../lib/svgpath.mjs";
 import { PX } from "../lib/padel.mjs";
-import { withBrowser, SAMPLES } from "../lib/browser.mjs";
+import { withBrowser, SAMPLES as BASE } from "../lib/browser.mjs";
+
+const SAMPLES = { ...BASE, lob: "/wissen/schlagtechniken/der-lob/" };
 
 export const name = "Animationen";
 const PAUSE = 1.2;
@@ -62,7 +64,7 @@ export default async ({ pub, htmlFiles }) => {
   await withBrowser(pub, async (browser, base) => {
     for (const motion of ["reduce", "no-preference"]) {
       const page = await browser.newPage({ reducedMotion: motion });
-      for (const key of ["kapitel", "artikel"]) {
+      for (const key of ["kapitel", "artikel", "lob"]) {
         await page.goto(base + SAMPLES[key]);
         const r = await page.evaluate(() => ({
           visible: [...document.querySelectorAll(".court-anim")].filter((c) => c.checkVisibility()).length,
@@ -77,6 +79,21 @@ export default async ({ pub, htmlFiles }) => {
           await ctl.click();
           const left = await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running").length);
           if (left) errors.push(`${SAMPLES[key]}: „Anhalten“ stoppt ${left} Animation(en) nicht`);
+          // Exactly one visible "you" at any moment of the cycle (fresh page: the API calls below override CSS play state).
+          await page.goto(base + SAMPLES[key]);
+          const youCounts = await page.evaluate(() => {
+            const svg = document.querySelector('svg[viewBox="0 0 440 230"]');
+            const anims = svg.getAnimations ? document.getAnimations() : [];
+            const out = [];
+            for (const f of [0, 0.3, 0.6, 0.95]) {
+              for (const a of anims) { a.pause(); a.currentTime = a.effect.getComputedTiming().duration * f; }
+              const you = [...svg.querySelectorAll('[data-r="du"], .court-anim[data-anim="mv"]')].filter((e) => e.checkVisibility() && +getComputedStyle(e).opacity > 0.1);
+              out.push(you.length);
+            }
+            for (const a of anims) a.play();
+            return out;
+          });
+          if (youCounts.some((n) => n !== 1)) errors.push(`${SAMPLES[key]}: „Du“ während der Animation ${youCounts.join("/")}× sichtbar statt genau 1×`);
         }
       }
       await page.close();

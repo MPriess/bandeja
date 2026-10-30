@@ -89,11 +89,16 @@
     {{- range $part := slice (dict "k" "ball" "from" $b0 "to" $b1 "on" (gt $F 0.0)) (dict "k" "ball2" "from" $c0 "to" $c1 "on" (gt $F2 0.0)) (dict "k" "mv" "from" $m0 "to" $m1 "on" (gt $M 0.0)) }}
       {{- if $part.on }}
         {{- $a := mul 100 (div $part.from $T) }}{{ $z := mul 100 (div $part.to $T) }}
-        {{- $kf = $kf | append (printf "@keyframes %s-%s{0%%,%.2f%%{offset-distance:0%%;opacity:0}%.2f%%{offset-distance:0%%;opacity:1}%.2f%%{offset-distance:100%%;opacity:1}%.2f%%,100%%{offset-distance:100%%;opacity:0}}" $id $part.k (math.Max 0 (sub $a 0.01)) $a $z (math.Min 100 (add $z 8))) }}
+        {{- if eq $part.k "mv" }}
+          {{- /* You: standing at the start, then walking, then standing at the end – visible all the time. */}}
+          {{- $kf = $kf | append (printf "@keyframes %s-%s{0%%,%.2f%%{offset-distance:0%%}%.2f%%,100%%{offset-distance:100%%}}" $id $part.k $a $z) }}
+        {{- else }}
+          {{- $kf = $kf | append (printf "@keyframes %s-%s{0%%,%.2f%%{offset-distance:0%%;opacity:0}%.2f%%{offset-distance:0%%;opacity:1}%.2f%%{offset-distance:100%%;opacity:1}%.2f%%,100%%{offset-distance:100%%;opacity:0}}" $id $part.k (math.Max 0 (sub $a 0.01)) $a $z (math.Min 100 (add $z 8))) }}
+        {{- end }}
         {{- $path := index $d $part.k }}
         {{- $typ := cond (eq $part.k "ball2") (or $d.typ2 $d.type) (cond (eq $part.k "mv") "lauf" $d.type) }}
         {{- if eq $part.k "mv" }}
-  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="11" fill="var(--color-ink)" stroke="var(--color-lime)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
+  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
         {{- else }}
   <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s"/>
         {{- end }}
@@ -109,7 +114,7 @@
   {{- if isset $d "bx" }}<circle data-r="gegner" cx="{{ $d.bx }}" cy="{{ $d.by }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
   {{- if isset $d "gx" }}<circle data-r="frueher" cx="{{ $d.gx }}" cy="{{ $d.gy }}" r="13" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>{{ end }}
   {{- if isset $d "qx" }}<circle data-r="partner" cx="{{ $d.qx }}" cy="{{ $d.qy }}" r="12" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>{{ end }}
-  {{- if isset $d "px" }}<circle data-r="du" cx="{{ $d.px }}" cy="{{ $d.py }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>{{ end }}
+  {{- if isset $d "px" }}<circle data-r="du" {{ if and $.animate $d.mv }}class="court-anim-static" {{ end }}cx="{{ $d.px }}" cy="{{ $d.py }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>{{ end }}
   {{- range $d.labels }}
     <circle cx="{{ .x }}" cy="{{ .y }}" r="22" fill="var(--color-paper)"/>
     <text x="{{ .x }}" y="{{ add .y 7 }}" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="20" fill="var(--color-ink)">{{ .t }}</text>
