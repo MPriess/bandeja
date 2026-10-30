@@ -48,7 +48,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Fest eingebaute Bandeja-Texte entfernen: Quiz-Ergebnistext aus `quiz.md` (`bestanden_ab`, `hinweis`), Probelektion im Lernpfad aus `content/lernpfad/_index.md`.
 - [x] `archetypes/` für Lektion, Kapitel, Quiz, Drill, Wissensartikel; `PFLEGE.md` mit Anleitung zum Anlegen und Prüfen.
 - [x] 404-Seite im Stil der Seite.
-- [ ] Prüfung „Pflichtfelder“ je Inhaltsart (z. B. Quiz: genau ein `right` im Bereich; Drill: `sets`, `balls`, `pause`, `steps`).
+- [x] Prüfung „Pflichtfelder“ je Inhaltsart (z. B. Quiz: genau ein `right` im Bereich; Drill: `sets`, `balls`, `pause`, `steps`).
 
 ## 4 · Inhalte
 
