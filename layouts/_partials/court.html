@@ -6,7 +6,11 @@
     cap            caption, used as the accessible label
     zx zy zw zh zo first highlighted zone (x, y, width, height, opacity)
     yx yy yw yh yo second highlighted zone
-    ball           SVG path of the ball's flight (dashed, lime)
+    ball           SVG path of the ball's flight (dashed, lime); absolute M, L, Q, C only
+    ball2          a second ball path, e.g. an alternative shot (no target)
+    von            who hits `ball` (p, q, a, b, g) if it does not start at a person
+    ohneNetz       true if the ball does not cross the net on purpose (wall drills)
+    ausserhalb     true if a player may stand outside the court
     mv             SVG path of the player's movement
     tx ty          ball target; ring = true adds a halo
     px py          you
@@ -29,6 +33,7 @@
   <line x1="{{ $s2 }}" y1="10" x2="{{ $s2 }}" y2="220" stroke="var(--color-paper)" stroke-width="2"/>
   <line x1="{{ $s }}" y1="115" x2="{{ $s2 }}" y2="115" stroke="var(--color-paper)" stroke-width="2"/>
   {{- with $d.ball }}<path d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7"/>{{ end }}
+  {{- with $d.ball2 }}<path d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7" opacity="0.75"/>{{ end }}
   {{- with $d.mv }}<path d="{{ . }}" fill="none" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 5"/>{{ end }}
   {{- if isset $d "tx" }}
     <circle cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="8" fill="var(--color-lime)"/>

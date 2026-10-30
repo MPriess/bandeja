@@ -50,7 +50,10 @@ Es gibt keine abweichenden Werte für Lektionen und Artikel.
 - Alle Personen stehen im Feld oder höchstens 1 m dahinter (Spiel außerhalb des Courts ist Ausnahme und braucht `ausserhalb: true`).
 - Du (`p`) und Partner (`q`) stehen auf einer Netzseite, die Gegner (`a`, `b`) auf der anderen. Keine Person auf der Netzlinie.
 - Personen überlappen sich nicht (Mittelpunkte mind. 30 px auseinander), Beschriftungen überdecken keine Person.
-- Ballweg (`ball`): Endpunkt = Ziel (`tx`, `ty`) ± 4 px; Ziel liegt im Feld. Ein Schlag kreuzt das Netz genau einmal und landet auf der Gegenseite des Schlagenden. Der Startpunkt liegt höchstens 40 px vom Schlagenden entfernt (außer beim Zuspiel des Gegners, `von: a|b`).
+- Ballweg (`ball`): Das Ziel (`tx`, `ty`) liegt auf dem Ballweg (± 4 px) und im Feld; der Weg darf danach weiterlaufen (z. B. Abprall aus dem Court). Bis zum Ziel kreuzt der Ball das Netz genau einmal und landet auf der Gegenseite des Schlagenden. Der Weg beginnt höchstens 40 px von einer Person (auch der früheren Position `g`) entfernt, sonst `von: p|q|a|b|g` setzen. Bewusst ohne Netz (Wand-Drills): `ohneNetz: true`.
+- Zweiter Ballweg (`ball2`, z. B. Alternative): dieselben Regeln, Ziel ist der Endpunkt.
+- Laufweg (`mv`): kreuzt nie das Netz und beginnt oder endet bei dir (`p`) bzw. deiner früheren Position (`g`). Ballwege nie als `mv` zeichnen.
+- Pfade nur mit absoluten Befehlen M, L, Q, C. Kontrollpunkte dürfen außerhalb des Courts liegen (Höhe eines Lobs).
 - Aufschlag: Aufschläger hinter der eigenen Aufschlaglinie, Ball diagonal, Aufprall im diagonal gegenüberliegenden Aufschlagfeld.
 - Zielzonen liegen vollständig im Feld.
 - Schlagtyp-Plausibilität: Bandeja/Vibora/Smash werden aus der Netzhälfte (zwischen Netz und Aufschlaglinie) oder beim Zurücklaufen gespielt; Lob wird von hinten gespielt und landet hinter der gegnerischen Aufschlaglinie; Chiquita landet vor den Füßen der Gegner am Netz.
