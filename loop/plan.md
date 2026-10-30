@@ -30,7 +30,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Prüfung „Court-Geometrie“: Aufschlaglinie überall x = 74/366 (Lektionen nutzen fälschlich 81 → Partial `court.html` korrigieren, Parameter `service` entfernen).
 - [x] Prüfung „Court-Regeln“ nach `loop/regeln.md` (Personen, Netzseiten, Abstände, Ballweg-Endpunkt = Ziel, Netz einmal gekreuzt, Zielzonen im Feld). Bestehende Grafiken korrigieren, bis alles besteht.
 - [x] Feld `type` für alle Grafiken einführen und vergeben; Schlagtyp-Regeln (Aufschlag, Lob, Bandeja/Vibora/Smash, Chiquita) in die Court-Prüfung aufnehmen.
-- [ ] Prüfung „Barrierefreiheit“ mit axe (Playwright) für je eine Seite jeder Seitenart; Verstöße beheben.
+- [x] Prüfung „Barrierefreiheit“ mit axe (Playwright) für je eine Seite jeder Seitenart; Verstöße beheben.
 - [ ] Prüfung „Layout“: kein horizontales Überlaufen bei 360, 768, 1280 px; Touch-Ziele ≥ 44 px.
 
 ## 2 · Animationen ohne JS
