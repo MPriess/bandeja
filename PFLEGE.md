@@ -24,6 +24,7 @@ Neue Inhalte starten als Entwurf (`draft: true`) und erscheinen erst, wenn du da
 | --- | --- | --- |
 | Wissensartikel | `npx hugo new content wissen/schlagtechniken/t23.md` | `id`, `weight` und Texte ausfüllen |
 | Drill | `npx hugo new content drills/mein-drill.md` | `lesson` auf die passende Lektion setzen |
+| Video | `npx hugo new content videos/der-lob.md` | `youtube`, `lektion`, `situation` ausfüllen, Startzeit prüfen |
 | Lektion | `npx hugo new content --kind lektion lektionen/die-vibora` | weitere Kapitel als Kopie von `kapitel-2.md`; Lektion in `content/lernpfad/stufe-N/_index.md` unter `lessons` eintragen |
 
 Entwürfe in der Vorschau sehen: `npx hugo server -D`.
@@ -39,6 +40,21 @@ Entwürfe in der Vorschau sehen: `npx hugo server -D`.
 | Lektion: Bewegungsablauf, Kapitel, Quiz | `content/lektionen/<name>/` |
 | Wissensartikel und Kategorie-Farben | `content/wissen/<kategorie>/` |
 | Impressum, Datenschutz | `content/impressum.md`, `content/datenschutz.md` |
+
+## Videos zu Spielsituationen
+
+Ein Video ist eine Datei in `content/videos/`. Es erscheint in der Video-Übersicht und in allen Kapiteln der Lektion, die unter `lektion` steht.
+
+| Feld | Bedeutung |
+| --- | --- |
+| `youtube` | Die Video-ID: der Teil nach `v=` in der YouTube-Adresse (11 Zeichen) |
+| `start`, `ende` | Optional: ab welcher Sekunde das Video startet und wo es endet – so zeigst du genau die Szene |
+| `kanal`, `sprache` | Wer das Video gemacht hat und in welcher Sprache es ist (als Hinweis auf der Karte) |
+| `lektion` | Die passende Lektion, z. B. `/lektionen/bandeja` |
+| `situation` | Ein bis zwei Sätze: Was passiert auf dem Court? |
+| `achte` | Zwei bis drei Punkte, worauf man im Video achtet |
+
+`review: true` heißt: Video noch nicht angeschaut – Inhalt und Startzeit prüfen, dann auf `false` setzen. Der YouTube-Player lädt nur auf der Video-Seite selbst; Lektionen zeigen eine Karte ohne Bild von YouTube. Bitte keine Vorschaubilder von YouTube einbauen, sonst lädt jede Lektion wieder Daten von Google.
 
 ## Court-Grafiken
 

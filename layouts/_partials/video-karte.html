@@ -1,0 +1,26 @@
+{{- /*
+  Card that links to a video page. Loads nothing from YouTube: the player only appears on the
+  video page itself (two-click solution). The link carries .ohne-vorladen so hovering does not
+  prerender the page (and with it the YouTube player).
+  Usage: partial "video-karte.html" (dict "page" $video "level" 3)   (level: heading level, 2 or 3)
+*/ -}}
+{{- $v := .page -}}
+<a href="{{ $v.RelPermalink }}" class="ohne-vorladen flex flex-col gap-3 rounded-[22px] border border-line bg-white p-6 text-ink no-underline hover:border-ink hover:text-ink">
+  <span class="flex items-center gap-2.5">
+    <span class="inline-flex size-10 flex-none items-center justify-center rounded-full bg-ink text-lime">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-[22px]") }}</span>
+    {{ partial "ui/eyebrow.html" (dict "text" "Video · Spielsituation" "class" "text-[13px] text-court") }}
+  </span>
+  {{- if eq .level 3 }}
+  <h3 class="m-0 text-xl font-bold">{{ $v.Title }}</h3>
+  {{- else }}
+  <h2 class="m-0 text-xl font-bold">{{ $v.Title }}</h2>
+  {{- end }}
+  <span class="text-sm leading-normal text-mute">{{ $v.Description }}</span>
+  <span class="flex flex-wrap gap-2">
+    {{- with $v.Params.sprache }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
+    {{- with $v.Params.kanal }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
+  </span>
+  <span class="text-[13px] leading-normal text-mute">Öffnet den YouTube-Player. Erst dann werden Daten an YouTube übertragen.</span>
+  <span class="mt-auto inline-flex items-center gap-2 text-[15px] font-bold text-court">Video ansehen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
+</a>
+{{- /**/ -}}

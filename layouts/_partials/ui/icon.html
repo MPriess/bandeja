@@ -15,6 +15,7 @@
   "question" `<path d="M9 9a3 3 0 1 1 4 2.8c-.6.3-1 .9-1 1.6V14M12 17h.01"/>`
   "info" `<path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="10"/>`
   "open" `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>`
+  "play" `<circle cx="12" cy="12" r="10"/><path d="M10 8.5v7l6-3.5z"/>`
   "users" `<circle cx="9" cy="8" r="4"/><path d="M2 21c1.2-3.5 3.8-5 7-5s5.8 1.5 7 5"/><path d="M16 4a4 4 0 0 1 0 8M18 16c2 .6 3.3 2.2 4 5"/>`
 -}}
 <svg class="{{ .class | default "size-5" }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{ .stroke | default 2 }}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ index $paths .name | safeHTML }}</svg>

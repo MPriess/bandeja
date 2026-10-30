@@ -43,6 +43,14 @@ export default async ({ root }) => {
       for (const k of ["minutes", "sets", "balls"]) need(posInt(fm[k]), `\`${k}\` muss eine ganze Zahl > 0 sein`);
       need(list(fm.steps), "`steps` fehlt");
       need(!fm.lesson || exists(fm.lesson), `\`lesson: ${fm.lesson}\` gibt es nicht`);
+    } else if (rel.startsWith("videos/") && !isIndex) {
+      for (const k of ["title", "description", "situation"]) need(text(fm[k]), `\`${k}\` fehlt`);
+      need(/^[\w-]{11}$/.test(fm.youtube ?? ""), "`youtube` fehlt oder ist keine YouTube-ID (11 Zeichen, z. B. 45OvqqQtpjQ)");
+      need(posInt(fm.weight), "`weight` fehlt");
+      need(fm.start === undefined || (Number.isInteger(fm.start) && fm.start >= 0), "`start` muss eine ganze Zahl ab 0 sein (Sekunden)");
+      need(fm.ende === undefined || (Number.isInteger(fm.ende) && fm.ende > (fm.start ?? 0)), "`ende` muss eine ganze Zahl größer als `start` sein (Sekunden)");
+      need(exists(fm.lektion), `\`lektion: ${fm.lektion}\` gibt es nicht`);
+      need(fm.achte === undefined || list(fm.achte), "`achte` muss eine Liste sein");
     } else if (/^lektionen\/[^/]+\/_index\.md$/.test(rel)) {
       for (const k of ["title", "description"]) need(text(fm[k]), `\`${k}\` fehlt`);
       need([1, 2, 3, 4].includes(fm.stufe), "`stufe` muss 1–4 sein");
