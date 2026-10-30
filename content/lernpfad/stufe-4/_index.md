@@ -10,12 +10,14 @@ lessons:
   - /wissen/schlagtechniken/t13
   - /wissen/schlagtechniken/t14
   - /wissen/schlagtechniken/t15
+  - /lektionen/die-chiquita
   - /wissen/schlagtechniken/t16
   - /wissen/schlagtechniken/t21
   - /wissen/training/tr15
   - /wissen/spielmodi/m04
   - /wissen/spielmodi/m12
 drills:
+  - /drills/chiquita-an-die-fuesse
   - /drills/smash-abschluss
   - /wissen/training/tr08
   - /wissen/training/tr10
