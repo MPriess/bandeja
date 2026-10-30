@@ -9,7 +9,7 @@ build:
   render: never
   list: always
 # Grafik auf Vorschau-Karten (Lernpfad, Lektionen)
-vorschau: { type: rueckwand, treffpunkt: true, cap: "Der Ball prallt von der Rückwand ab, du spielst ihn nach vorn zurück.", ball: "M 160 70 Q 300 40 385 130 L 428 145 L 380 125", tx: 380, ty: 125, px: 365, py: 120, qx: 280, qy: 60, ax: 160, ay: 70, bx: 160, by: 160 }
+vorschau: { type: rueckwand, treffpunkt: true, cap: "Der Ball prallt von der Rückwand ab, du spielst ihn nach vorn zurück.", ball: "M 160 70 Q 300 40 385 130 L 428 145 L 380 125", tx: 380, ty: 125, px: 365, py: 120, qx: 280, qy: 170, ax: 160, ay: 70, bx: 160, by: 160 }
 # Bewegungsablauf: drei Phasen, gezeigt in der zweiten Ansicht jedes Kapitels.
 phases:
   - title: Lesen

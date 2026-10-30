@@ -89,6 +89,18 @@ export function checkCourt(d) {
     const out = pts.filter((p) => !inField(p, 2) && !(p.y >= FIELD.y1 - 2 && p.y <= FIELD.y2 + 2 && p.x >= FIELD.x1 - 2 && p.x <= FIELD.x2 + 2));
     if (out.length && !d.ausserhalb) e.push(`${key}: Ballweg verlässt den Court (bis ${Math.round(Math.min(...out.map((p) => p.y)))} px) – Bogen ins Feld legen`);
     typeRules(key, typ, { pts: pts.slice(0, cut), hitter, hitterSide, end, treffpunkt: key === "ball" && d.treffpunkt });
+    // Legibility: the ball does not fly through people who are not part of the shot
+    // (hitter and, for a contact point, the receiving player are allowed).
+    {
+      // Receiver: the person at the contact point, or whoever the ball is aimed at (target ≤ 25 px away).
+      const nearest = Object.entries(people).filter(([k]) => k !== "g").sort((x, y) => dist(x[1], end) - dist(y[1], end))[0];
+      const receiver = nearest && ((key === "ball" && d.treffpunkt) || dist(nearest[1], end) <= 25) ? nearest[0] : null;
+      for (const [k, pt] of Object.entries(people)) {
+        if (k === "g" || pt === hitter || k === receiver) continue;
+        const near = Math.min(...pts.slice(0, cut).map((p) => dist(p, pt)));
+        if (near < R_PERSON + 2) e.push(`${key}: Ballweg läuft durch ${PERSONS[k]} (${Math.round(near)} px Abstand, mind. ${R_PERSON + 2}) – sieht aus wie ein Treffer`);
+      }
+    }
     if (d.ohneNetz) return;
     const c = crossings(pts.slice(0, cut), NET_X);
     if (c.n !== 1) e.push(`${key}: Ball kreuzt das Netz ${c.n}× bis zum Ziel statt genau 1×${c.n === 0 ? " (sonst `ohneNetz: true`)" : ""}`);

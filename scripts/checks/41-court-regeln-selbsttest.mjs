@@ -22,6 +22,7 @@ const CASES = [
   ["Chiquita zu lang", { ...base, type: "chiquita", ball: "M 395 160 Q 300 140 100 120", tx: 100, ty: 120 }, true],
   ["Rückwand ohne Wand", { ...base, type: "rueckwand", treffpunkt: true, ball: "M 45 65 Q 300 40 380 150", tx: 380, ty: 150 }, true],
   ["ohne type", { ...base }, true],
+  ["Ball fliegt durch den Partner", { ...base, type: "lob", ball: "M 395 160 Q 300 60 40 60", tx: 40, ty: 60, qx: 300, qy: 95 }, true],
   ["Lob-Bogen über die Seitenlinie", { ...base, type: "lob", ball: "M 395 160 Q 230 -120 40 60", tx: 40, ty: 60 }, true],
 ];
 
