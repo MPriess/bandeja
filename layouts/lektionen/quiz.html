@@ -46,7 +46,7 @@
         </div>
 
         {{- with $q.court }}
-        <div class="flex justify-center rounded-[20px] bg-court p-[22px]">
+        <div class="-mx-6 flex justify-center bg-court px-3 py-4 sm:mx-0 sm:rounded-[20px] sm:p-[22px]">
           {{ partial "court.html" (dict "d" . "class" "w-full max-w-[560px]") }}
         </div>
         {{- end }}
