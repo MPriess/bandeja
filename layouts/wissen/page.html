@@ -104,16 +104,7 @@
         </section>
         {{- end }}
 
-        <nav aria-label="Seiten dieser Kategorie" class="flex flex-col gap-0.5 rounded-[20px] bg-sand p-[18px]">
-          <h2 class="m-0 mb-2 ml-2 text-base font-bold">{{ $cat.Title }}</h2>
-          {{- range $cat.RegularPages.ByWeight }}
-            {{- $cur := eq . $ }}
-            <a href="{{ .RelPermalink }}" {{ if $cur }}aria-current="page"{{ end }} class="flex min-h-11 items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm text-ink no-underline hover:bg-white/60 {{ if $cur }}bg-white font-bold{{ else }}font-medium{{ end }}">
-              <span class="w-9 flex-none text-xs font-bold text-mute">{{ .Params.id }}</span>
-              <span>{{ .Title }}</span>
-            </a>
-          {{- end }}
-        </nav>
+        {{ partial "wissen-liste.html" (dict "page" . "cat" $cat) }}
       </aside>
     </div>
   </main>

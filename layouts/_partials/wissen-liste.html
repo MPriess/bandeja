@@ -1,0 +1,33 @@
+{{- /*
+  Pages of a Wissen category with the current page highlighted.
+  Phones and tablets get a collapsed <details>, from 1024 px the list is always open.
+  Usage: partial "wissen-liste.html" (dict "page" . "cat" .CurrentSection)
+*/ -}}
+{{- $page := .page -}}
+{{- $pages := .cat.RegularPages.ByWeight -}}
+{{- define "_partials/inline/wissen-links.html" }}
+  {{- $page := .page }}
+  {{- range .pages }}
+    {{- $cur := eq . $page }}
+    <a href="{{ .RelPermalink }}" {{ if $cur }}aria-current="page"{{ end }} class="flex min-h-11 items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-sm text-ink no-underline hover:bg-white/60 {{ if $cur }}bg-white font-bold{{ else }}font-medium{{ end }}">
+      <span class="w-9 flex-none text-xs font-bold text-mute">{{ .Params.id }}</span>
+      <span>{{ .Title }}</span>
+    </a>
+  {{- end }}
+{{- end }}
+<details class="group/liste rounded-[20px] bg-sand lg:hidden">
+  <summary class="flex min-h-14 cursor-pointer list-none items-center gap-3 rounded-[20px] p-[18px] [&::-webkit-details-marker]:hidden">
+    <span class="flex min-w-0 flex-auto flex-col gap-0.5">
+      <span class="text-base font-bold">{{ .cat.Title }} · {{ len $pages }} Seiten</span>
+      <span class="truncate text-sm text-mute">Du bist bei {{ $page.Params.id }} {{ $page.Title }}</span>
+    </span>
+    {{ partial "ui/icon.html" (dict "name" "chevron-left" "class" "size-5 flex-none -rotate-90 transition-transform group-open/liste:rotate-90") }}
+  </summary>
+  <nav aria-label="Seiten dieser Kategorie" class="flex flex-col gap-0.5 px-[18px] pb-[18px]">
+    {{ partial "inline/wissen-links.html" (dict "page" $page "pages" $pages) }}
+  </nav>
+</details>
+<nav aria-label="Seiten dieser Kategorie" class="hidden flex-col gap-0.5 rounded-[20px] bg-sand p-[18px] lg:flex">
+  <h2 class="m-0 mb-2 ml-2 text-base font-bold">{{ .cat.Title }}</h2>
+  {{ partial "inline/wissen-links.html" (dict "page" $page "pages" $pages) }}
+</nav>
