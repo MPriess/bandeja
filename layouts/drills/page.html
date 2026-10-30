@@ -2,7 +2,12 @@
 {{- /* Drill for the court, laid out for the phone. The ball count uses CSS counters (.tally), nothing is stored. */ -}}
 {{- $p := .Params -}}
 {{- $lesson := site.GetPage $p.lesson -}}
-<form class="tally min-h-screen bg-ink text-paper" aria-label="Drill">
+{{- $lit := slice -}}
+{{- range $s := seq $p.sets }}{{ range $b := seq $p.balls }}
+  {{- $lit = $lit | append (printf ".drill:has([name=satz-%d-ball-%d]:checked) [data-seg=\"%d-%d\"]" $s $b $s $b) }}
+{{- end }}{{ end -}}
+<style>{{ delimit $lit ", " | safeCSS }} { stroke: var(--color-lime) }</style>
+<form class="drill tally min-h-screen bg-ink text-paper" aria-label="Drill">
   <div class="mx-auto flex max-w-[480px] flex-col pb-10">
     <div class="flex items-center justify-between px-5 pt-7">
       <a href="{{ with $lesson }}{{ partial "fn/href.html" . }}{{ else }}{{ "/drills/" | relURL }}{{ end }}" aria-label="Zurück" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
@@ -18,8 +23,17 @@
       </div>
 
       <div class="mx-5 mt-6 flex flex-col items-center gap-4 rounded-3xl bg-court p-[22px]">
-        <div class="relative flex size-[190px] flex-col items-center justify-center rounded-full border-[10px] border-court-2" aria-hidden="true">
-          <svg width="190" height="190" viewBox="0 0 190 190" class="absolute -top-2.5 -left-2.5 -rotate-90"><circle cx="95" cy="95" r="85" fill="none" stroke="var(--color-lime)" stroke-width="10" stroke-linecap="round" stroke-dasharray="534" stroke-dashoffset="200"/></svg>
+        <div class="relative flex size-[190px] flex-col items-center justify-center rounded-full border-[10px] border-transparent" aria-hidden="true">
+          {{- /* One ring segment per ball; it lights up when that ball is ticked (selectors below). */ -}}
+          {{- $n := mul $p.sets $p.balls }}
+          {{- $c := mul 2 (mul math.Pi 85) }}
+          {{- $seg := div $c $n }}
+          <svg width="190" height="190" viewBox="0 0 190 190" class="absolute -top-2.5 -left-2.5 -rotate-90">
+            {{- range $s := seq $p.sets }}{{ range $b := seq $p.balls }}
+              {{- $i := add (mul (sub $s 1) $p.balls) (sub $b 1) }}
+              <circle data-seg="{{ $s }}-{{ $b }}" cx="95" cy="95" r="85" fill="none" stroke="var(--color-court-2)" stroke-width="10" stroke-dasharray="{{ math.Max 1 (sub $seg 3) }} {{ $c }}" stroke-dashoffset="{{ mul -1 (mul $i $seg) }}"/>
+            {{- end }}{{ end }}
+          </svg>
           <span class="font-display text-[56px] leading-none font-extrabold">{{ $p.sets }} × {{ $p.balls }}</span>
           <span class="text-[13px] text-sky">Bälle</span>
         </div>
