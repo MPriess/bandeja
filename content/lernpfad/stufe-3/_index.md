@@ -9,11 +9,13 @@ lessons:
   - /wissen/training/tr13
   - /wissen/training/tr14
   - /lektionen/bandeja
+  - /lektionen/die-vibora
   - /wissen/schlagtechniken/t12
   - /wissen/schlagtechniken/t17
   - /wissen/schlagtechniken/t20
   - /wissen/schlagtechniken/t22
 drills:
+  - /drills/vibora-ans-seitenglas
   - /drills/bandeja-an-die-seitenwand
   - /wissen/training/tr08
   - /wissen/training/tr05
