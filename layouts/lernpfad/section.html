@@ -13,10 +13,10 @@
         <p class="m-0 text-[15px] text-mute">{{ if $isRoot }}Offen für alle · ohne Anmeldung{{ else }}Lernpfad · {{ len .Params.lessons }} Lektionen{{ end }}</p>
         <h1 class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-[52px]">{{ if $isRoot }}Dein Lernpfad{{ else }}{{ .Title }}{{ end }}</h1>
       </div>
-      <nav aria-label="Stufen" class="flex flex-wrap gap-2">
+      <nav aria-label="Stufen" class="grid w-full grid-cols-4 gap-1.5 sm:flex sm:w-auto sm:flex-wrap sm:gap-2">
         {{- range $levels }}
           {{- $on := eq . $ }}
-          <a href="{{ .RelPermalink }}" {{ if $on }}aria-current="page"{{ end }} class="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold no-underline {{ if $on }}bg-ink text-paper hover:text-lime{{ else }}border border-line-2 bg-white text-ink hover:border-ink{{ end }}">Stufe {{ .Params.stufe }}</a>
+          <a href="{{ .RelPermalink }}" {{ if $on }}aria-current="page"{{ end }} class="inline-flex min-h-11 items-center justify-center rounded-full px-2 text-sm font-semibold whitespace-nowrap no-underline sm:px-4 {{ if $on }}bg-ink text-paper hover:text-lime{{ else }}border border-line-2 bg-white text-ink hover:border-ink{{ end }}">Stufe {{ .Params.stufe }}</a>
         {{- end }}
       </nav>
     </div>

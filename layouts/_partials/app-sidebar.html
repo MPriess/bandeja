@@ -1,5 +1,6 @@
 {{- /*
-  Dark sidebar of the learning area (stacks on top on small screens).
+  Dark sidebar of the learning area. Below 1024 px a compact bar: logo, swipeable navigation,
+  no Stufen-Check box (the page links to the check itself).
   Usage: partial "app-sidebar.html" (dict "active" "lernpfad" "level" $levelPage)
 */ -}}
 {{- $level := .level -}}
@@ -13,17 +14,17 @@
   (dict "key" "drills" "title" "Drills" "icon" "calendar" "href" ("/drills/" | relURL))
   (dict "key" "check" "title" "Stufen-Check" "icon" "trophy" "href" $check.RelPermalink)
 -}}
-<aside class="box-border flex max-w-full flex-[1_1_240px] flex-col gap-8 bg-ink px-5 py-7 text-paper md:min-h-screen md:max-w-[280px]">
-  <div class="px-3">{{ partial "ui/logo.html" (dict "class" "text-[30px]") }}</div>
-  <nav aria-label="Lernbereich" class="flex flex-col gap-1 text-[15px] font-semibold">
+<aside class="box-border flex w-full flex-col gap-1 bg-ink px-6 pt-3 text-paper lg:min-h-screen lg:w-[260px] lg:flex-none lg:gap-8 lg:px-5 lg:py-7">
+  <div class="lg:px-3">{{ partial "ui/logo.html" (dict "class" "text-[26px] lg:text-[30px]") }}</div>
+  <nav aria-label="Lernbereich" class="-mx-6 flex gap-x-1 overflow-x-auto px-3 text-[15px] font-semibold whitespace-nowrap [scrollbar-width:none] lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0">
     {{- range $items }}
       {{- $on := eq .key $.active }}
-      <a href="{{ .href }}" {{ if $on }}aria-current="page"{{ end }} class="flex min-h-11 items-center gap-3 rounded-xl px-3 no-underline {{ if $on }}bg-ink-2 text-paper hover:text-paper{{ else }}text-fog hover:bg-ink-2 hover:text-paper{{ end }}">
-        {{ partial "ui/icon.html" (dict "name" .icon "class" (cond $on "size-5 text-lime" "size-5")) }}{{ .title }}
+      <a href="{{ .href }}" {{ if $on }}aria-current="page"{{ end }} class="flex min-h-11 flex-none items-center gap-3 rounded-xl px-3 no-underline {{ if $on }}bg-ink-2 text-paper hover:text-paper{{ else }}text-fog hover:bg-ink-2 hover:text-paper{{ end }}">
+        {{ partial "ui/icon.html" (dict "name" .icon "class" (cond $on "hidden size-5 text-lime lg:block" "hidden size-5 lg:block")) }}{{ .title }}
       </a>
     {{- end }}
   </nav>
-  <div class="mt-auto flex flex-col gap-2.5 rounded-2xl bg-court p-[18px]">
+  <div class="mt-auto hidden flex-col gap-2.5 rounded-2xl bg-court p-[18px] lg:flex">
     {{- if $level }}
       <p class="m-0 text-sm font-bold">Stufen-Check</p>
       <p class="m-0 text-[13px] leading-normal text-sky">Am Ende von Stufe {{ $level.Params.stufe }} prüfst du mit einer kurzen Checkliste, ob alles sitzt.</p>

@@ -17,7 +17,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Lektion auf dem Handy: Ansichts-Umschalter bricht um („Court-/Ansicht“) – kürzere Beschriftung („Court“ / „Ablauf“); Legende unter den Court statt darüber (3 Zeilen über der Grafik).
 - [x] Kapitel-Blättern auf dem Handy: beide Buttons volle Breite, „Nächstes Kapitel“ zuerst (Hauptaktion oben), am Desktop wie bisher nebeneinander.
 - [x] Wissen-Artikel: Seitenliste der Kategorie (bis zu 23 Einträge) unterhalb von 1024 px einklappbar (`<details>`, aktuelle Seite sichtbar); „Auf einen Blick“ vor die Seitenliste.
-- [ ] Lernpfad/Stufe auf dem Handy: App-Seitenleiste füllt den ganzen ersten Bildschirm, Inhalt beginnt erst darunter. Unter 1024 px kompakte Kopfzeile wie `site-header` (Stufen-Check-Kasten ans Ende der Seite); Stufen-Umschalter einzeilig. Prüfung: Überschrift der Stufe bei 360 px im ersten Bildschirm.
+- [x] Lernpfad/Stufe auf dem Handy: App-Seitenleiste füllt den ganzen ersten Bildschirm, Inhalt beginnt erst darunter. Unter 1024 px kompakte Kopfzeile wie `site-header` (Stufen-Check-Kasten ans Ende der Seite); Stufen-Umschalter einzeilig. Prüfung: Überschrift der Stufe bei 360 px im ersten Bildschirm.
 - [ ] Lektionszeilen im Lernpfad auf dem Handy: Typ („Wissen“/„Lektion“) unter den Titel statt eigener Spalte, Titel nicht mehr dreizeilig; Zeilenkopf „Lektionen in Stufe 3 / 7 Lektionen“ ohne Umbruch.
 - [ ] Drill: Fortschrittsring um „3 × 10“ ist fest zu ~60 % gefüllt und täuscht Fortschritt vor. Ring als vollen, neutralen Kreis zeichnen oder per CSS-Zähler/`:has()` an die Treffer koppeln (ohne JS); Prüfung, dass der Ring ohne Treffer leer ist.
 
