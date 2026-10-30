@@ -60,8 +60,8 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.
 - [x] Lektion „Die Vibora“ (Stufe 3).
 - [x] Drill zur Vibora; Stufe 3 verlinken.
-- [ ] Lektion „Der Smash“ (Stufe 4).
-- [ ] Drill zum Smash; Stufe 4 verlinken.
+- [x] Lektion „Der Smash“ (Stufe 4).
+- [x] Drill zum Smash; Stufe 4 verlinken.
 - [ ] Lektion „Volley“ (Stufe 2).
 - [ ] Lektion „Chiquita“ (Stufe 4).
 - [ ] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).

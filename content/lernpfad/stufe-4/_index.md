@@ -6,6 +6,7 @@ weight: 4
 description: Smash, Chiquita, Matchplanung und mentale Stärke für deine ersten Turniere.
 tags: [Smash, Chiquita, Matchplan]
 lessons:
+  - /lektionen/der-smash
   - /wissen/schlagtechniken/t13
   - /wissen/schlagtechniken/t14
   - /wissen/schlagtechniken/t15
@@ -15,6 +16,7 @@ lessons:
   - /wissen/spielmodi/m04
   - /wissen/spielmodi/m12
 drills:
+  - /drills/smash-abschluss
   - /wissen/training/tr08
   - /wissen/training/tr10
   - /wissen/training/tr11
