@@ -11,7 +11,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 
 - [x] Quiz: Ergebnis erst zeigen, wenn alle Fragen beantwortet sind (CSS `:has()`), vorher Hinweis „Noch X Fragen offen“ statt „0/4 richtig“. Textfehler „die Die Bandeja“ beheben.
 - [x] Quiz-Antworten ohne doppelten Buchstaben („A – Mitte …“ neben dem Buchstaben-Kästchen A); Prüfung, dass Antworttexte nicht mit „A –“ usw. beginnen.
-- [ ] Court-Legende passt nicht zur Grafik: „Du“ ist in der Grafik ein gefüllter Kreis, in der Legende ein Ring; Partner fehlt in der Lektions-Legende. Legende aus denselben Formen wie `court.html` erzeugen.
+- [x] Court-Legende passt nicht zur Grafik: „Du“ ist in der Grafik ein gefüllter Kreis, in der Legende ein Ring; Partner fehlt in der Lektions-Legende. Legende aus denselben Formen wie `court.html` erzeugen.
 - [ ] Court-Grafik auf dem Handy größer: weniger Innenabstand um den Court (Wissen, Quiz), Markierungen und Legende gut lesbar bei 360 px.
 - [ ] Kopfzeile auf dem Handy kompakter (Navigation zweizeilig plus Button nimmt viel Platz ein), z. B. Navigation als horizontale Leiste.
 

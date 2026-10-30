@@ -20,30 +20,32 @@
     labels         list of {x, y, t} round markers with a letter (quiz)
   Court geometry (checked by scripts/checks/30-court-geometrie.mjs): 21 px per metre,
   net at x 220, service lines 6.95 m from the net at x 74 and 366, centre line at y 115.
+  Every drawn element carries data-r (du, partner, frueher, gegner, ball, lauf, zone);
+  court-legend.html shows the same roles, and scripts/checks/45-legende.mjs compares both.
 */ -}}
 {{- $d := .d | default dict -}}
 {{- $s := 74 -}}
 {{- $s2 := 366 -}}
 <svg viewBox="0 0 440 230" class="block h-auto {{ .class | default "w-full" }}" role="img" aria-label="{{ $d.cap | default "Padelcourt von oben" }}">
   <rect x="10" y="10" width="420" height="210" rx="4" fill="var(--color-court-2)" stroke="var(--color-paper)" stroke-width="3"/>
-  {{- with $d.zw }}<rect x="{{ $d.zx }}" y="{{ $d.zy }}" width="{{ . }}" height="{{ $d.zh }}" fill="var(--color-lime)" opacity="{{ $d.zo | default 0.4 }}"/>{{ end }}
-  {{- with $d.yw }}<rect x="{{ $d.yx }}" y="{{ $d.yy }}" width="{{ . }}" height="{{ $d.yh }}" fill="var(--color-lime)" opacity="{{ $d.yo | default 0.4 }}"/>{{ end }}
+  {{- with $d.zw }}<rect data-r="zone" x="{{ $d.zx }}" y="{{ $d.zy }}" width="{{ . }}" height="{{ $d.zh }}" fill="var(--color-lime)" opacity="{{ $d.zo | default 0.4 }}"/>{{ end }}
+  {{- with $d.yw }}<rect data-r="zone" x="{{ $d.yx }}" y="{{ $d.yy }}" width="{{ . }}" height="{{ $d.yh }}" fill="var(--color-lime)" opacity="{{ $d.yo | default 0.4 }}"/>{{ end }}
   <line x1="220" y1="10" x2="220" y2="220" stroke="var(--color-ink)" stroke-width="4"/>
   <line x1="{{ $s }}" y1="10" x2="{{ $s }}" y2="220" stroke="var(--color-paper)" stroke-width="2"/>
   <line x1="{{ $s2 }}" y1="10" x2="{{ $s2 }}" y2="220" stroke="var(--color-paper)" stroke-width="2"/>
   <line x1="{{ $s }}" y1="115" x2="{{ $s2 }}" y2="115" stroke="var(--color-paper)" stroke-width="2"/>
-  {{- with $d.ball }}<path d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7"/>{{ end }}
-  {{- with $d.ball2 }}<path d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7" opacity="0.75"/>{{ end }}
-  {{- with $d.mv }}<path d="{{ . }}" fill="none" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 5"/>{{ end }}
+  {{- with $d.ball }}<path data-r="ball" d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7"/>{{ end }}
+  {{- with $d.ball2 }}<path data-r="ball" d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7" opacity="0.75"/>{{ end }}
+  {{- with $d.mv }}<path data-r="lauf" d="{{ . }}" fill="none" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 5"/>{{ end }}
   {{- if isset $d "tx" }}
-    <circle cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="8" fill="var(--color-lime)"/>
+    <circle data-r="ball" cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="8" fill="var(--color-lime)"/>
     {{- if $d.ring }}<circle cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="18" fill="none" stroke="var(--color-lime)" stroke-width="2" opacity="0.5"/>{{ end }}
   {{- end }}
-  {{- if isset $d "ax" }}<circle cx="{{ $d.ax }}" cy="{{ $d.ay }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
-  {{- if isset $d "bx" }}<circle cx="{{ $d.bx }}" cy="{{ $d.by }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
-  {{- if isset $d "gx" }}<circle cx="{{ $d.gx }}" cy="{{ $d.gy }}" r="13" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>{{ end }}
-  {{- if isset $d "qx" }}<circle cx="{{ $d.qx }}" cy="{{ $d.qy }}" r="12" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>{{ end }}
-  {{- if isset $d "px" }}<circle cx="{{ $d.px }}" cy="{{ $d.py }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>{{ end }}
+  {{- if isset $d "ax" }}<circle data-r="gegner" cx="{{ $d.ax }}" cy="{{ $d.ay }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
+  {{- if isset $d "bx" }}<circle data-r="gegner" cx="{{ $d.bx }}" cy="{{ $d.by }}" r="12" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>{{ end }}
+  {{- if isset $d "gx" }}<circle data-r="frueher" cx="{{ $d.gx }}" cy="{{ $d.gy }}" r="13" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>{{ end }}
+  {{- if isset $d "qx" }}<circle data-r="partner" cx="{{ $d.qx }}" cy="{{ $d.qy }}" r="12" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>{{ end }}
+  {{- if isset $d "px" }}<circle data-r="du" cx="{{ $d.px }}" cy="{{ $d.py }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>{{ end }}
   {{- range $d.labels }}
     <circle cx="{{ .x }}" cy="{{ .y }}" r="22" fill="var(--color-paper)"/>
     <text x="{{ .x }}" y="{{ add .y 7 }}" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="20" fill="var(--color-ink)">{{ .t }}</text>

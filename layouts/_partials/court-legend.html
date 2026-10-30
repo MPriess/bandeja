@@ -1,8 +1,21 @@
-{{- /* Legend for court diagrams. Usage: partial "court-legend.html" (dict "partner" true "class" "text-sky") */ -}}
-<div class="flex flex-wrap gap-4 text-[13px] {{ .class | default "text-sky" }}">
-  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-paper bg-ink"></span>Du</span>
-  {{- if .partner }}<span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-paper bg-ink opacity-60"></span>Partner</span>{{ end }}
-  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full border-2 border-dashed border-paper"></span>Gegner</span>
-  <span class="inline-flex items-center gap-1.5"><span class="size-3 rounded-full bg-lime"></span>{{ .ball | default "Ball / Ziel" }}</span>
-</div>
-{{- /**/ -}}
+{{- /*
+  Legend for a court diagram. Shows only what the diagram contains, drawn with the same
+  shapes as court.html on court blue, so it reads the same on light and dark backgrounds.
+  Usage: partial "court-legend.html" (dict "d" $diagram "class" "text-sky")
+*/ -}}
+{{- $d := .d | default dict -}}
+{{- $items := slice -}}
+{{- if isset $d "px" }}{{ $items = $items | append (dict "r" "du" "t" "Du" "svg" `<circle cx="14" cy="14" r="8" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>`) }}{{ end -}}
+{{- if isset $d "qx" }}{{ $items = $items | append (dict "r" "partner" "t" "Partner" "svg" `<circle cx="14" cy="14" r="8" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>`) }}{{ end -}}
+{{- if isset $d "gx" }}{{ $items = $items | append (dict "r" "frueher" "t" "Vorher" "svg" `<circle cx="14" cy="14" r="8" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>`) }}{{ end -}}
+{{- if or (isset $d "ax") (isset $d "bx") }}{{ $items = $items | append (dict "r" "gegner" "t" "Gegner" "svg" `<circle cx="14" cy="14" r="8" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>`) }}{{ end -}}
+{{- if or $d.ball $d.ball2 (isset $d "tx") }}{{ $items = $items | append (dict "r" "ball" "t" (cond (isset $d "tx") "Ball / Ziel" "Ball") "svg" `<path d="M3 21 Q10 4 20 12" fill="none" stroke="var(--color-lime)" stroke-width="2.5" stroke-dasharray="4 3"/><circle cx="21" cy="13" r="4" fill="var(--color-lime)"/>`) }}{{ end -}}
+{{- with $d.mv }}{{ $items = $items | append (dict "r" "lauf" "t" "Laufweg" "svg" `<path d="M4 14 H24" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 4"/>`) }}{{ end -}}
+{{- if or $d.zw $d.yw }}{{ $items = $items | append (dict "r" "zone" "t" "Zielzone" "svg" `<rect x="5" y="7" width="18" height="14" fill="var(--color-lime)" opacity="0.5"/>`) }}{{ end -}}
+{{- with $items }}
+<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[13px] {{ $.class | default "text-sky" }}" aria-label="Legende">
+  {{- range . }}
+  <li data-legend="{{ .r }}" class="inline-flex items-center gap-1.5"><svg viewBox="0 0 28 28" class="size-6 flex-none" aria-hidden="true"><rect width="28" height="28" rx="7" fill="var(--color-court-2)"/>{{ .svg | safeHTML }}</svg>{{ .t }}</li>
+  {{- end }}
+</ul>
+{{- end }}

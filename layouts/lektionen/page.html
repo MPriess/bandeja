@@ -45,7 +45,7 @@
               <input type="radio" name="ansicht" id="ansicht-flow" class="sr-only">Bewegungsablauf
             </label>
           </div>
-          {{ partial "court-legend.html" (dict "class" "text-fog" "ball" "Ball") }}
+          {{ partial "court-legend.html" (dict "d" $court "class" "text-fog") }}
         </div>
 
         <div class="hidden flex-col items-center gap-[18px] bg-court p-7 group-has-[#ansicht-court:checked]/view:flex">
