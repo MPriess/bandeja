@@ -30,6 +30,7 @@ bandeja. soll eine Padel-Lernseite werden, die der Inhaber selbst pflegen, spät
 - Interaktion nur mit HTML/CSS (`:has()`, Radio/Checkbox, CSS-Counter, `<details>`).
 - Jede neue Prüfung kommt als Datei in `scripts/checks/NN-name.mjs` (wird von `scripts/check.mjs` automatisch geladen), mit `export const name` und `export default async ({ root, pub, htmlFiles }) => ({ ok, errors, note })`.
 - Neue npm-Pakete nur als devDependency und mit fester Version.
+- Vorschau-Server: `npx hugo server --port 1313 --baseURL http://localhost:1313/` im Hintergrund; beenden mit `pkill -x hugo` (nie `pkill -f …`, das trifft die eigene Shell).
 
 ## Court-Geometrie (verbindlich)
 
