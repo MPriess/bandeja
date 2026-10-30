@@ -32,6 +32,9 @@
             <li class="flex items-start gap-3"><span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-ink text-[13px] font-bold text-lime">{{ add $i 1 }}</span><span class="pt-1">{{ $t }}</span></li>
             {{- end }}
           </ol>
+          {{- with site.GetPage "/schnellstart" }}
+          <a href="{{ .RelPermalink }}" class="mt-auto inline-flex min-h-11 items-center gap-2 text-sm font-bold">Neu im Padel? Erst der Schnellstart {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-4") }}</a>
+          {{- end }}
         </div>
       </div>
 
@@ -45,6 +48,7 @@
         </a>
         {{- end }}
       </div>
+      {{ partial "premium.html" . }}
 
     {{- else }}
       {{/* One level */}}
@@ -66,7 +70,7 @@
             </li>
             {{- end }}{{ end }}
           </ul>
-          <a href="{{ "/drills/" | relURL }}" class="mt-auto inline-flex min-h-11 items-center text-sm font-bold">Alle Drills →</a>
+          <a href="{{ "drills/" | relURL }}" class="mt-auto inline-flex min-h-11 items-center text-sm font-bold">Alle Drills →</a>
         </div>
       </div>
 

@@ -6,6 +6,8 @@ description: Ein Satz, was man in dieser Lektion lernt.
 stufe: 1
 stufeName: Einstieg
 drill: /drills/bandeja-an-die-seitenwand
+# Grafik auf Vorschau-Karten (optional, sonst das erste Kapitel mit Ballweg)
+# vorschau: { type: aufstellung, cap: "…", px: 268, py: 80 }
 draft: true
 review: true
 build:

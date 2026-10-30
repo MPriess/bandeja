@@ -1,0 +1,11 @@
+# Produktempfehlungen (Affiliate). Erscheinen in Wissensartikeln der angegebenen Kategorie,
+# aber nur, wenn in hugo.toml `params.monetarisierung.produkte = true` gesetzt ist.
+# Jede Empfehlung wird automatisch als „Anzeige“ gekennzeichnet.
+#
+# Beispiel:
+# - kategorie: schlaeger        # Ordnername unter content/wissen/
+#   name: Name des Schlägers
+#   text: Ein Satz, warum er für Einsteiger passt.
+#   link: https://partnerlink.example/…
+#   haendler: Name des Shops
+[]

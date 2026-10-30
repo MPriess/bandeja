@@ -89,6 +89,18 @@ export function checkCourt(d) {
     const out = pts.filter((p) => !inField(p, 2) && !(p.y >= FIELD.y1 - 2 && p.y <= FIELD.y2 + 2 && p.x >= FIELD.x1 - 2 && p.x <= FIELD.x2 + 2));
     if (out.length && !d.ausserhalb) e.push(`${key}: Ballweg verlässt den Court (bis ${Math.round(Math.min(...out.map((p) => p.y)))} px) – Bogen ins Feld legen`);
     typeRules(key, typ, { pts: pts.slice(0, cut), hitter, hitterSide, end, treffpunkt: key === "ball" && d.treffpunkt });
+    // Legibility: the ball does not fly through people who are not part of the shot
+    // (hitter and, for a contact point, the receiving player are allowed).
+    {
+      // Receiver: the person at the contact point, or whoever the ball is aimed at (target ≤ 25 px away).
+      const nearest = Object.entries(people).filter(([k]) => k !== "g").sort((x, y) => dist(x[1], end) - dist(y[1], end))[0];
+      const receiver = nearest && ((key === "ball" && d.treffpunkt) || dist(nearest[1], end) <= 25) ? nearest[0] : null;
+      for (const [k, pt] of Object.entries(people)) {
+        if (k === "g" || pt === hitter || k === receiver) continue;
+        const near = Math.min(...pts.slice(0, cut).map((p) => dist(p, pt)));
+        if (near < R_PERSON + 2) e.push(`${key}: Ballweg läuft durch ${PERSONS[k]} (${Math.round(near)} px Abstand, mind. ${R_PERSON + 2}) – sieht aus wie ein Treffer`);
+      }
+    }
     if (d.ohneNetz) return;
     const c = crossings(pts.slice(0, cut), NET_X);
     if (c.n !== 1) e.push(`${key}: Ball kreuzt das Netz ${c.n}× bis zum Ziel statt genau 1×${c.n === 0 ? " (sonst `ohneNetz: true`)" : ""}`);
@@ -159,6 +171,13 @@ export function checkCourt(d) {
       const mover = ["p", "g"].map((k) => people[k]).filter(Boolean);
       const ends = [pts[0], pts.at(-1)];
       if (!mover.some((m) => ends.some((x) => dist(m, x) <= 40))) e.push("Laufweg (`mv`) beginnt oder endet nicht bei dir");
+      for (const k of ["q", "a", "b"]) if (people[k] && dist(people[k], pts.at(-1)) < 30) e.push(`Laufweg (\`mv\`) endet auf ${PERSONS[k]}`);
+      // After your own shot you move towards the net (not backwards).
+      if (d.ball && !d.ohneNetz) {
+        const s0 = parsePath(d.ball).start;
+        const hit = Object.entries(people).sort((x, y) => dist(x[1], s0) - dist(y[1], s0))[0];
+        if (hit && ["p", "g"].includes(hit[0]) && fromNet(pts.at(-1).x) > fromNet(pts[0].x) + 2) e.push("Laufweg (`mv`) führt nach deinem Schlag vom Netz weg – nach dem Schlag geht es nach vorn");
+      }
     } catch (err) { e.push(`mv: ${err.message}`); }
   }
   return e;

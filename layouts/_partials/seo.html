@@ -1,0 +1,26 @@
+{{- /* Canonical, Open Graph and structured data (schema.org). Checked by scripts/checks/27-seo.mjs. */ -}}
+{{- $desc := .Description | default site.Params.description -}}
+{{- $title := cond .IsHome (printf "%s Online-Padelschule" site.Title) .Title -}}
+{{- $img := "og.png" | absURL -}}
+{{- $isArticle := and (eq .Section "wissen") .IsPage -}}
+{{- $isLesson := and (eq .Section "lektionen") .IsPage -}}
+<link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="de_DE">
+<meta property="og:type" content="{{ cond (or $isArticle $isLesson) "article" "website" }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:image" content="{{ $img }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+{{- $ld := dict "@context" "https://schema.org" "@type" "WebPage" "name" $title "description" $desc "url" .Permalink "inLanguage" "de" -}}
+{{- if .IsHome }}
+  {{- $ld = dict "@context" "https://schema.org" "@type" "WebSite" "name" site.Title "description" $desc "url" .Permalink "inLanguage" "de" }}
+{{- else if $isArticle }}
+  {{- $ld = dict "@context" "https://schema.org" "@type" "Article" "headline" .Title "description" $desc "url" .Permalink "inLanguage" "de" "image" $img "isAccessibleForFree" true "publisher" (dict "@type" "Organization" "name" site.Title) }}
+{{- else if $isLesson }}
+  {{- $ld = dict "@context" "https://schema.org" "@type" "LearningResource" "name" (printf "%s – %s" .CurrentSection.Title .Title) "description" (.Params.intro | default $desc) "url" .Permalink "inLanguage" "de" "isAccessibleForFree" true "learningResourceType" (cond (eq .Layout "quiz") "Quiz" "Lektion") "isPartOf" (dict "@type" "Course" "name" .CurrentSection.Title "description" .CurrentSection.Description "provider" (dict "@type" "Organization" "name" site.Title)) }}
+{{- end }}
+<script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>

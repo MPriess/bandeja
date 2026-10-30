@@ -19,7 +19,7 @@
           <p class="m-0 max-w-[520px] text-xl leading-relaxed text-fog">Vom ersten Aufschlag bis zur Vibora: Lektionen mit Court-Grafiken, Drills für deinen Platz und ein Lernpfad in vier Stufen.</p>
           <div class="flex flex-wrap gap-3">
             {{ partial "ui/button.html" (dict "href" $first.RelPermalink "label" "Lernpfad starten" "size" "lg" "icon" "arrow-right") }}
-            {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" $probe) "label" "Probelektion starten" "size" "lg" "variant" "ghost" "iconBefore" "court") }}
+            {{ partial "ui/button.html" (dict "href" ("schnellstart/" | relURL) "label" "Schnellstart in 10 Minuten" "size" "lg" "variant" "ghost" "iconBefore" "court") }}
           </div>
           <p class="m-0 text-sm text-fog-3">Kostenlos und ohne Anmeldung. Für Anfänger, Wiedereinsteiger und Tennisspieler, die umsteigen.</p>
         </div>
@@ -91,8 +91,8 @@
     <section id="lektionen" class="bg-white px-6 py-24">
       <div class="mx-auto flex max-w-[1240px] flex-col gap-10">
         <div class="flex flex-wrap items-end justify-between gap-4">
-          <h2 class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-[64px]">Beliebte Lektionen</h2>
-          <a href="{{ "/lernpfad/" | relURL }}" class="inline-flex min-h-11 items-center text-base font-semibold">Ganzen Lernpfad ansehen →</a>
+          <h2 class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-[64px]">{{ .Params.auswahlTitel | default "Lektionen" }}</h2>
+          <a href="{{ "lernpfad/" | relURL }}" class="inline-flex min-h-11 items-center text-base font-semibold">Ganzen Lernpfad ansehen →</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
           {{- $styles := slice (dict "bg" "bg-court" "badge" "bg-lime") (dict "bg" "bg-ink" "badge" "bg-paper") (dict "bg" "bg-moss" "badge" "bg-paper") (dict "bg" "bg-clay" "badge" "bg-paper") }}
@@ -132,7 +132,7 @@
               <li>Lektionen und Drills je Stufe</li>
               <li>Stufen-Check als Checkliste</li>
             </ul>
-            {{ partial "ui/button.html" (dict "href" ("/lernpfad/" | relURL) "label" "Lernpfad öffnen" "variant" "outline") }}
+            {{ partial "ui/button.html" (dict "href" ("lernpfad/" | relURL) "label" "Lernpfad öffnen" "variant" "outline") }}
           </div>
           <div class="flex flex-col gap-5 rounded-[20px] bg-ink p-8 text-paper">
             <div class="flex items-center justify-between gap-3">
@@ -155,7 +155,7 @@
               <li>Schläger, Zubehör und Bälle</li>
               <li>Training und Spielmodi</li>
             </ul>
-            {{ partial "ui/button.html" (dict "href" ("/wissen/" | relURL) "label" "Wissen durchstöbern" "variant" "outline") }}
+            {{ partial "ui/button.html" (dict "href" ("wissen/" | relURL) "label" "Wissen durchstöbern" "variant" "outline") }}
           </div>
         </div>
       </div>

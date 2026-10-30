@@ -25,6 +25,8 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Kopfzeile und Inhalt fluchten nicht: bei 1280 px steht das Logo 24 px weiter rechts als der Seiteninhalt (Innenabstand in `site-header` innerhalb der Max-Breite, im Inhalt außerhalb). Einheitlich lösen; Prüfung: linke Kante von Logo und `<h1>` gleich (± 1 px) auf Wissen-Seiten bei 1280 px.
 - [x] Animation: „Du“ erscheint doppelt (statischer Kreis bleibt am Start, bewegter Marker mit Lime-Rand läuft los; Marker fehlt in der Legende). Bei Animation mit Laufweg: bewegter Marker sieht aus wie „Du“ und ist den ganzen Zyklus sichtbar (steht vor dem Loslaufen am Start, danach am Ziel), statischer „Du“-Kreis wird währenddessen ausgeblendet; ohne Bewegung/reduziert bleibt die statische Grafik. Prüfung: während der Animation genau ein sichtbares „Du“.
 - [x] Wissen-Übersicht auf dem Handy ~9.500 px lang (alle 100 Titel untereinander). Je Kategorie die ersten 5 zeigen, Rest per `<details>` „Alle N zeigen“ (ohne JS); Desktop darf mehr zeigen. Prüfung: Seitenhöhe bei 360 px ≤ 4.000 px.
+- [x] Ballwege laufen durch unbeteiligte Personen (z. B. t18, Rückwand-Kapitel 1–3: gegnerischer Ball fliegt durch deinen Partner am Netz) – sieht aus wie ein Treffer. Court-Regel: Ballweg hält ≥ 15 px Abstand zu allen Personen außer Schlagendem und Annehmendem; betroffene Grafiken korrigieren.
+- [x] Startseite „Beliebte Lektionen“: zeigt 3 Wissensartikel statt der 6 echten Lektionen, und „beliebt“ ist unbelegt. Überschrift sachlich („Eine Lektion für jede Stufe“, aus dem Content), Auswahl je Stufe eine Lektion.
 
 ## 1 · Fundament: Prüfungen
 
@@ -47,28 +49,28 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Wissen-Artikel von JSON auf YAML-Frontmatter umstellen (Skript, Inhalt unverändert; Build-Ausgabe vorher/nachher vergleichen).
 - [x] Fest eingebaute Bandeja-Texte entfernen: Quiz-Ergebnistext aus `quiz.md` (`bestanden_ab`, `hinweis`), Probelektion im Lernpfad aus `content/lernpfad/_index.md`.
 - [x] `archetypes/` für Lektion, Kapitel, Quiz, Drill, Wissensartikel; `PFLEGE.md` mit Anleitung zum Anlegen und Prüfen.
-- [ ] 404-Seite im Stil der Seite.
-- [ ] Prüfung „Pflichtfelder“ je Inhaltsart (z. B. Quiz: genau ein `right` im Bereich; Drill: `sets`, `balls`, `pause`, `steps`).
+- [x] 404-Seite im Stil der Seite.
+- [x] Prüfung „Pflichtfelder“ je Inhaltsart (z. B. Quiz: genau ein `right` im Bereich; Drill: `sets`, `balls`, `pause`, `steps`).
 
 ## 4 · Inhalte
 
-- [ ] Lektion „Der Aufschlag“ (Stufe 1) mit Kapiteln, Quiz, animierten Grafiken.
-- [ ] Drill zum Aufschlag; Stufe 1 auf Lektion und Drill verweisen lassen.
-- [ ] Lektion „Spiel mit der Rückwand“ (Stufe 2).
-- [ ] Drill zur Rückwand; Stufe 2 verlinken.
-- [ ] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.
-- [ ] Lektion „Die Vibora“ (Stufe 3).
-- [ ] Drill zur Vibora; Stufe 3 verlinken.
-- [ ] Lektion „Der Smash“ (Stufe 4).
-- [ ] Drill zum Smash; Stufe 4 verlinken.
-- [ ] Lektion „Volley“ (Stufe 2).
-- [ ] Lektion „Chiquita“ (Stufe 4).
-- [ ] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).
+- [x] Lektion „Der Aufschlag“ (Stufe 1) mit Kapiteln, Quiz, animierten Grafiken.
+- [x] Drill zum Aufschlag; Stufe 1 auf Lektion und Drill verweisen lassen.
+- [x] Lektion „Spiel mit der Rückwand“ (Stufe 2).
+- [x] Drill zur Rückwand; Stufe 2 verlinken.
+- [x] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.
+- [x] Lektion „Die Vibora“ (Stufe 3).
+- [x] Drill zur Vibora; Stufe 3 verlinken.
+- [x] Lektion „Der Smash“ (Stufe 4).
+- [x] Drill zum Smash; Stufe 4 verlinken.
+- [x] Lektion „Volley“ (Stufe 2).
+- [x] Lektion „Chiquita“ (Stufe 4).
+- [x] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).
 
 ## 5 · Live-Vorbereitung und Monetarisierung (ohne Hosting)
 
-- [ ] SEO-Grundlagen: Canonical, Open-Graph-Tags, Vorschaubild (SVG→PNG beim Build oder statisch), strukturierte Daten für Kurs/Artikel; Prüfung dafür.
-- [ ] Schriftpfade relativ zur `baseURL`, damit die Seite auch in einem Unterordner läuft.
-- [ ] Baustein Produktempfehlung (Affiliate, gekennzeichnet, per `hugo.toml` abschaltbar, standardmäßig aus).
-- [ ] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
-- [ ] Performance-Budget-Prüfung: CSS ≤ 40 kB, Seiten-HTML ≤ 60 kB, keine Bilder > 200 kB.
+- [x] SEO-Grundlagen: Canonical, Open-Graph-Tags, Vorschaubild (SVG→PNG beim Build oder statisch), strukturierte Daten für Kurs/Artikel; Prüfung dafür.
+- [x] Schriftpfade relativ zur `baseURL`, damit die Seite auch in einem Unterordner läuft.
+- [x] Baustein Produktempfehlung (Affiliate, gekennzeichnet, per `hugo.toml` abschaltbar, standardmäßig aus).
+- [x] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
+- [x] Performance-Budget-Prüfung: CSS ≤ 40 kB, Seiten-HTML ≤ 60 kB, keine Bilder > 200 kB.

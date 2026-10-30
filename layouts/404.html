@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{- /* Page not found. Hugo writes it to /404.html; most hosts serve it automatically. */ -}}
+<div class="flex min-h-screen flex-col">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt" class="flex-1 bg-ink px-6 pt-12 pb-20 text-paper">
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-6">
+      {{ partial "ui/eyebrow.html" (dict "text" "Fehler 404" "class" "text-lime") }}
+      <h1 class="m-0 max-w-[880px] font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-8xl">Ball im Aus.</h1>
+      <p class="m-0 max-w-[620px] text-lg leading-relaxed text-fog">Diese Seite gibt es nicht – vielleicht hat sich die Adresse geändert. Von hier aus geht's weiter:</p>
+      <div class="flex flex-wrap gap-3">
+        {{ partial "ui/button.html" (dict "href" ("lernpfad/" | relURL) "label" "Zum Lernpfad" "size" "lg" "icon" "arrow-right") }}
+        {{ partial "ui/button.html" (dict "href" ("wissen/" | relURL) "label" "Padel-Wissen" "size" "lg" "variant" "ghost") }}
+        {{ partial "ui/button.html" (dict "href" ("" | relURL) "label" "Startseite" "size" "lg" "variant" "ghost") }}
+      </div>
+    </div>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

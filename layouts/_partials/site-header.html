@@ -1,15 +1,15 @@
 {{- /*
   Dark top bar used on content pages.
-  Usage: partial "site-header.html" (dict "page" . "crumbs" (slice (dict "title" "Wissen" "href" "/wissen/")) "width" "max-w-[1240px]")
+  Usage: partial "site-header.html" (dict "page" . "crumbs" (slice (dict "title" "Wissen" "href" "wissen/")) "width" "max-w-[1240px]")
 */ -}}
 {{- $p := .page -}}
 {{- $nav := slice
-  (dict "title" "Lernpfad" "href" "/lernpfad/")
-  (dict "title" "Lektionen" "href" "/lektionen/")
-  (dict "title" "Drills" "href" "/drills/")
-  (dict "title" "Wissen" "href" "/wissen/")
+  (dict "title" "Lernpfad" "href" "lernpfad/")
+  (dict "title" "Lektionen" "href" "lektionen/")
+  (dict "title" "Drills" "href" "drills/")
+  (dict "title" "Wissen" "href" "wissen/")
 -}}
-<header class="bg-ink px-6 text-paper">
+<header class="vt-kopf bg-ink px-6 text-paper">
   {{- /* Phone: logo and button in row 1, navigation as a swipeable bar in row 2. From md: one row. */}}
   <div class="mx-auto flex flex-wrap items-center gap-x-6 pt-3 md:flex-nowrap md:py-4 {{ .width | default "max-w-[1240px]" }}">
     <div class="flex min-w-0 flex-1 items-center gap-5">
@@ -30,7 +30,7 @@
       {{- end }}
     </nav>
     <div class="order-2 flex-none md:order-3">
-      {{ partial "ui/button.html" (dict "href" ("/lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
+      {{ partial "ui/button.html" (dict "href" ("lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
     </div>
   </div>
 </header>

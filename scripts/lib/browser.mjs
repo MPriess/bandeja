@@ -36,4 +36,6 @@ export const SAMPLES = {
   drill: "/drills/bandeja-an-die-seitenwand/",
   wissen: "/wissen/",
   artikel: "/wissen/schlagtechniken/der-aufschlag-technik/",
+  fehler: "/404.html",
+  schnellstart: "/schnellstart/",
 };

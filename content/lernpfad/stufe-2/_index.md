@@ -7,18 +7,19 @@ description: Volley, Lob und das Spiel mit der Rückwand – der Moment, in dem 
 tags: [Volley, Lob, Rückwand]
 lessons:
   - /wissen/schlagtechniken/t03
-  - /wissen/regeln/r10
-  - /wissen/schlagtechniken/t18
-  - /wissen/schlagtechniken/t19
-  - /wissen/regeln/r09
-  - /wissen/schlagtechniken/t07
+  - /lektionen/spiel-mit-der-rueckwand
+  - /lektionen/der-volley
   - /wissen/schlagtechniken/t08
   - /wissen/schlagtechniken/t09
+  - /wissen/regeln/r09
+  - /wissen/schlagtechniken/t07
   - /wissen/schlagtechniken/t10
 drills:
-  - /wissen/training/tr04
   - /wissen/training/tr06
+  - /drills/rueckwand-zuspiel
+  - /drills/volley-in-die-ecken
   - /wissen/training/tr07
+  - /wissen/training/tr04
 check:
   - Ich lasse den Ball von der Rückwand abprallen, statt ins Glas zu laufen.
   - Ich spiele Bälle aus der Ecke zurück ins Feld.

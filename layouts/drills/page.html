@@ -10,7 +10,7 @@
 <form class="drill tally min-h-screen bg-ink text-paper" aria-label="Drill">
   <div class="mx-auto flex max-w-[480px] flex-col pb-10 lg:max-w-[1040px]">
     <div class="flex items-center justify-between px-5 pt-7">
-      <a href="{{ with $lesson }}{{ partial "fn/href.html" . }}{{ else }}{{ "/drills/" | relURL }}{{ end }}" aria-label="Zurück" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
+      <a href="{{ with $lesson }}{{ partial "fn/href.html" . }}{{ else }}{{ "drills/" | relURL }}{{ end }}" aria-label="Zurück" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
       <span class="text-sm font-semibold text-fog-2">Drill · {{ $p.with }}</span>
       {{ partial "ui/logo.html" (dict "class" "text-2xl") }}
     </div>

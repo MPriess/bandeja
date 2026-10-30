@@ -1,0 +1,25 @@
+{{- /*
+  Newsletter sign-up above the footer. Off unless monetarisierung.newsletter is true AND
+  newsletterAction is set. Plain form, no JavaScript; data only goes out on submit.
+*/ -}}
+{{- with site.Params.monetarisierung }}
+{{- if and .newsletter .newsletterAction }}
+<section aria-labelledby="newsletter" class="bg-ink-2 px-6 py-10 text-paper" data-newsletter>
+  <div class="mx-auto flex max-w-[1240px] flex-wrap items-end justify-between gap-6">
+    <div class="flex max-w-[560px] flex-col gap-2">
+      <h2 id="newsletter" class="m-0 text-xl font-bold">Newsletter</h2>
+      <p class="m-0 text-[15px] leading-normal text-fog">{{ .newsletterText }}</p>
+    </div>
+    <form action="{{ .newsletterAction }}" method="post" class="flex w-full max-w-[480px] flex-col gap-2">
+      <label for="newsletter-email" class="text-sm font-semibold">E-Mail-Adresse</label>
+      <div class="flex flex-wrap gap-2">
+        <input id="newsletter-email" name="email" type="email" required autocomplete="email" class="min-h-12 flex-[1_1_220px] rounded-full border border-ink-line bg-ink px-5 text-paper placeholder:text-fog-3" placeholder="du@beispiel.de">
+        {{- /* The button is a plain submit, styled like ui/button (lime). */}}
+        <button type="submit" class="inline-flex min-h-12 cursor-pointer items-center rounded-full bg-lime px-6 font-bold text-ink hover:bg-[#d9f25c]">Anmelden</button>
+      </div>
+      <p class="m-0 text-xs leading-normal text-fog">Abmeldung jederzeit möglich. Mehr in der <a href="{{ "datenschutz/" | relURL }}" class="link-light underline">Datenschutzerklärung</a>.</p>
+    </form>
+  </div>
+</section>
+{{- end }}
+{{- end }}

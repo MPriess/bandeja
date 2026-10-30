@@ -7,6 +7,16 @@ enableRobotsTXT = true
 
 [params]
   description = 'Offene Online-Padelschule: Lektionen mit Court-Grafiken, Drills für deinen Platz und 100 Seiten Padel-Wissen. Kostenlos, ohne Anmeldung.'
+  # Einnahmen – alles standardmäßig aus. Einschalten erst nach rechtlicher Prüfung (Impressum, Datenschutz, Kennzeichnung).
+  [params.monetarisierung]
+    produkte = false   # Empfehlungen aus data/empfehlungen.yaml in Wissensartikeln
+    newsletter = false # Anmeldefeld über der Fußzeile; braucht newsletterAction
+    newsletterAction = ''  # Formular-Adresse deines Newsletter-Anbieters (Double-Opt-in!)
+    newsletterText = 'Neue Lektionen und Drills per E-Mail – etwa einmal im Monat.'
+    premium = false    # Hinweis-Kasten auf der Lernpfad-Übersicht
+    premiumTitel = 'Trainingspläne – bald'
+    premiumText = 'Strukturierte Wochenpläne für dein Training auf dem Court. Wir sagen Bescheid, sobald es losgeht.'
+    premiumLink = ''   # optional: Seite mit mehr Infos
 
 [markup.goldmark.renderer]
   unsafe = false

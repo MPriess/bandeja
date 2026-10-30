@@ -88,7 +88,7 @@
           <p class="m-0 max-w-[560px] text-base leading-relaxed text-fog">Du hast alle vier Stufen durch. Such dir eine Spielform aus und probier dein Können im Match aus.</p>
         </div>
         <div class="flex flex-wrap gap-3">
-          {{ partial "ui/button.html" (dict "href" ("/wissen/spielmodi/" | relURL) "label" "Spielmodi ansehen" "variant" "ghost" "size" "lg") }}
+          {{ partial "ui/button.html" (dict "href" ("wissen/spielmodi/" | relURL) "label" "Spielmodi ansehen" "variant" "ghost" "size" "lg") }}
           {{ with site.GetPage "/wissen/spielmodi/m12" }}{{ partial "ui/button.html" (dict "href" .RelPermalink "label" .Title "size" "lg" "icon" "arrow-right") }}{{ end }}
         </div>
         {{- end }}

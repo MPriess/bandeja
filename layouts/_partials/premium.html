@@ -1,0 +1,12 @@
+{{- /* Premium teaser on the Lernpfad overview. Off unless monetarisierung.premium is true. */ -}}
+{{- with site.Params.monetarisierung }}
+{{- if .premium }}
+<aside aria-labelledby="premium" class="flex flex-wrap items-center justify-between gap-4 rounded-[22px] border-2 border-dashed border-court bg-court-soft p-6" data-premium>
+  <div class="flex max-w-[640px] flex-col gap-1.5">
+    <h2 id="premium" class="m-0 text-lg font-bold">{{ .premiumTitel }}</h2>
+    <p class="m-0 text-[15px] leading-normal text-body">{{ .premiumText }}</p>
+  </div>
+  {{- with .premiumLink }}{{ partial "ui/button.html" (dict "href" . "label" "Mehr erfahren" "variant" "ink" "icon" "arrow-right") }}{{ end }}
+</aside>
+{{- end }}
+{{- end }}

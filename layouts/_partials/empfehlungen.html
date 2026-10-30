@@ -1,0 +1,25 @@
+{{- /*
+  Product recommendations (affiliate) for a Wissen category, from data/empfehlungen.yaml.
+  Off unless site.Params.monetarisierung.produkte is true. Always labelled as „Anzeige“.
+  Usage: partial "empfehlungen.html" (dict "kategorie" "schlaeger")
+*/ -}}
+{{- if site.Params.monetarisierung.produkte }}
+  {{- with where (site.Data.empfehlungen | default slice) "kategorie" .kategorie }}
+  <section aria-labelledby="empfehlungen" class="flex flex-col gap-3 rounded-[20px] border border-line bg-white p-[22px]" data-anzeige>
+    <div class="flex items-center justify-between gap-3">
+      <h2 id="empfehlungen" class="m-0 text-base font-bold">Empfehlungen</h2>
+      <span class="rounded-full bg-sand px-2.5 py-1 text-xs font-bold tracking-[0.06em] text-mute uppercase">Anzeige</span>
+    </div>
+    <ul class="m-0 flex list-none flex-col gap-2.5 p-0">
+      {{- range . }}
+      <li class="flex flex-col gap-1 border-t border-sand pt-2.5">
+        <a href="{{ .link }}" rel="sponsored nofollow noopener" target="_blank" class="inline-flex min-h-11 items-center font-bold">{{ .name }}<span class="sr-only"> (Anzeige, öffnet {{ .haendler }} in neuem Tab)</span>&nbsp;→</a>
+        <p class="m-0 text-sm leading-normal text-mute">{{ .text }}</p>
+        <p class="m-0 text-xs text-mute">bei {{ .haendler }}</p>
+      </li>
+      {{- end }}
+    </ul>
+    <p class="m-0 text-xs leading-normal text-mute">Für Käufe über diese Links erhalten wir eine Provision. Für dich ändert sich der Preis nicht.</p>
+  </section>
+  {{- end }}
+{{- end }}

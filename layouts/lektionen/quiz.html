@@ -19,7 +19,7 @@
 {{- end }}
 <style>{{ delimit $unanswered ", " | safeCSS }} { display: none } .quiz{{ $answered | safeCSS }} .quiz-pending { display: none }</style>
 <form class="quiz tally group/quiz flex min-h-screen flex-col" style="counter-reset: tally quiz-open {{ $total }}" aria-label="Lektions-Quiz">
-  <header class="bg-ink text-paper">
+  <header class="vt-lektion-kopf bg-ink text-paper">
     <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
       <div class="flex items-center gap-4">
         <a href="{{ (index $chapters (sub (len $chapters) 1)).RelPermalink }}" aria-label="Zurück zur Lektion" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "close") }}</a>
