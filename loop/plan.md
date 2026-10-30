@@ -52,8 +52,8 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 
 ## 4 · Inhalte
 
-- [ ] Lektion „Der Aufschlag“ (Stufe 1) mit Kapiteln, Quiz, animierten Grafiken.
-- [ ] Drill zum Aufschlag; Stufe 1 auf Lektion und Drill verweisen lassen.
+- [x] Lektion „Der Aufschlag“ (Stufe 1) mit Kapiteln, Quiz, animierten Grafiken.
+- [x] Drill zum Aufschlag; Stufe 1 auf Lektion und Drill verweisen lassen.
 - [ ] Lektion „Spiel mit der Rückwand“ (Stufe 2).
 - [ ] Drill zur Rückwand; Stufe 2 verlinken.
 - [ ] Bandeja-Lektion: Grafiken mit `type` und Animation überarbeiten, Inhalte gegenlesen.

@@ -2,9 +2,14 @@
 {{- $p := .page -}}
 <a href="{{ partial "fn/href.html" $p }}" class="flex min-w-0 flex-[2_1_460px] flex-wrap items-center gap-7 rounded-[22px] bg-ink p-7 text-paper no-underline hover:text-paper">
   <div class="flex aspect-[16/10] flex-[1_1_220px] items-center justify-center rounded-2xl bg-court">
-    {{ partial "court.html" (dict "class" "w-[82%]" "d" (or $p.Params.diag (dict
-      "cap" "Padelcourt von oben"
-      "ball" "M 300 72 Q 170 20 52 182" "tx" 52 "ty" 182 "px" 300 "py" 72))) }}
+    {{- /* Preview: the article's diagram, a lesson's `vorschau`, else its first chapter with a ball path. */}}
+    {{- $d := $p.Params.diag | default $p.Params.vorschau }}
+    {{- if not $d }}
+      {{- range (where $p.RegularPages "Layout" "ne" "quiz").ByWeight }}
+        {{- if and (not $d) .Params.court.ball }}{{ $d = merge (dict "ax" 130 "ay" 70 "bx" 140 "by" 165) .Params.court }}{{ end }}
+      {{- end }}
+    {{- end }}
+    {{ partial "court.html" (dict "class" "w-[82%]" "d" ($d | default (dict "cap" "Padelcourt von oben"))) }}
   </div>
   <div class="flex flex-[1_1_220px] flex-col gap-3">
     <p class="m-0 text-[13px] font-semibold tracking-[0.07em] text-lime uppercase">{{ .eyebrow }}</p>

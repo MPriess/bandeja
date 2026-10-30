@@ -12,10 +12,12 @@ lessons:
   - /wissen/regeln/r04
   - /wissen/regeln/r05
   - /wissen/regeln/r07
+  - /lektionen/der-aufschlag
   - /wissen/schlagtechniken/t06
   - /wissen/schlagtechniken/t04
   - /wissen/schlagtechniken/t05
 drills:
+  - /drills/aufschlag-in-die-zielecken
   - /wissen/training/tr02
   - /wissen/training/tr03
 check:
