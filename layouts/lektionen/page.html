@@ -39,18 +39,18 @@
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-2 px-[18px] py-3.5">
           <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink-2 p-1">
             <label class="inline-flex min-h-10 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
-              <input type="radio" name="ansicht" id="ansicht-court" class="sr-only" checked>Court-Ansicht
+              <input type="radio" name="ansicht" id="ansicht-court" class="sr-only" checked>Court<span class="hidden sm:inline">-Ansicht</span>
             </label>
             <label class="inline-flex min-h-10 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
-              <input type="radio" name="ansicht" id="ansicht-flow" class="sr-only">Bewegungsablauf
+              <input type="radio" name="ansicht" id="ansicht-flow" class="sr-only"><span class="sm:hidden">Ablauf</span><span class="hidden sm:inline">Bewegungsablauf</span>
             </label>
           </div>
-          {{ partial "court-legend.html" (dict "d" $court "class" "text-fog") }}
         </div>
 
         <div class="hidden flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7 group-has-[#ansicht-court:checked]/view:flex">
           {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]") }}
           <p class="m-0 max-w-[620px] text-center text-base font-semibold">{{ $court.cap }}</p>
+          {{ partial "court-legend.html" (dict "d" $court "class" "justify-center text-sky") }}
         </div>
 
         <div class="hidden grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5 p-6 group-has-[#ansicht-flow:checked]/view:grid">
