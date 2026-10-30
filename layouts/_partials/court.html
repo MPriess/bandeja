@@ -1,6 +1,6 @@
 {{- /*
   Padel court seen from above (net in the middle), drawn as inline SVG.
-  Usage: partial "court.html" (dict "d" $diagram "class" "w-full" "service" 74)
+  Usage: partial "court.html" (dict "d" $diagram "class" "w-full")
 
   $diagram keys (all optional, coordinates in a 440 × 230 box):
     cap            caption, used as the accessible label
@@ -14,11 +14,12 @@
     gx gy          your earlier position (ghost)
     ax ay, bx by   opponents
     labels         list of {x, y, t} round markers with a letter (quiz)
-  service: x of the service lines on the left half (74 in articles, 81 in lessons).
+  Court geometry (checked by scripts/checks/30-court-geometrie.mjs): 21 px per metre,
+  net at x 220, service lines 6.95 m from the net at x 74 and 366, centre line at y 115.
 */ -}}
 {{- $d := .d | default dict -}}
-{{- $s := .service | default 81 -}}
-{{- $s2 := sub 440 $s -}}
+{{- $s := 74 -}}
+{{- $s2 := 366 -}}
 <svg viewBox="0 0 440 230" class="block h-auto {{ .class | default "w-full" }}" role="img" aria-label="{{ $d.cap | default "Padelcourt von oben" }}">
   <rect x="10" y="10" width="420" height="210" rx="4" fill="var(--color-court-2)" stroke="var(--color-paper)" stroke-width="3"/>
   {{- with $d.zw }}<rect x="{{ $d.zx }}" y="{{ $d.zy }}" width="{{ . }}" height="{{ $d.zh }}" fill="var(--color-lime)" opacity="{{ $d.zo | default 0.4 }}"/>{{ end }}

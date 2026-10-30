@@ -25,7 +25,7 @@
       <article class="flex min-w-0 flex-[999_1_560px] flex-col gap-8">
         {{- with $p.diag }}
         <figure class="m-0 flex flex-col gap-3.5 rounded-[22px] bg-court p-6 text-paper">
-          {{ partial "court.html" (dict "d" . "service" 74) }}
+          {{ partial "court.html" (dict "d" .) }}
           <figcaption class="text-[15px] leading-normal font-semibold">{{ .cap }}</figcaption>
           {{ partial "court-legend.html" (dict "partner" true) }}
         </figure>
