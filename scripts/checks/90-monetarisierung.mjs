@@ -25,7 +25,16 @@ export default async ({ root, pub }) => {
     const data = path.join(tmp, "data"), out = path.join(tmp, "public");
     fs.mkdirSync(data);
     fs.writeFileSync(path.join(data, "empfehlungen.yaml"), "- { kategorie: schlaeger, name: Testschläger, text: Nur für die Prüfung., link: 'https://partner.example/x', haendler: Testshop }\n");
-    execSync(`npx hugo --gc --minify --quiet -d ${out}`, { cwd: root, stdio: "pipe", env: { ...process.env, HUGO_DATADIR: data, HUGO_PARAMS_MONETARISIERUNG_PRODUKTE: "true" } });
+    execSync(`npx hugo --gc --minify --quiet -d ${out}`, { cwd: root, stdio: "pipe", env: { ...process.env, HUGO_DATADIR: data, HUGO_PARAMS_MONETARISIERUNG_PRODUKTE: "true", HUGO_PARAMS_MONETARISIERUNG_NEWSLETTER: "true", HUGO_PARAMS_MONETARISIERUNG_NEWSLETTERACTION: "https://newsletter.example/anmelden", HUGO_PARAMS_MONETARISIERUNG_PREMIUM: "true" } });
+    // Newsletter: labelled e-mail field, posts only to the configured provider, links the privacy page.
+    const home = fs.readFileSync(path.join(out, "index.html"), "utf8");
+    if (!home.includes("data-newsletter")) errors.push("Newsletter eingeschaltet, aber nicht sichtbar");
+    else {
+      if (!/<form action="?https:\/\/newsletter\.example\/anmelden"?[^>]*method="?post/.test(home)) errors.push("Newsletter-Formular geht nicht an newsletterAction (POST)");
+      if (!/<label for="?newsletter-email/.test(home) || !/type="?email[^>]*required|required[^>]*type="?email/.test(home)) errors.push("Newsletter: E-Mail-Feld ohne Label oder nicht Pflicht");
+      if (!/datenschutz\//.test(home.slice(home.indexOf("data-newsletter")))) errors.push("Newsletter: Link zur Datenschutzerklärung fehlt");
+    }
+    if (!fs.readFileSync(path.join(out, "lernpfad", "index.html"), "utf8").includes("data-premium")) errors.push("Premium eingeschaltet, aber auf der Lernpfad-Übersicht nicht sichtbar");
     const pages = html(path.join(out, "wissen"));
     const inCat = pages.filter((f) => f.includes(`${path.sep}schlaeger${path.sep}`) && !f.endsWith(`schlaeger${path.sep}index.html`));
     const other = pages.filter((f) => !f.includes(`${path.sep}schlaeger${path.sep}`));

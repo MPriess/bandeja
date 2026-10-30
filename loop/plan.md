@@ -72,5 +72,5 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] SEO-Grundlagen: Canonical, Open-Graph-Tags, Vorschaubild (SVG→PNG beim Build oder statisch), strukturierte Daten für Kurs/Artikel; Prüfung dafür.
 - [x] Schriftpfade relativ zur `baseURL`, damit die Seite auch in einem Unterordner läuft.
 - [x] Baustein Produktempfehlung (Affiliate, gekennzeichnet, per `hugo.toml` abschaltbar, standardmäßig aus).
-- [ ] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
+- [x] Baustein Newsletter-Hinweis und Premium-Platzhalter (standardmäßig aus).
 - [ ] Performance-Budget-Prüfung: CSS ≤ 40 kB, Seiten-HTML ≤ 60 kB, keine Bilder > 200 kB.
