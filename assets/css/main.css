@@ -141,25 +141,27 @@
 }
 
 /*
-  Court animations without JavaScript. The ball follows the drawn path (offset-path) and
-  only moves when the visitor allows motion; otherwise the static diagram is the full picture.
-  One cycle: flight (70 %), then a pause; checked by scripts/checks/80-animationen.mjs.
+  Court animations without JavaScript. Balls and your movement follow the drawn paths (offset-path);
+  per-diagram keyframes come from court.html. Only with motion allowed, and only where a pause
+  control exists (.court-scope); checked by scripts/checks/80-animationen.mjs.
 */
 @layer components {
-  .court-anim-ball {
+  .court-anim,
+  .court-pause-control {
     display: none;
-    offset-rotate: 0deg;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .court-anim-ball {
+    .court-anim {
       display: inline;
-      animation: court-ball calc(var(--flight) / 0.7) ease-in-out infinite;
+      offset-rotate: 0deg;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
     }
-  }
-  @keyframes court-ball {
-    0% { offset-distance: 0%; opacity: 0; }
-    6% { opacity: 1; }
-    70% { offset-distance: 100%; opacity: 1; }
-    85%, 100% { offset-distance: 100%; opacity: 0; }
+    .court-pause-control {
+      display: inline-flex;
+    }
+    .court-scope:has(.court-pause:checked) .court-anim {
+      animation-play-state: paused;
+    }
   }
 }

@@ -1,6 +1,6 @@
 {{- /*
   Padel court seen from above (net in the middle), drawn as inline SVG.
-  Usage: partial "court.html" (dict "d" $diagram "class" "w-full")
+  Usage: partial "court.html" (dict "d" $diagram "class" "w-full" "animate" true)
 
   $diagram keys (all optional, coordinates in a 440 × 230 box):
     cap            caption, used as the accessible label
@@ -39,14 +39,56 @@
   {{- with $d.ball }}<path data-r="ball" d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7"/>{{ end }}
   {{- with $d.ball2 }}<path data-r="ball" d="{{ . }}" fill="none" stroke="var(--color-lime)" stroke-width="3" stroke-dasharray="7 7" opacity="0.75"/>{{ end }}
   {{- with $d.mv }}<path data-r="lauf" d="{{ . }}" fill="none" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 5"/>{{ end }}
-  {{- /* Animated balls (CSS offset-path, only without reduced motion; see main.css). */ -}}
-  {{- range $k := slice "ball" "ball2" }}
-    {{- with index $d $k }}
-      {{- $typ := cond (eq $k "ball2") (or $d.typ2 $d.type) $d.type }}
-      {{- with index $flight (string $typ) }}
-  <circle class="court-anim-ball" data-anim="{{ $k }}" data-typ="{{ $typ }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ index $d $k }}'); --flight: {{ . }}s"/>
+  {{- /*
+    Animation (only with "animate" true, i.e. where a pause control exists; CSS hides it with reduced motion).
+    Order: if you hit the ball, it flies first and you move afterwards; if the ball comes from the
+    other side, you move while it flies and arrive with it. Timings go into per-diagram keyframes.
+  */ -}}
+  {{- if $.animate }}
+    {{- $num := `-?\d+(\.\d+)?` }}
+    {{- $F := 0.0 }}{{ $F2 := 0.0 }}{{ $M := 0.0 }}{{ $own := true }}
+    {{- with $d.ball }}{{ with index $flight (string $d.type) }}{{ $F = float . }}{{ end }}
+      {{- $n := findRE $num . }}{{ $bx := float (index $n 0) }}{{ $by := float (index $n 1) }}
+      {{- $best := 1e9 }}
+      {{- range $k := slice "p" "g" "q" "a" "b" }}
+        {{- with index $d (printf "%sx" $k) }}
+          {{- $dx := sub (float .) $bx }}{{ $dy := sub (float (index $d (printf "%sy" $k))) $by }}
+          {{- $dist := add (mul $dx $dx) (mul $dy $dy) }}
+          {{- if lt $dist $best }}{{ $best = $dist }}{{ $own = in (slice "p" "g" "q") $k }}{{ end }}
+        {{- end }}
       {{- end }}
     {{- end }}
+    {{- with $d.ball2 }}{{ with index $flight (string (or $d.typ2 $d.type)) }}{{ $F2 = float . }}{{ end }}{{ end }}
+    {{- with $d.mv }}
+      {{- /* Walking at about 3 m/s (63 px/s) over the straight distance, at least 0.6 s. */}}
+      {{- $n := findRE $num . }}{{ $c := len $n }}
+      {{- $dx := sub (float (index $n (sub $c 2))) (float (index $n 0)) }}{{ $dy := sub (float (index $n (sub $c 1))) (float (index $n 1)) }}
+      {{- $M = math.Max 0.6 (div (math.Sqrt (add (mul $dx $dx) (mul $dy $dy))) 63.0) }}
+    {{- end }}
+    {{- $pause := 1.2 }}
+    {{- $b0 := 0.0 }}{{ $b1 := $F }}{{ $m0 := 0.0 }}{{ $m1 := $M }}
+    {{- if and $F $M }}
+      {{- if $own }}{{ $m0 = add $F 0.15 }}{{ $m1 = add $m0 $M }}
+      {{- else }}{{ $m0 = math.Max 0 (sub $F $M) }}{{ $m1 = math.Max $F $M }}{{ $b0 = sub $m1 $F }}{{ $b1 = $m1 }}{{ end }}
+    {{- end }}
+    {{- $c0 := add (math.Max $b1 $m1) 0.3 }}{{ $c1 := add $c0 $F2 }}
+    {{- $T := add (math.Max $b1 $m1 (cond (gt $F2 0.0) $c1 0.0)) $pause }}
+    {{- $id := printf "c%s" (substr (md5 (jsonify $d)) 0 8) }}
+    {{- $kf := slice }}
+    {{- range $part := slice (dict "k" "ball" "from" $b0 "to" $b1 "on" (gt $F 0.0)) (dict "k" "ball2" "from" $c0 "to" $c1 "on" (gt $F2 0.0)) (dict "k" "mv" "from" $m0 "to" $m1 "on" (gt $M 0.0)) }}
+      {{- if $part.on }}
+        {{- $a := mul 100 (div $part.from $T) }}{{ $z := mul 100 (div $part.to $T) }}
+        {{- $kf = $kf | append (printf "@keyframes %s-%s{0%%,%.2f%%{offset-distance:0%%;opacity:0}%.2f%%{offset-distance:0%%;opacity:1}%.2f%%{offset-distance:100%%;opacity:1}%.2f%%,100%%{offset-distance:100%%;opacity:0}}" $id $part.k (math.Max 0 (sub $a 0.01)) $a $z (math.Min 100 (add $z 8))) }}
+        {{- $path := index $d $part.k }}
+        {{- $typ := cond (eq $part.k "ball2") (or $d.typ2 $d.type) (cond (eq $part.k "mv") "lauf" $d.type) }}
+        {{- if eq $part.k "mv" }}
+  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="11" fill="var(--color-ink)" stroke="var(--color-lime)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
+        {{- else }}
+  <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s"/>
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  <style>{{ delimit $kf "" | safeCSS }}</style>
   {{- end }}
   {{- if isset $d "tx" }}
     <circle data-r="ball" cx="{{ $d.tx }}" cy="{{ $d.ty }}" r="8" fill="var(--color-lime)"/>

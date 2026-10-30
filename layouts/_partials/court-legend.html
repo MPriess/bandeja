@@ -17,5 +17,13 @@
   {{- range . }}
   <li data-legend="{{ .r }}" class="inline-flex items-center gap-1.5"><svg viewBox="0 0 28 28" class="size-6 flex-none" aria-hidden="true"><rect width="28" height="28" rx="7" fill="var(--color-court-2)"/>{{ .svg | safeHTML }}</svg>{{ .t }}</li>
   {{- end }}
+  {{- if or $d.ball $d.ball2 $d.mv }}
+  <li class="court-pause-control items-center">
+    <label class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-current/40 px-3 font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+      <input type="checkbox" class="court-pause peer sr-only">
+      <span class="peer-checked:hidden">❚❚ Anhalten</span><span class="hidden peer-checked:inline">▶ Weiter</span>
+    </label>
+  </li>
+  {{- end }}
 </ul>
 {{- end }}

@@ -24,8 +24,8 @@
     <div class="mx-auto flex max-w-[1180px] flex-wrap items-start gap-8 px-6 pt-12 pb-14">
       <article class="flex min-w-0 flex-[999_1_560px] flex-col gap-8">
         {{- with $p.diag }}
-        <figure class="-mx-6 m-0 flex flex-col gap-3.5 bg-court px-3 py-5 text-paper sm:mx-0 sm:rounded-[22px] sm:p-6">
-          {{ partial "court.html" (dict "d" .) }}
+        <figure class="court-scope -mx-6 m-0 flex flex-col gap-3.5 bg-court px-3 py-5 text-paper sm:mx-0 sm:rounded-[22px] sm:p-6">
+          {{ partial "court.html" (dict "d" . "animate" true) }}
           <figcaption class="text-[15px] leading-normal font-semibold">{{ .cap }}</figcaption>
           {{ partial "court-legend.html" (dict "d" .) }}
         </figure>

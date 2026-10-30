@@ -47,8 +47,8 @@
           </div>
         </div>
 
-        <div class="hidden flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7 group-has-[#ansicht-court:checked]/view:flex">
-          {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]") }}
+        <div class="court-scope hidden flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7 group-has-[#ansicht-court:checked]/view:flex">
+          {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]" "animate" true) }}
           <p class="m-0 max-w-[620px] text-center text-base font-semibold">{{ $court.cap }}</p>
           {{ partial "court-legend.html" (dict "d" $court "class" "justify-center text-sky") }}
         </div>
