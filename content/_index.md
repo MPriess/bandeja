@@ -15,5 +15,5 @@ beliebt:
   - /lektionen/der-aufschlag
   - /lektionen/spiel-mit-der-rueckwand
   - /lektionen/bandeja
-  - /lektionen/der-smash
+  - /lektionen/die-chiquita
 ---

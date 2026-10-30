@@ -1,8 +1,8 @@
 ---
 title: Der Smash
 description: Wann sich der Smash lohnt, wie du dich stellst und wohin du ihn spielst – in fünf Kapiteln mit Court-Grafiken, Quiz und Drill.
-stufe: 4
-stufeName: Turnier
+stufe: 3
+stufeName: Taktik
 drill: /drills/smash-abschluss
 review: true
 build:

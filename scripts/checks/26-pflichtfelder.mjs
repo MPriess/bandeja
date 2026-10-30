@@ -36,6 +36,7 @@ export default async ({ root }) => {
       need(/^[A-Z]{1,2}\d{2}$/.test(fm.id ?? ""), `\`id\` fehlt oder hat nicht die Form R01/TR04`);
       need(posInt(fm.weight), "`weight` fehlt");
       need(list(fm.sections) && fm.sections.every((s) => text(s.h) && text(s.p)), "`sections` fehlt oder Abschnitt ohne `h`/`p`");
+      need(!fm.lektion || exists(fm.lektion), `\`lektion: ${fm.lektion}\` gibt es nicht`);
       if (fm.id && !fm.draft) { if (ids.has(fm.id)) need(false, `\`id: ${fm.id}\` schon vergeben in ${ids.get(fm.id)}`); ids.set(fm.id, rel); }
     } else if (rel.startsWith("drills/") && !isIndex) {
       for (const k of ["title", "description", "with", "pause", "focus"]) need(text(fm[k]), `\`${k}\` fehlt`);

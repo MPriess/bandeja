@@ -3,20 +3,21 @@ title: "Stufe 3 · Taktik"
 name: Taktik
 stufe: 3
 weight: 3
-description: Positionierung als Team, Bandeja und Vibora, um das Netz zu halten.
-tags: [Bandeja, Vibora, Netzposition]
+description: Positionierung als Team und die drei Überkopfbälle Bandeja, Vibora und Smash, um das Netz zu halten.
+tags: [Bandeja, Vibora, Smash]
 lessons:
   - /wissen/training/tr13
   - /wissen/training/tr14
   - /lektionen/bandeja
   - /lektionen/die-vibora
-  - /wissen/schlagtechniken/t12
+  - /lektionen/der-smash
+  - /wissen/schlagtechniken/t22
   - /wissen/schlagtechniken/t17
   - /wissen/schlagtechniken/t20
-  - /wissen/schlagtechniken/t22
 drills:
-  - /drills/vibora-ans-seitenglas
   - /drills/bandeja-an-die-seitenwand
+  - /drills/vibora-ans-seitenglas
+  - /drills/smash-abschluss
   - /wissen/training/tr08
   - /wissen/training/tr05
 check:

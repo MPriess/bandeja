@@ -73,6 +73,12 @@
         </section>
         {{- end }}
 
+        {{- with .Params.lektion }}{{ with site.GetPage . }}
+        <a href="{{ partial "fn/href.html" . }}" class="flex flex-wrap items-center justify-between gap-3 rounded-[18px] bg-ink px-5 py-4 text-paper no-underline hover:text-paper">
+          <span class="flex flex-col gap-0.5"><span class="text-[13px] font-semibold text-lime">Ausführlich als Lektion</span><span class="text-[17px] font-bold">{{ .Title }} · {{ partial "fn/meta.html" . }}</span></span>
+          {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-5 text-lime") }}
+        </a>
+        {{- end }}{{ end }}
         {{- with partial "fn/level-of.html" . }}
         <p class="m-0 rounded-[18px] bg-lime-soft px-5 py-4 text-[15px] leading-normal">Diese Seite gehört zu <a href="{{ .RelPermalink }}" class="font-bold">{{ .Title }}</a> im Lernpfad.</p>
         {{- end }}
