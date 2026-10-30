@@ -21,7 +21,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Lektionszeilen im Lernpfad auf dem Handy: Typ („Wissen“/„Lektion“) unter den Titel statt eigener Spalte, Titel nicht mehr dreizeilig; Zeilenkopf „Lektionen in Stufe 3 / 7 Lektionen“ ohne Umbruch.
 - [x] Drill: Fortschrittsring um „3 × 10“ ist fest zu ~60 % gefüllt und täuscht Fortschritt vor. Ring als vollen, neutralen Kreis zeichnen oder per CSS-Zähler/`:has()` an die Treffer koppeln (ohne JS); Prüfung, dass der Ring ohne Treffer leer ist.
 - [x] Ballwege verlassen in der Draufsicht den Court (t07: Lob-Bogen 6 px über die Seitenlinie – wirkt wie „Aus“). Bogen ins Feld legen; Court-Regel: alle Punkte eines Ballwegs liegen im Feld (Wandkontakt erlaubt).
-- [ ] Drill am Desktop: einspaltige Handy-Ansicht wirkt verloren auf 1280 px. Ab 1024 px zweispaltig (links Ablauf und Fokus, rechts Ring, Zähler und „Was hat gehakt?“), auf dem Handy unverändert.
+- [x] Drill am Desktop: einspaltige Handy-Ansicht wirkt verloren auf 1280 px. Ab 1024 px zweispaltig (links Ablauf und Fokus, rechts Ring, Zähler und „Was hat gehakt?“), auf dem Handy unverändert.
 
 ## 1 · Fundament: Prüfungen
 

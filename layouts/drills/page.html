@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{- /* Drill for the court, laid out for the phone. The ball count uses CSS counters (.tally), nothing is stored. */ -}}
+{{- /* Drill for the court, laid out for the phone (from 1024 px in two columns; `order` keeps the phone order). The ball count uses CSS counters (.tally), nothing is stored. */ -}}
 {{- $p := .Params -}}
 {{- $lesson := site.GetPage $p.lesson -}}
 {{- $lit := slice -}}
@@ -8,21 +8,41 @@
 {{- end }}{{ end -}}
 <style>{{ delimit $lit ", " | safeCSS }} { stroke: var(--color-lime) }</style>
 <form class="drill tally min-h-screen bg-ink text-paper" aria-label="Drill">
-  <div class="mx-auto flex max-w-[480px] flex-col pb-10">
+  <div class="mx-auto flex max-w-[480px] flex-col pb-10 lg:max-w-[1040px]">
     <div class="flex items-center justify-between px-5 pt-7">
       <a href="{{ with $lesson }}{{ partial "fn/href.html" . }}{{ else }}{{ "/drills/" | relURL }}{{ end }}" aria-label="Zurück" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
       <span class="text-sm font-semibold text-fog-2">Drill · {{ $p.with }}</span>
       {{ partial "ui/logo.html" (dict "class" "text-2xl") }}
     </div>
 
-    <main id="inhalt" class="contents">
-      <div class="flex flex-col gap-2 px-5 pt-6">
+    <main id="inhalt" class="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-6">
+      <div class="contents lg:flex lg:flex-col">
+      <div class="order-1 lg:order-none flex flex-col gap-2 px-5 pt-6">
         {{ partial "ui/eyebrow.html" (dict "text" (printf "%s · %d Min" $p.with $p.minutes) "class" "text-[13px] text-lime") }}
         <h1 class="m-0 font-display text-[40px] leading-[0.95] font-extrabold uppercase">{{ .Title }}</h1>
         <p class="m-0 text-[15px] leading-normal text-fog">{{ .Description }}</p>
       </div>
 
-      <div class="mx-5 mt-6 flex flex-col items-center gap-4 rounded-3xl bg-court p-[22px]">
+      <div class="order-3 lg:order-none mx-5 mt-[18px] flex items-start gap-3 rounded-[18px] bg-ink-2 p-4">
+        <span class="inline-flex size-8 flex-none items-center justify-center rounded-full bg-lime text-ink">{{ partial "ui/icon.html" (dict "name" "info" "class" "size-4" "stroke" 2.4) }}</span>
+        <p class="m-0 text-sm leading-normal text-sky"><strong class="text-paper">Fokus:</strong> {{ $p.focus }}</p>
+      </div>
+
+      <section class="order-4 lg:order-none mx-5 mt-8 flex flex-col gap-3" aria-labelledby="ablauf">
+        <h2 id="ablauf" class="m-0 text-lg font-bold">So geht's</h2>
+        <ol class="m-0 flex list-none flex-col gap-2.5 p-0">
+          {{- range $i, $t := $p.steps }}
+          <li class="flex items-start gap-3 text-[15px] leading-normal">
+            <span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-lime text-[13px] font-bold text-ink">{{ add $i 1 }}</span>
+            <span class="pt-0.5">{{ $t }}</span>
+          </li>
+          {{- end }}
+        </ol>
+      </section>
+
+      </div>
+      <div class="contents lg:flex lg:flex-col lg:pt-6">
+      <div class="order-2 lg:order-none mx-5 mt-6 flex flex-col items-center gap-4 rounded-3xl bg-court p-[22px]">
         <div class="relative flex size-[190px] flex-col items-center justify-center rounded-full border-[10px] border-transparent" aria-hidden="true">
           {{- /* One ring segment per ball; it lights up when that ball is ticked (selectors below). */ -}}
           {{- $n := mul $p.sets $p.balls }}
@@ -47,24 +67,7 @@
         </dl>
       </div>
 
-      <div class="mx-5 mt-[18px] flex items-start gap-3 rounded-[18px] bg-ink-2 p-4">
-        <span class="inline-flex size-8 flex-none items-center justify-center rounded-full bg-lime text-ink">{{ partial "ui/icon.html" (dict "name" "info" "class" "size-4" "stroke" 2.4) }}</span>
-        <p class="m-0 text-sm leading-normal text-sky"><strong class="text-paper">Fokus:</strong> {{ $p.focus }}</p>
-      </div>
-
-      <section class="mx-5 mt-8 flex flex-col gap-3" aria-labelledby="ablauf">
-        <h2 id="ablauf" class="m-0 text-lg font-bold">So geht's</h2>
-        <ol class="m-0 flex list-none flex-col gap-2.5 p-0">
-          {{- range $i, $t := $p.steps }}
-          <li class="flex items-start gap-3 text-[15px] leading-normal">
-            <span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-lime text-[13px] font-bold text-ink">{{ add $i 1 }}</span>
-            <span class="pt-0.5">{{ $t }}</span>
-          </li>
-          {{- end }}
-        </ol>
-      </section>
-
-      <section class="mx-5 mt-8 flex flex-col gap-4 rounded-3xl bg-paper p-5 text-ink" aria-labelledby="zaehlen">
+      <section class="order-5 lg:order-none mx-5 mt-8 flex flex-col gap-4 rounded-3xl bg-paper p-5 text-ink" aria-labelledby="zaehlen">
         <div class="flex flex-col gap-1">
           <h2 id="zaehlen" class="m-0 text-lg font-bold">Bälle in der Zielecke</h2>
           <p class="m-0 text-sm text-mute">Tipp nach jedem Treffer einen Ball an. Wird nicht gespeichert.</p>
@@ -88,7 +91,7 @@
       </section>
 
       {{- with $p.check }}
-      <section class="mx-5 mt-5 flex flex-col gap-3" aria-labelledby="gehakt">
+      <section class="order-6 lg:order-none mx-5 mt-5 flex flex-col gap-3" aria-labelledby="gehakt">
         <h2 id="gehakt" class="m-0 text-lg font-bold">Was hat noch gehakt?</h2>
         <div class="flex flex-wrap gap-2">
           {{- range $i, $t := . }}
@@ -100,11 +103,12 @@
       </section>
       {{- end }}
 
-      <div class="mx-5 mt-8 flex gap-2.5">
+      <div class="order-7 lg:order-none mx-5 mt-8 flex gap-2.5">
         <button type="reset" class="inline-flex min-h-14 flex-1 cursor-pointer items-center justify-center rounded-full border border-ink-line bg-transparent text-base font-bold text-paper hover:text-lime">Neu starten</button>
         {{- with $lesson }}
         {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" .) "label" "Zur Lektion" "size" "lg" "class" "flex-1") }}
         {{- end }}
+      </div>
       </div>
     </main>
   </div>
