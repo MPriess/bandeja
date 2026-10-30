@@ -18,7 +18,7 @@
       <nav aria-label="Brotkrumen" class="hidden min-w-0 items-center gap-2 text-sm text-fog-2 lg:flex">
         {{- range $i, $c := . }}
           {{- if $i }}<span aria-hidden="true">›</span>{{ end }}
-          {{- if $c.href }}<a href="{{ $c.href | relURL }}" class="link-light truncate font-semibold">{{ $c.title }}</a>{{ else }}<span class="truncate">{{ $c.title }}</span>{{ end }}
+          {{- if $c.href }}<a href="{{ $c.href | relURL }}" class="link-light inline-flex min-h-11 items-center truncate font-semibold">{{ $c.title }}</a>{{ else }}<span class="truncate">{{ $c.title }}</span>{{ end }}
         {{- end }}
       </nav>
       {{- end }}
@@ -26,7 +26,7 @@
     <nav aria-label="Hauptnavigation" class="order-3 -mx-6 flex w-[calc(100%+3rem)] flex-none items-center gap-x-6 overflow-x-auto px-6 text-[15px] font-medium whitespace-nowrap [scrollbar-width:none] md:order-2 md:mx-0 md:w-auto md:overflow-visible md:px-0">
       {{- range $nav }}
         {{- $active := hasPrefix $p.RelPermalink (.href | relURL) }}
-        <a href="{{ .href | relURL }}" class="link-light inline-flex min-h-11 items-center no-underline {{ if $active }}text-lime{{ end }}" {{ if $active }}aria-current="page"{{ end }}>{{ .title }}</a>
+        <a href="{{ .href | relURL }}" class="link-light inline-flex min-h-11 min-w-11 items-center justify-center no-underline {{ if $active }}text-lime{{ end }}" {{ if $active }}aria-current="page"{{ end }}>{{ .title }}</a>
       {{- end }}
     </nav>
     <div class="order-2 flex-none md:order-3">
