@@ -37,4 +37,5 @@ export const SAMPLES = {
   wissen: "/wissen/",
   artikel: "/wissen/schlagtechniken/der-aufschlag-technik/",
   fehler: "/404.html",
+  schnellstart: "/schnellstart/",
 };
