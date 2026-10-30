@@ -63,3 +63,36 @@ export function crossings(points, lineX) {
   });
   return { n, first };
 }
+
+// Any SVG path (relative commands, H/V, S/T – as the HTML minifier writes them) as absolute M/L/Q/C.
+export function toAbsolute(d) {
+  const tokens = d.match(/[MLHVQTCSZ]|-?(?:\d+\.?\d*|\.\d+)(?:e-?\d+)?/gi) ?? [];
+  const n = { M: 2, L: 2, H: 1, V: 1, Q: 4, T: 2, C: 6, S: 4, Z: 0 };
+  const out = [];
+  let i = 0, cmd = null, x = 0, y = 0, sx = 0, sy = 0, lastCtrl = null, lastCmd = null;
+  while (i < tokens.length) {
+    if (/[a-z]/i.test(tokens[i])) cmd = tokens[i++];
+    const C = cmd.toUpperCase(), rel = cmd !== C;
+    const v = tokens.slice(i, i + n[C]).map(Number);
+    i += n[C];
+    const ax = (k) => (rel ? x + v[k] : v[k]), ay = (k) => (rel ? y + v[k] : v[k]);
+    const refl = () => (lastCtrl && ["Q", "T", "C", "S"].includes(lastCmd) ? [2 * x - lastCtrl[0], 2 * y - lastCtrl[1]] : [x, y]);
+    if (C === "M") { x = sx = ax(0); y = sy = ay(1); out.push(`M ${x} ${y}`); cmd = rel ? "l" : "L"; lastCtrl = null; }
+    else if (C === "L") { x = ax(0); y = ay(1); out.push(`L ${x} ${y}`); lastCtrl = null; }
+    else if (C === "H") { x = rel ? x + v[0] : v[0]; out.push(`L ${x} ${y}`); lastCtrl = null; }
+    else if (C === "V") { y = rel ? y + v[0] : v[0]; out.push(`L ${x} ${y}`); lastCtrl = null; }
+    else if (C === "Q") { const c = [ax(0), ay(1)]; x = ax(2); y = ay(3); out.push(`Q ${c[0]} ${c[1]} ${x} ${y}`); lastCtrl = c; }
+    else if (C === "T") { const c = lastCmd === "Q" || lastCmd === "T" ? refl() : [x, y]; x = ax(0); y = ay(1); out.push(`Q ${c[0]} ${c[1]} ${x} ${y}`); lastCtrl = c; }
+    else if (C === "C") { const c1 = [ax(0), ay(1)], c2 = [ax(2), ay(3)]; x = ax(4); y = ay(5); out.push(`C ${c1.join(" ")} ${c2.join(" ")} ${x} ${y}`); lastCtrl = c2; }
+    else if (C === "S") { const c1 = lastCmd === "C" || lastCmd === "S" ? refl() : [x, y]; const c2 = [ax(0), ay(1)]; x = ax(2); y = ay(3); out.push(`C ${c1.join(" ")} ${c2.join(" ")} ${x} ${y}`); lastCtrl = c2; }
+    else if (C === "Z") { x = sx; y = sy; out.push(`L ${x} ${y}`); lastCtrl = null; }
+    lastCmd = C;
+  }
+  return out.join(" ");
+}
+
+// Two paths describe the same curve (sampled points within tol px).
+export function samePath(a, b, tol = 0.5) {
+  const pa = sample(toAbsolute(a), 40), pb = sample(toAbsolute(b), 40);
+  return pa.length === pb.length && pa.every((p, i) => dist(p, pb[i]) <= tol);
+}

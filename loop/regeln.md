@@ -66,9 +66,10 @@ Es gibt keine abweichenden Werte für Lektionen und Artikel.
 - Der Ball folgt genau dem gezeichneten Ballweg, Laufwege genau dem `mv`-Pfad.
 - Animation nur unter `@media (prefers-reduced-motion: no-preference)`. Ohne Animation zeigt die Grafik den vollständigen Endzustand.
 - Dauer 0,8–4 s pro Schritt, insgesamt höchstens 8 s, dann Pause/Wiederholung. Nichts blinkt öfter als 3× pro Sekunde.
-- Plausible Zeiten: Laufgeschwindigkeit ≤ 6 m/s; Ballgeschwindigkeit passend zum Schlag (Lob langsam, Smash schnell; Smash schneller als Bandeja, Bandeja schneller als Lob).
-- Reihenfolge: Ball kommt an, bevor die Person nach dem Treffen losläuft (wo sinnvoll).
-- Eine sichtbare Steuerung ohne JS zum Anhalten/Wiederholen (z. B. Checkbox + `:has()`, `animation-play-state`).
+- Plausible Zeiten: Geschwindigkeit je Schlagtyp in `court.html` (`$speed`, Zeitlupe), Flugzeit = Weglänge / Tempo; gemessen muss gelten Smash > Bandeja > Lob. Laufgeschwindigkeit ≤ 6 m/s (Vorgabe ~3 m/s).
+- Reihenfolge: Schlägst du selbst, erst Ball, dann Lauf. Kommt der Ball vom Gegner, läufst du während des Flugs und kommst mit ihm an.
+- Animiert wird nur mit „Anhalten/Weiter“-Steuerung in derselben `.court-scope` (WCAG 2.2.2); Grafiken ohne Steuerung (Startseite, Stufe, Quiz) bleiben statisch (`animate` nicht setzen).
+- Geprüft in `scripts/checks/80-animationen.mjs`; animierte Wege werden geometrisch mit den gezeichneten verglichen (der Minifier schreibt Pfade relativ um).
 
 ## Inhalt
 

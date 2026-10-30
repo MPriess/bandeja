@@ -38,7 +38,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 
 - [x] Ballflug-Animation im Partial `court.html` (CSS `offset-path` entlang `ball`), nur bei `prefers-reduced-motion: no-preference`, Endzustand ohne Animation vollständig.
 - [x] Laufweg-Animation entlang `mv` und Reihenfolge Ball → Bewegung; Stopp/Wiederholen-Steuerung ohne JS.
-- [ ] Prüfung „Animationen“: Pfad identisch mit gezeichnetem Weg, Dauer-Grenzen, Reduced-Motion-Schutz, Lauftempo ≤ 6 m/s, Ballgeschwindigkeit nach Schlagtyp plausibel.
+- [x] Prüfung „Animationen“: Pfad identisch mit gezeichnetem Weg, Dauer-Grenzen, Reduced-Motion-Schutz, Lauftempo ≤ 6 m/s, Ballgeschwindigkeit nach Schlagtyp plausibel.
 
 ## 3 · Pflegbarkeit
 
