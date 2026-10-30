@@ -23,7 +23,12 @@ export default async ({ pub, htmlFiles }) => {
     const svgs = [...html.matchAll(/<svg viewBox="?0 0 440 230[\s\S]*?<\/svg>/g)].map((m) => m[0]);
     for (const svg of svgs) {
       const anims = [...svg.matchAll(/<circle class="?court-anim"?[^>]*>/g)].map((m) => attrs(m[0]));
-      if (!anims.length) continue;
+      const hasPath = /data-r="?(ball|lauf)/.test(svg);
+      if (!anims.length) {
+        // Articles and lesson chapters animate every drawn ball or walking path.
+        if (hasPath && /^(wissen\/[^/]+\/[^/]+|lektionen\/[^/]+\/kapitel-[^/]+)\//.test(rel)) errors.push(`${rel}: Grafik mit Ballweg/Laufweg ist nicht animiert`);
+        continue;
+      }
       if (!html.includes("court-pause")) errors.push(`${rel}: Animation ohne Anhalten-Steuerung (WCAG 2.2.2)`);
       const drawn = [...svg.matchAll(/<path[^>]*>/g)].map((m) => attrs(m[0]));
       const people = [...svg.matchAll(/<circle[^>]*data-r="?(du|partner|frueher|gegner)[^>]*>/g)].map((m) => attrs(m[0]));

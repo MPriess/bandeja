@@ -64,7 +64,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Drill zum Smash; Stufe 4 verlinken.
 - [x] Lektion „Volley“ (Stufe 2).
 - [x] Lektion „Chiquita“ (Stufe 4).
-- [ ] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).
+- [x] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).
 
 ## 5 · Live-Vorbereitung und Monetarisierung (ohne Hosting)
 
