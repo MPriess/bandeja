@@ -85,6 +85,9 @@ export function checkCourt(d) {
       cut = i + 1;
     }
     if (!inField(end)) e.push(`${key}: Ziel (${Math.round(end.x)}|${Math.round(end.y)}) liegt außerhalb des Courts`);
+    // In the top view the ball never leaves the court (wall contact is fine): a path over the line reads as "out".
+    const out = pts.filter((p) => !inField(p, 2) && !(p.y >= FIELD.y1 - 2 && p.y <= FIELD.y2 + 2 && p.x >= FIELD.x1 - 2 && p.x <= FIELD.x2 + 2));
+    if (out.length && !d.ausserhalb) e.push(`${key}: Ballweg verlässt den Court (bis ${Math.round(Math.min(...out.map((p) => p.y)))} px) – Bogen ins Feld legen`);
     typeRules(key, typ, { pts: pts.slice(0, cut), hitter, hitterSide, end, treffpunkt: key === "ball" && d.treffpunkt });
     if (d.ohneNetz) return;
     const c = crossings(pts.slice(0, cut), NET_X);
