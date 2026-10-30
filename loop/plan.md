@@ -43,7 +43,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 
 ## 3 · Pflegbarkeit
 
-- [ ] Wissen-Artikel von JSON auf YAML-Frontmatter umstellen (Skript, Inhalt unverändert; Build-Ausgabe vorher/nachher vergleichen).
+- [x] Wissen-Artikel von JSON auf YAML-Frontmatter umstellen (Skript, Inhalt unverändert; Build-Ausgabe vorher/nachher vergleichen).
 - [ ] Fest eingebaute Bandeja-Texte entfernen: Quiz-Ergebnistext aus `quiz.md` (`bestanden_ab`, `hinweis`), Probelektion im Lernpfad aus `content/lernpfad/_index.md`.
 - [ ] `archetypes/` für Lektion, Kapitel, Quiz, Drill, Wissensartikel; `PFLEGE.md` mit Anleitung zum Anlegen und Prüfen.
 - [ ] 404-Seite im Stil der Seite.
