@@ -18,7 +18,13 @@ npm run dev
 npm run build
 ```
 
+```bash
+npm run check
+```
+
 Hugo und das Tailwind-CLI kommen über npm mit (`hugo-extended`, `@tailwindcss/cli`). Die Seite landet in `public/`. Vor dem Veröffentlichen `baseURL` in `hugo.toml` setzen und Impressum/Datenschutz (`content/impressum.md`, `content/datenschutz.md`) ausfüllen.
+
+Wie du Inhalte anlegst, prüfst und Court-Grafiken baust, steht in [PFLEGE.md](PFLEGE.md).
 
 ## Aufbau
 
