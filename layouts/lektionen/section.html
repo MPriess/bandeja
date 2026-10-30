@@ -5,7 +5,7 @@
     {{ partial "page-hero.html" (dict "eyebrow" "Lektionen" "title" "Schritt für Schritt zum Schlag" "text" .Description) }}
     <div class="mx-auto flex max-w-[1240px] flex-col gap-10 px-6 pt-12 pb-20">
       <div class="grid grid-cols-[repeat(auto-fit,minmax(min(460px,100%),1fr))] gap-5">
-        {{- range .Sections.ByWeight }}
+        {{- range sort .Sections "Params.stufe" }}
           {{ partial "lernpfad/feature.html" (dict "page" . "eyebrow" (printf "Stufe %d · %s" (int .Params.stufe) .Params.stufeName)) }}
         {{- end }}
       </div>
