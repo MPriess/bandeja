@@ -12,7 +12,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 ## 1 · Fundament: Prüfungen
 
 - [x] Prüfung „Seitenstruktur“: jede HTML-Seite hat genau eine `<h1>`, `lang`, `<title>`, Meta-Description, keine doppelten IDs. Bestehende Verstöße beheben (Quiz-Seite ohne `<h1>`).
-- [ ] Court-Daten zentral lesbar machen: Skript, das alle Grafiken aus dem Content sammelt (Wissen `diag`, Lektion `court`, Quiz `court`) inkl. Datei und Pfad im Frontmatter.
+- [x] Court-Daten zentral lesbar machen: Skript, das alle Grafiken aus dem Content sammelt (Wissen `diag`, Lektion `court`, Quiz `court`) inkl. Datei und Pfad im Frontmatter.
 - [ ] Prüfung „Court-Geometrie“: Aufschlaglinie überall x = 74/366 (Lektionen nutzen fälschlich 81 → Partial `court.html` korrigieren, Parameter `service` entfernen).
 - [ ] Prüfung „Court-Regeln“ nach `loop/regeln.md` (Personen, Netzseiten, Abstände, Ballweg-Endpunkt = Ziel, Netz einmal gekreuzt, Zielzonen im Feld). Bestehende Grafiken korrigieren, bis alles besteht.
 - [ ] Feld `type` für alle Grafiken einführen und vergeben; Schlagtyp-Regeln (Aufschlag, Lob, Bandeja/Vibora/Smash, Chiquita) in die Court-Prüfung aufnehmen.
