@@ -27,6 +27,7 @@ bandeja. soll eine Padel-Lernseite werden, die der Inhaber selbst pflegen, spät
 ## Technik
 
 - Hugo + Tailwind v4. Kein JavaScript im Frontend, keine externen Anfragen (Schriften selbst gehostet).
+- Vorladen per Speculation Rules (JSON, wird nicht ausgeführt) und Seitenübergänge per CSS `@view-transition` sind erlaubt; Übergänge nur bei `prefers-reduced-motion: no-preference`, `view-transition-name` je Seite eindeutig. Links, die nicht vorgeladen werden sollen, bekommen `.ohne-vorladen`.
 - Interaktion nur mit HTML/CSS (`:has()`, Radio/Checkbox, CSS-Counter, `<details>`).
 - Jede neue Prüfung kommt als Datei in `scripts/checks/NN-name.mjs` (wird von `scripts/check.mjs` automatisch geladen), mit `export const name` und `export default async ({ root, pub, htmlFiles }) => ({ ok, errors, note })`.
 - Neue npm-Pakete nur als devDependency und mit fester Version.

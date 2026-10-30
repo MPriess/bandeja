@@ -31,6 +31,7 @@ export default async ({ root }) => {
         if (!u.startsWith(SUB)) errors.push(`${rel}: Pfad ${u} verlässt den Unterordner`);
         else if (!fs.existsSync(path.join(out, decodeURIComponent(u.slice(SUB.length).split(/[?#]/)[0])))) errors.push(`${rel}: ${u} fehlt`);
       }
+      for (const m of text.matchAll(/"href_matches":"([^"]*)"/g)) if (!m[1].startsWith(SUB)) errors.push(`${rel}: Vorlade-Regel ${m[1]} verlässt den Unterordner`);
       for (const m of text.matchAll(/url\(["']?(\.\.\/[^"')]*)/g)) {
         if (!fs.existsSync(path.resolve(path.dirname(file), m[1]))) errors.push(`${rel}: ${m[1]} fehlt`);
       }

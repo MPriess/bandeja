@@ -15,7 +15,7 @@
   {{- range $i, $l := .Params.lessons }}{{ if eq $l $lesson.Path }}{{ $lessonNo = add $i 1 }}{{ end }}{{ end }}
 {{- end -}}
 <div class="min-h-screen">
-  <header class="bg-ink text-paper">
+  <header class="vt-lektion-kopf bg-ink text-paper">
     <div class="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
       <div class="flex flex-wrap items-center gap-4">
         <a href="{{ $backHref }}" aria-label="Zurück zum Lernpfad" class="link-light inline-flex size-11 items-center justify-center rounded-full border border-ink-line">{{ partial "ui/icon.html" (dict "name" "chevron-left") }}</a>
@@ -35,7 +35,7 @@
     <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
 
       {{/* Court view / movement view, switched with radio buttons and :has() — no JavaScript */}}
-      <div class="group/view overflow-hidden rounded-[22px] bg-ink text-paper">
+      <div class="vt-lektion-court group/view overflow-hidden rounded-[22px] bg-ink text-paper">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-2 px-[18px] py-3.5">
           <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink-2 p-1">
             <label class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
@@ -100,7 +100,7 @@
     </div>
 
     <aside class="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
-      <nav aria-label="Kapitel" class="flex flex-col gap-1 rounded-[22px] border border-line bg-white p-[18px]">
+      <nav aria-label="Kapitel" class="vt-lektion-kapitel flex flex-col gap-1 rounded-[22px] border border-line bg-white p-[18px]">
         <p class="m-0 mb-2 ml-2 text-base font-bold">Kapitel</p>
         {{- range $i, $c := $chapters }}
           {{- $cur := eq $i $pos }}{{ $before := lt $i $pos }}

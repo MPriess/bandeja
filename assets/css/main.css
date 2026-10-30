@@ -169,3 +169,29 @@
     }
   }
 }
+
+/*
+  Page transitions between pages (cross-document view transitions), pure CSS.
+  The header stays in place, the content crossfades briefly; while paging through a lesson the
+  court and the chapter list stay put. Only with motion allowed; checked by 85-uebergaenge.mjs.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-group(root) {
+    animation-duration: 220ms;
+  }
+  .vt-kopf { view-transition-name: kopf; }
+  .vt-lektion-kopf { view-transition-name: lektion-kopf; }
+  .vt-lektion-court { view-transition-name: lektion-court; }
+  .vt-lektion-kapitel { view-transition-name: lektion-kapitel; }
+  ::view-transition-group(kopf),
+  ::view-transition-group(lektion-kopf) {
+    animation-duration: 0s;
+  }
+  ::view-transition-group(lektion-court),
+  ::view-transition-group(lektion-kapitel) {
+    animation-duration: 220ms;
+  }
+}
