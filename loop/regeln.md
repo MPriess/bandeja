@@ -47,7 +47,8 @@ Es gibt keine abweichenden Werte für Lektionen und Artikel.
 
 ## Regeln für Court-Grafiken (werden automatisch geprüft)
 
-- Jede Grafik hat `cap` (Beschreibung für Screenreader) und `type`, z. B. `aufstellung`, `aufschlag`, `lob`, `bandeja`, `vibora`, `smash`, `volley`, `rueckwand`, `chiquita`, `zielzonen`, `quiz`.
+- Jede Grafik hat `cap` (Beschreibung für Screenreader) und `type` aus: `aufschlag`, `return`, `lob`, `bandeja`, `vibora`, `smash`, `volley`, `chiquita`, `stopp`, `schlag` (neutral), `rueckwand`, `ecke`, `bajada`, `contrapared`, `wand`, `aufstellung`, `bewegung`, `zielzonen`, `quiz`. Ein zweiter Ballweg kann mit `typ2` einen eigenen Typ haben.
+- Ziel (`tx`, `ty`) ist der Aufprall. Ist es der Treffpunkt in der Luft oder nach der Wand, `treffpunkt: true` setzen.
 - Alle Personen stehen im Feld oder höchstens 1 m dahinter (Spiel außerhalb des Courts ist Ausnahme und braucht `ausserhalb: true`).
 - Du (`p`) und Partner (`q`) stehen auf einer Netzseite, die Gegner (`a`, `b`) auf der anderen. Keine Person auf der Netzlinie.
 - Personen überlappen sich nicht (Mittelpunkte mind. 30 px auseinander), Beschriftungen überdecken keine Person.
@@ -57,7 +58,7 @@ Es gibt keine abweichenden Werte für Lektionen und Artikel.
 - Pfade nur mit absoluten Befehlen M, L, Q, C. Kontrollpunkte dürfen außerhalb des Courts liegen (Höhe eines Lobs).
 - Aufschlag: Aufschläger hinter der eigenen Aufschlaglinie, Ball diagonal, Aufprall im diagonal gegenüberliegenden Aufschlagfeld.
 - Zielzonen liegen vollständig im Feld.
-- Schlagtyp-Plausibilität: Bandeja/Vibora/Smash werden aus der Netzhälfte (zwischen Netz und Aufschlaglinie) oder beim Zurücklaufen gespielt; Lob wird von hinten gespielt und landet hinter der gegnerischen Aufschlaglinie; Chiquita landet vor den Füßen der Gegner am Netz.
+- Schlagtyp-Regeln (geprüft in `scripts/checks/40-court-regeln.mjs`, Selbsttest in `41-…`): Aufschlag hinter der eigenen Aufschlaglinie, diagonal, Aufprall im Aufschlagfeld. Return von hinten. Lob landet hinter der Aufschlaglinie bzw. geht mit `treffpunkt` über den vorderen Spieler. Bandeja/Vibora aus der Netzhälfte (bis 1 m hinter der Aufschlaglinie), Ziel tief; Smash aus der Netzhälfte. Chiquita von hinten, Chiquita/Stopp landen ≤ 3 m hinter dem Netz. Rückwand/Ecke/Bajada: Ballweg berührt die Rückwand (Ecke zusätzlich Seitenwand) beim Annehmenden, mit `treffpunkt`. Contrapared: gegen die eigene Rückwand.
 
 ## Animationen ohne JavaScript (werden automatisch geprüft)
 
