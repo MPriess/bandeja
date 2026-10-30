@@ -55,3 +55,13 @@ Eine Grafik ist eine Liste von Koordinaten im Feld 440 × 230 (Court von oben, N
 | `zx`/`zy`/`zw`/`zh` | Zielzone |
 
 Ballflug und Laufweg werden in Artikeln und Lektionen automatisch animiert. Die Prüfung meldet, wenn etwas den Padel-Regeln widerspricht, z. B. „Aufschläger steht vor seiner Aufschlaglinie“. Alle Regeln stehen in `loop/regeln.md`.
+
+## Einnahmen (standardmäßig aus)
+
+Alle Bausteine sind in `hugo.toml` unter `[params.monetarisierung]` ausgeschaltet. Einschalten erst, wenn Impressum, Datenschutz und Partnerprogramm rechtlich geklärt sind.
+
+| Baustein | Inhalt | Schalter |
+| --- | --- | --- |
+| Produktempfehlungen | `data/empfehlungen.yaml` (je Wissen-Kategorie, z. B. `schlaeger`) | `produkte = true` |
+
+Empfehlungen werden automatisch als „Anzeige“ gekennzeichnet, mit Hinweis auf die Provision und Links mit `rel="sponsored nofollow"`. `npm run check` prüft das mit einem Testprodukt, auch wenn der Schalter aus ist.

@@ -7,6 +7,9 @@ enableRobotsTXT = true
 
 [params]
   description = 'Offene Online-Padelschule: Lektionen mit Court-Grafiken, Drills für deinen Platz und 100 Seiten Padel-Wissen. Kostenlos, ohne Anmeldung.'
+  # Einnahmen – alles standardmäßig aus. Einschalten erst nach rechtlicher Prüfung (Impressum, Datenschutz, Kennzeichnung).
+  [params.monetarisierung]
+    produkte = false   # Empfehlungen aus data/empfehlungen.yaml in Wissensartikeln
 
 [markup.goldmark.renderer]
   unsafe = false
