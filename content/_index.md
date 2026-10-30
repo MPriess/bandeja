@@ -9,10 +9,11 @@ probe:
     - { k: Ziel, v: "Ecke, hinten links" }
     - { k: Schlägerfläche, v: Leicht offen }
     - { k: Danach, v: Netz halten }
-# „Beliebte Lektionen“: Seiten in dieser Reihenfolge (Farben wechseln automatisch)
+# Lektionsauswahl auf der Startseite: Überschrift und Seiten in dieser Reihenfolge (Farben wechseln automatisch)
+auswahlTitel: Eine Lektion für jede Stufe
 beliebt:
+  - /lektionen/der-aufschlag
+  - /lektionen/spiel-mit-der-rueckwand
   - /lektionen/bandeja
-  - /wissen/schlagtechniken/t18
-  - /wissen/schlagtechniken/t10
-  - /wissen/regeln/r01
+  - /lektionen/der-smash
 ---

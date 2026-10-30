@@ -32,7 +32,7 @@ Entwürfe in der Vorschau sehen: `npx hugo server -D`.
 
 | Inhalt | Datei |
 | --- | --- |
-| Probelektion, Grafik und „Beliebte Lektionen“ auf der Startseite | `content/_index.md` |
+| Probelektion, Grafik und Lektionsauswahl auf der Startseite | `content/_index.md` |
 | Probelektion im Lernpfad | `content/lernpfad/_index.md` |
 | Eine Stufe: Lektionen, Drills, Stufen-Check | `content/lernpfad/stufe-N/_index.md` |
 | Lektion: Bewegungsablauf, Kapitel, Quiz | `content/lektionen/<name>/` |

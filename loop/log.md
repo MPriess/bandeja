@@ -53,3 +53,4 @@
 | 2026-10-30T05:48Z | Inhalt: Lektion Chiquita + Drill | Lektion „Die Chiquita“ (4 Kapitel: wann, langsam und flach, an die Füße, danach ans Netz; Quiz mit 4 Fragen) und Drill „Chiquita an die Füße“, in Stufe 4. Court-Regeln prüfen Chiquita von hinten und Aufprall ≤ 3 m hinter dem Netz – grün (68 Grafiken) | – |
 | 2026-10-30T05:49Z | Animationen in allen Artikeln | Nachgeprüft: alle 21 Wissen-Grafiken mit Ball-/Laufweg sind über die Vorlage animiert, kein Nachrüsten nötig. Animations-Prüfung verlangt das jetzt für alle Artikel und Kapitel | – |
 | 2026-10-30T05:50Z | UX-Runde 10 | Startseite nach den neuen Lektionen angesehen. 1 neuer Punkt: „Beliebte Lektionen“ zeigt Wissensartikel und behauptet Beliebtheit ohne Daten | – |
+| 2026-10-30T05:51Z | UX: Lektionsauswahl Startseite | „Beliebte Lektionen“ (unbelegt, 3 Wissensartikel) → „Eine Lektion für jede Stufe“ mit Aufschlag, Rückwand, Bandeja, Smash. Überschrift aus `content/_index.md` (`auswahlTitel`) | – |
