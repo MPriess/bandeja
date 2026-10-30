@@ -1,0 +1,17 @@
+{{ define "main" }}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt">
+    {{ partial "page-hero.html" (dict "eyebrow" "Videos" "title" "Szenen vom Court" "text" .Description) }}
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-10 px-6 pt-12 pb-20">
+      {{ partial "video-hinweis.html" (dict "text" "Die Videos liegen bei YouTube. Diese Übersicht lädt nichts von dort – der Player erscheint erst, wenn du ein Video öffnest.") }}
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-5">
+        {{- range .RegularPages.ByWeight }}
+          {{ partial "video-karte.html" (dict "page" . "level" 2) }}
+        {{- end }}
+      </div>
+    </div>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

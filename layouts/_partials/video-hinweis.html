@@ -1,0 +1,6 @@
+{{- /* Privacy note next to YouTube videos. Usage: partial "video-hinweis.html" (dict "text" "…" "class" "…") */ -}}
+<div class="flex items-start gap-3 rounded-2xl bg-sand px-[18px] py-4 {{ .class }}">
+  {{ partial "ui/icon.html" (dict "name" "info" "class" "size-[22px] flex-none text-court") }}
+  <p class="m-0 max-w-[820px] text-[15px] leading-normal">{{ .text }} Mehr dazu in der <a href="{{ "datenschutz/" | relURL }}">Datenschutzerklärung</a>.</p>
+</div>
+{{- /**/ -}}

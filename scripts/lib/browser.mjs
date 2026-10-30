@@ -22,7 +22,9 @@ export async function serve(pub) {
 export async function withBrowser(pub, fn) {
   const { chromium } = createRequire(import.meta.url)("playwright");
   const site = await serve(pub);
-  const browser = await chromium.launch();
+  // Only the local test server resolves: nothing reaches YouTube or other hosts during checks,
+  // but every attempt still shows up as a request (see 68-videos.mjs).
+  const browser = await chromium.launch({ args: ["--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1"] });
   try { return await fn(browser, site.url); } finally { await browser.close(); site.close(); }
 }
 
@@ -38,4 +40,6 @@ export const SAMPLES = {
   artikel: "/wissen/schlagtechniken/der-aufschlag-technik/",
   fehler: "/404.html",
   schnellstart: "/schnellstart/",
+  videos: "/videos/",
+  video: "/videos/bandeja/",
 };

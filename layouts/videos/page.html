@@ -1,0 +1,68 @@
+{{ define "main" }}
+{{- /*
+  Video page = second click of the two-click solution: only this page embeds YouTube
+  (youtube-nocookie.com). Links to it carry .ohne-vorladen and the speculation rules exclude it,
+  so it is never prerendered. Checked by scripts/checks/68-videos.mjs.
+*/ -}}
+{{- $p := .Params -}}
+{{- $lesson := site.GetPage $p.lektion -}}
+{{- $start := int ($p.start | default 0) -}}
+{{- $embed := printf "https://www.youtube-nocookie.com/embed/%s?rel=0" $p.youtube -}}
+{{- $watch := printf "https://www.youtube.com/watch?v=%s" $p.youtube -}}
+{{- if gt $start 0 }}{{ $embed = printf "%s&start=%d" $embed $start }}{{ $watch = printf "%s&t=%ds" $watch $start }}{{ end -}}
+{{- with $p.ende }}{{ $embed = printf "%s&end=%d" $embed (int .) }}{{ end -}}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" . "crumbs" (slice (dict "title" "Videos" "href" "videos/") (dict "title" .Title))) }}
+  <main id="inhalt" class="mx-auto flex max-w-[1240px] flex-wrap items-start gap-6 px-6 pt-8 pb-20">
+    <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
+      <div class="flex flex-col gap-3">
+        {{ partial "ui/eyebrow.html" (dict "text" "Video · Spielsituation" "class" "text-[13px] text-court") }}
+        <h1 class="m-0 font-display text-[44px] leading-none font-extrabold uppercase">{{ .Title }}</h1>
+        <p class="m-0 max-w-[720px] text-[17px] leading-relaxed text-mute">{{ .Description }}</p>
+      </div>
+
+      <figure class="m-0 flex flex-col overflow-hidden rounded-[22px] bg-ink text-paper">
+        <div class="aspect-video w-full">
+          <iframe class="size-full border-0" src="{{ $embed }}" title="YouTube-Video: {{ .Title }}" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <figcaption class="flex flex-wrap items-center justify-between gap-3 px-[18px] py-3.5 text-sm text-fog">
+          <span>Video{{ with $p.kanal }} von {{ . }}{{ end }} auf YouTube{{ if gt $start 0 }} · startet bei {{ div $start 60 }}:{{ printf "%02d" (mod $start 60) }}{{ end }}</span>
+          <a href="{{ $watch }}" rel="noopener" class="link-light inline-flex min-h-11 items-center font-semibold">Auf YouTube öffnen</a>
+        </figcaption>
+      </figure>
+
+      {{ partial "video-hinweis.html" (dict "text" "Der Player kommt von YouTube (Google Ireland Ltd.). Mit dem Öffnen dieser Seite überträgt dein Browser Daten wie deine IP-Adresse an YouTube; wir nutzen den erweiterten Datenschutzmodus (youtube-nocookie.com).") }}
+    </div>
+
+    <aside class="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
+      <section aria-labelledby="situation" class="flex flex-col gap-3.5 rounded-[22px] border border-line bg-white p-6">
+        <h2 id="situation" class="m-0 text-xl font-bold">Die Situation</h2>
+        <p class="m-0 text-[15px] leading-normal">{{ $p.situation }}</p>
+        {{- with $p.achte }}
+        <h3 class="m-0 pt-1 text-base font-bold">Worauf du achtest</h3>
+        <ol class="m-0 flex list-none flex-col gap-2.5 p-0">
+          {{- range $i, $t := . }}
+          <li class="flex items-start gap-3 text-[15px] leading-normal">
+            <span class="inline-flex size-7 flex-none items-center justify-center rounded-full bg-ink text-[13px] font-bold text-lime">{{ add $i 1 }}</span>
+            <span class="pt-0.5">{{ $t }}</span>
+          </li>
+          {{- end }}
+        </ol>
+        {{- end }}
+      </section>
+
+      {{- with $lesson }}
+      <section aria-labelledby="lektion" class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-6 text-paper">
+        {{ partial "ui/eyebrow.html" (dict "text" "Lektion zum Video" "class" "text-[13px] text-lime") }}
+        <h2 id="lektion" class="m-0 text-xl font-bold">{{ .Title }}</h2>
+        <p class="m-0 text-sm leading-normal text-fog">{{ .Description }}</p>
+        {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" .) "label" "Zur Lektion") }}
+      </section>
+      {{- end }}
+
+      {{ partial "ui/button.html" (dict "href" ("videos/" | relURL) "label" "← Alle Videos" "variant" "outline") }}
+    </aside>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}
