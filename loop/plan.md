@@ -13,7 +13,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Quiz-Antworten ohne doppelten Buchstaben („A – Mitte …“ neben dem Buchstaben-Kästchen A); Prüfung, dass Antworttexte nicht mit „A –“ usw. beginnen.
 - [x] Court-Legende passt nicht zur Grafik: „Du“ ist in der Grafik ein gefüllter Kreis, in der Legende ein Ring; Partner fehlt in der Lektions-Legende. Legende aus denselben Formen wie `court.html` erzeugen.
 - [x] Court-Grafik auf dem Handy größer: weniger Innenabstand um den Court (Wissen, Quiz), Markierungen und Legende gut lesbar bei 360 px.
-- [ ] Kopfzeile auf dem Handy kompakter (Navigation zweizeilig plus Button nimmt viel Platz ein), z. B. Navigation als horizontale Leiste.
+- [x] Kopfzeile auf dem Handy kompakter (Navigation zweizeilig plus Button nimmt viel Platz ein), z. B. Navigation als horizontale Leiste.
 - [ ] Lektion auf dem Handy: Ansichts-Umschalter bricht um („Court-/Ansicht“) – kürzere Beschriftung („Court“ / „Ablauf“); Legende unter den Court statt darüber (3 Zeilen über der Grafik).
 - [ ] Kapitel-Blättern auf dem Handy: beide Buttons volle Breite, „Nächstes Kapitel“ zuerst (Hauptaktion oben), am Desktop wie bisher nebeneinander.
 - [ ] Wissen-Artikel: Seitenliste der Kategorie (bis zu 23 Einträge) unterhalb von 1024 px einklappbar (`<details>`, aktuelle Seite sichtbar); „Auf einen Blick“ vor die Seitenliste.

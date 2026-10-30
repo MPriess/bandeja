@@ -10,25 +10,27 @@
   (dict "title" "Wissen" "href" "/wissen/")
 -}}
 <header class="bg-ink text-paper">
-  <div class="mx-auto flex flex-wrap items-center justify-between gap-4 px-6 py-4 {{ .width | default "max-w-[1240px]" }}">
-    <div class="flex flex-wrap items-center gap-5">
-      {{ partial "ui/logo.html" (dict "class" "text-[30px]") }}
+  {{- /* Phone: logo and button in row 1, navigation as a swipeable bar in row 2. From md: one row. */}}
+  <div class="mx-auto flex flex-wrap items-center gap-x-6 px-6 pt-3 md:flex-nowrap md:py-4 {{ .width | default "max-w-[1240px]" }}">
+    <div class="flex min-w-0 flex-1 items-center gap-5">
+      {{ partial "ui/logo.html" (dict "class" "text-[26px] md:text-[30px]") }}
       {{- with .crumbs }}
-      <nav aria-label="Brotkrumen" class="flex items-center gap-2 text-sm text-fog-2">
+      <nav aria-label="Brotkrumen" class="hidden min-w-0 items-center gap-2 text-sm text-fog-2 lg:flex">
         {{- range $i, $c := . }}
           {{- if $i }}<span aria-hidden="true">›</span>{{ end }}
-          {{- if $c.href }}<a href="{{ $c.href | relURL }}" class="link-light font-semibold">{{ $c.title }}</a>{{ else }}<span>{{ $c.title }}</span>{{ end }}
+          {{- if $c.href }}<a href="{{ $c.href | relURL }}" class="link-light truncate font-semibold">{{ $c.title }}</a>{{ else }}<span class="truncate">{{ $c.title }}</span>{{ end }}
         {{- end }}
       </nav>
       {{- end }}
     </div>
-    <nav aria-label="Hauptnavigation" class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] font-medium">
+    <nav aria-label="Hauptnavigation" class="order-3 -mx-6 flex w-[calc(100%+3rem)] flex-none items-center gap-x-6 overflow-x-auto px-6 text-[15px] font-medium whitespace-nowrap [scrollbar-width:none] md:order-2 md:mx-0 md:w-auto md:overflow-visible md:px-0">
       {{- range $nav }}
         {{- $active := hasPrefix $p.RelPermalink (.href | relURL) }}
         <a href="{{ .href | relURL }}" class="link-light inline-flex min-h-11 items-center no-underline {{ if $active }}text-lime{{ end }}" {{ if $active }}aria-current="page"{{ end }}>{{ .title }}</a>
       {{- end }}
-      {{ partial "ui/button.html" (dict "href" ("/lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
     </nav>
+    <div class="order-2 flex-none md:order-3">
+      {{ partial "ui/button.html" (dict "href" ("/lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
+    </div>
   </div>
 </header>
-{{- /**/ -}}
