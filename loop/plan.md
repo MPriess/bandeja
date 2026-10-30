@@ -62,7 +62,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Drill zur Vibora; Stufe 3 verlinken.
 - [x] Lektion „Der Smash“ (Stufe 4).
 - [x] Drill zum Smash; Stufe 4 verlinken.
-- [ ] Lektion „Volley“ (Stufe 2).
+- [x] Lektion „Volley“ (Stufe 2).
 - [ ] Lektion „Chiquita“ (Stufe 4).
 - [ ] Wissensartikel mit Grafik: fehlende Animationen nachrüsten (in Blöcken zu 6 Artikeln).
 

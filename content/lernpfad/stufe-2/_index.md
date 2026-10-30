@@ -13,10 +13,12 @@ lessons:
   - /wissen/schlagtechniken/t19
   - /wissen/regeln/r09
   - /wissen/schlagtechniken/t07
+  - /lektionen/der-volley
   - /wissen/schlagtechniken/t08
   - /wissen/schlagtechniken/t09
   - /wissen/schlagtechniken/t10
 drills:
+  - /drills/volley-in-die-ecken
   - /drills/rueckwand-zuspiel
   - /wissen/training/tr04
   - /wissen/training/tr06
