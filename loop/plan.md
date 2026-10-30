@@ -24,7 +24,7 @@ Regeln: `loop/regeln.md`. Immer den ersten offenen Punkt nehmen. `- [ ]` offen �
 - [x] Drill am Desktop: einspaltige Handy-Ansicht wirkt verloren auf 1280 px. Ab 1024 px zweispaltig (links Ablauf und Fokus, rechts Ring, Zähler und „Was hat gehakt?“), auf dem Handy unverändert.
 - [x] Kopfzeile und Inhalt fluchten nicht: bei 1280 px steht das Logo 24 px weiter rechts als der Seiteninhalt (Innenabstand in `site-header` innerhalb der Max-Breite, im Inhalt außerhalb). Einheitlich lösen; Prüfung: linke Kante von Logo und `<h1>` gleich (± 1 px) auf Wissen-Seiten bei 1280 px.
 - [x] Animation: „Du“ erscheint doppelt (statischer Kreis bleibt am Start, bewegter Marker mit Lime-Rand läuft los; Marker fehlt in der Legende). Bei Animation mit Laufweg: bewegter Marker sieht aus wie „Du“ und ist den ganzen Zyklus sichtbar (steht vor dem Loslaufen am Start, danach am Ziel), statischer „Du“-Kreis wird währenddessen ausgeblendet; ohne Bewegung/reduziert bleibt die statische Grafik. Prüfung: während der Animation genau ein sichtbares „Du“.
-- [ ] Wissen-Übersicht auf dem Handy ~9.500 px lang (alle 100 Titel untereinander). Je Kategorie die ersten 5 zeigen, Rest per `<details>` „Alle N zeigen“ (ohne JS); Desktop darf mehr zeigen. Prüfung: Seitenhöhe bei 360 px ≤ 4.000 px.
+- [x] Wissen-Übersicht auf dem Handy ~9.500 px lang (alle 100 Titel untereinander). Je Kategorie die ersten 5 zeigen, Rest per `<details>` „Alle N zeigen“ (ohne JS); Desktop darf mehr zeigen. Prüfung: Seitenhöhe bei 360 px ≤ 4.000 px.
 
 ## 1 · Fundament: Prüfungen
 
