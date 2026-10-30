@@ -16,6 +16,9 @@ export default async ({ pub }) => {
           box: [...document.querySelectorAll("aside .bg-court")].some((e) => e.checkVisibility()),
           small: [...document.querySelectorAll('nav[aria-label="Lernbereich"] a')].filter((a) => a.getBoundingClientRect().height < 44).length,
           overflow: document.documentElement.scrollWidth > innerWidth,
+          longTitles: [...document.querySelectorAll('section[aria-labelledby="lektionen"] a > span:nth-child(2) > span:first-child')]
+            .filter((t) => t.getBoundingClientRect().height > 2.2 * parseFloat(getComputedStyle(t).lineHeight)).map((t) => t.textContent.trim()),
+          headWrap: (() => { const h = document.getElementById("lektionen"); return h ? h.getBoundingClientRect().height > 1.5 * parseFloat(getComputedStyle(h).lineHeight) : false; })(),
           rows: new Set([...document.querySelectorAll('nav[aria-label="Stufen"] a')].map((a) => Math.round(a.getBoundingClientRect().top))).size,
         }));
         const where = `${SAMPLES[key]} bei ${w} px`;
@@ -23,6 +26,8 @@ export default async ({ pub }) => {
         if (w >= 1024 && !r.box) errors.push(`${where}: Stufen-Check-Kasten fehlt in der Seitenleiste`);
         if (r.small) errors.push(`${where}: ${r.small} Navigationslinks kleiner als 44 px`);
         if (r.rows > 1) errors.push(`${where}: Stufen-Umschalter bricht auf ${r.rows} Zeilen um`);
+        for (const t of r.longTitles) errors.push(`${where}: Lektionstitel „${t}“ bricht auf mehr als 2 Zeilen um`);
+        if (r.headWrap) errors.push(`${where}: Überschrift „Lektionen in Stufe …“ bricht um`);
         if (r.overflow) errors.push(`${where}: Seite läuft seitlich über`);
       }
       await page.close();

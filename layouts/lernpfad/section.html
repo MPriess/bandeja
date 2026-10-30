@@ -71,10 +71,10 @@
       </div>
 
       <div class="flex flex-wrap items-start gap-5">
-        <section aria-labelledby="lektionen" class="flex min-w-0 flex-[2_1_460px] flex-col gap-1.5 rounded-[22px] border border-line bg-white p-6">
-          <div class="flex items-center justify-between gap-3 pb-2.5">
+        <section aria-labelledby="lektionen" class="flex min-w-0 flex-[2_1_460px] flex-col gap-1.5 rounded-[22px] border border-line bg-white p-4 sm:p-6">
+          <div class="flex items-center justify-between gap-3 px-2 pb-2.5 sm:px-0">
             <h2 id="lektionen" class="m-0 text-lg font-bold">Lektionen in Stufe {{ .Params.stufe }}</h2>
-            <span class="text-sm text-mute">{{ len $lessons }} Lektionen</span>
+            <span class="inline-flex min-w-7 flex-none items-center justify-center rounded-full bg-sand px-2.5 py-0.5 text-sm font-semibold text-mute">{{ len $lessons }}<span class="sr-only"> Lektionen</span></span>
           </div>
           {{- range $i, $l := $lessons }}
             {{ partial "lesson-row.html" (dict "page" $l "n" (add $i 1) "highlight" (eq $l $featured)) }}
