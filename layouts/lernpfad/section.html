@@ -2,7 +2,7 @@
 {{- $root := site.GetPage "/lernpfad" -}}
 {{- $levels := $root.Sections.ByWeight -}}
 {{- $isRoot := eq . $root -}}
-{{- $bandeja := site.GetPage "/lektionen/bandeja" -}}
+{{- $probe := site.GetPage $root.Params.probelektion -}}
 <div class="flex min-h-screen flex-wrap bg-paper">
   {{ partial "app-sidebar.html" (dict "active" "lernpfad" "level" (cond $isRoot false .)) }}
 
@@ -24,7 +24,7 @@
     {{- if $isRoot }}
       {{/* Overview of all levels */}}
       <div class="flex flex-wrap gap-5">
-        {{ partial "lernpfad/feature.html" (dict "page" $bandeja "eyebrow" "Probelektion") }}
+        {{ partial "lernpfad/feature.html" (dict "page" $probe "eyebrow" "Probelektion") }}
         <div class="flex min-w-0 flex-[1_1_260px] flex-col gap-4 rounded-[22px] border border-line bg-white p-6">
           <p class="m-0 text-[15px] font-bold">So funktioniert's</p>
           <ol class="m-0 flex list-none flex-col gap-3 p-0 text-sm leading-normal text-mute">

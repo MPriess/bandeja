@@ -1,6 +1,6 @@
 {{ define "main" }}
 {{- $levels := (site.GetPage "/lernpfad").Sections.ByWeight -}}
-{{- $bandeja := site.GetPage "/lektionen/bandeja" -}}
+{{- $probe := site.GetPage .Params.probe.lektion -}}
 {{- $first := index $levels 0 -}}
 <div class="min-h-screen">
   {{ partial "site-header.html" (dict "page" .) }}
@@ -19,26 +19,23 @@
           <p class="m-0 max-w-[520px] text-xl leading-relaxed text-fog">Vom ersten Aufschlag bis zur Vibora: Lektionen mit Court-Grafiken, Drills für deinen Platz und ein Lernpfad in vier Stufen.</p>
           <div class="flex flex-wrap gap-3">
             {{ partial "ui/button.html" (dict "href" $first.RelPermalink "label" "Lernpfad starten" "size" "lg" "icon" "arrow-right") }}
-            {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" $bandeja) "label" "Probelektion starten" "size" "lg" "variant" "ghost" "iconBefore" "court") }}
+            {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" $probe) "label" "Probelektion starten" "size" "lg" "variant" "ghost" "iconBefore" "court") }}
           </div>
           <p class="m-0 text-sm text-fog-3">Kostenlos und ohne Anmeldung. Für Anfänger, Wiedereinsteiger und Tennisspieler, die umsteigen.</p>
         </div>
 
         <div class="min-w-0 flex-[1_1_480px]">
-          <a href="{{ partial "fn/href.html" $bandeja }}" class="flex flex-col gap-5 rounded-3xl bg-court p-7 text-paper no-underline hover:text-paper">
+          <a href="{{ partial "fn/href.html" $probe }}" class="flex flex-col gap-5 rounded-3xl bg-court p-7 text-paper no-underline hover:text-paper">
             <div class="flex flex-wrap items-center justify-between gap-3">
-              <p class="m-0 font-display text-[26px] font-bold tracking-wide uppercase">{{ $bandeja.Title }}</p>
-              <span class="rounded-full bg-ink/35 px-3 py-1.5 text-[13px] font-semibold">Stufe {{ $bandeja.Params.stufe }} · {{ $bandeja.Params.stufeName }}</span>
+              <p class="m-0 font-display text-[26px] font-bold tracking-wide uppercase">{{ $probe.Title }}</p>
+              <span class="rounded-full bg-ink/35 px-3 py-1.5 text-[13px] font-semibold">Stufe {{ $probe.Params.stufe }} · {{ $probe.Params.stufeName }}</span>
             </div>
-            {{ partial "court.html" (dict "d" (dict
-              "cap" "Padelcourt von oben mit der Flugbahn einer Bandeja vom Netz in die gegnerische Ecke"
-              "ball" "M 300 72 Q 170 20 52 182" "tx" 52 "ty" 182 "ring" true
-              "px" 300 "py" 72 "qx" 296 "qy" 160 "ax" 130 "ay" 70 "bx" 140 "by" 165)) }}
+            {{ partial "court.html" (dict "d" .Params.probe.court) }}
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {{- range slice (slice "Ziel" "Ecke, hinten links") (slice "Schlägerfläche" "Leicht offen") (slice "Danach" "Netz halten") }}
+              {{- range .Params.probe.fakten }}
               <div class="rounded-[14px] bg-ink/30 p-3.5">
-                <p class="m-0 text-xs font-semibold tracking-[0.06em] text-sky-2 uppercase">{{ index . 0 }}</p>
-                <p class="mt-1 mb-0 text-[15px] font-semibold">{{ index . 1 }}</p>
+                <p class="m-0 text-xs font-semibold tracking-[0.06em] text-sky-2 uppercase">{{ .k }}</p>
+                <p class="mt-1 mb-0 text-[15px] font-semibold">{{ .v }}</p>
               </div>
               {{- end }}
             </div>
@@ -98,14 +95,10 @@
           <a href="{{ "/lernpfad/" | relURL }}" class="inline-flex min-h-11 items-center text-base font-semibold">Ganzen Lernpfad ansehen →</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
-          {{- range slice
-            (dict "path" "/lektionen/bandeja" "bg" "bg-court" "badge" "bg-lime")
-            (dict "path" "/wissen/schlagtechniken/t18" "bg" "bg-ink" "badge" "bg-paper")
-            (dict "path" "/wissen/schlagtechniken/t10" "bg" "bg-moss" "badge" "bg-paper")
-            (dict "path" "/wissen/regeln/r01" "bg" "bg-clay" "badge" "bg-paper")
-          }}
-            {{- $card := . }}
-            {{- with site.GetPage .path }}
+          {{- $styles := slice (dict "bg" "bg-court" "badge" "bg-lime") (dict "bg" "bg-ink" "badge" "bg-paper") (dict "bg" "bg-moss" "badge" "bg-paper") (dict "bg" "bg-clay" "badge" "bg-paper") }}
+          {{- range $i, $path := .Params.beliebt }}
+            {{- $card := index $styles (mod $i (len $styles)) }}
+            {{- with site.GetPage $path }}
               {{- $level := partial "fn/level-of.html" . }}
               <a href="{{ partial "fn/href.html" . }}" class="group flex flex-col gap-3.5 text-ink no-underline hover:text-ink">
                 <div class="relative flex aspect-[4/3] items-end rounded-[18px] p-4 {{ $card.bg }}">
@@ -152,7 +145,7 @@
               <li>Quiz zu jeder Lektion</li>
               <li>Keine Cookies, kein Tracking</li>
             </ul>
-            {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" $bandeja) "label" "Probelektion starten") }}
+            {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" $probe) "label" "Probelektion starten") }}
           </div>
           <div class="flex flex-col gap-5 rounded-[20px] border border-line bg-white p-8">
             <h3 class="m-0 text-xl font-bold">Padel-Wissen</h3>

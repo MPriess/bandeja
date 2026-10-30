@@ -37,6 +37,7 @@ export function collectCourts(root) {
   for (const file of mdFiles(path.join(root, "content"))) {
     const rel = path.relative(root, file);
     const fm = frontMatter(file);
+    if (fm.probe?.court) out.push({ file: rel, where: "probe.court", kind: "start", d: fm.probe.court });
     if (fm.diag) out.push({ file: rel, where: "diag", kind: "wissen", d: fm.diag });
     if (rel.startsWith("content/lektionen/") && fm.layout !== "quiz" && !rel.endsWith("_index.md")) {
       out.push({ file: rel, where: "court", kind: "kapitel", d: { ...KAPITEL_DEFAULTS, ...(fm.court ?? {}) } });
