@@ -10,7 +10,7 @@ questions:
     why: Die Bandeja ist die Antwort auf einen Lob, wenn du deine Netzposition nicht aufgeben willst.
   - text: Wohin zielst du mit der Bandeja?
     court: { cap: "Court mit drei markierten Zielzonen A, B und C", px: 318, py: 80, labels: [{ x: 150, y: 115, t: A }, { x: 46, y: 186, t: B }, { x: 46, y: 80, t: C }] }
-    options: [A – Mitte des Feldes, B – Hintere Ecke an der Seitenwand, C – Direkt ins hintere Gitter]
+    options: [Mitte des Feldes, Hintere Ecke an der Seitenwand, Direkt ins hintere Gitter]
     right: 1
     why: In der Ecke springt der Ball flach von der Seitenwand ab und ist schwer anzugreifen.
   - text: Wo triffst du den Ball?
