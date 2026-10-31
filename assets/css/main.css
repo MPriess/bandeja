@@ -189,31 +189,7 @@
     .court-scope:has(.court-pause:checked) .court-anim {
       animation-play-state: paused;
     }
-    /* Startseite, einmal beim Laden (zusammen unter 5 s): Flugbahn läuft in Flugrichtung,
-       Zielpunkt und Video-Teaser pulsieren. */
-    .court-richtung path[data-r="ball"] {
-      animation: richtung 0.7s linear 6;
-    }
-    .court-richtung circle[data-r="ball"] {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: ziel-puls 1.6s ease-in-out 3;
-    }
-    .probe-teaser:not(:has(:checked)) {
-      animation: teaser-puls 1.6s ease-out 3;
-    }
   }
-}
-
-@keyframes richtung {
-  to { stroke-dashoffset: -14; }
-}
-@keyframes ziel-puls {
-  50% { transform: scale(1.35); }
-}
-@keyframes teaser-puls {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-lime) 70%, transparent); }
-  70%, 100% { box-shadow: 0 0 0 14px transparent; }
 }
 
 /*
