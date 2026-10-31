@@ -154,7 +154,8 @@ function ballZeigen(t) {
 
 const fade = (tau, a, b, f = 0.3) => Math.max(0, Math.min(1, (tau - a) / f, (b - tau) / f));
 
-window.bild = (tau) => {
+// zeichnen = false: only pose everything (for exports), skip the expensive drawing.
+window.bild = (tau, zeichnen = true) => {
   const abspann = plan.abspann && tau >= plan.abspann.t0;
   const { abschnitt: a, szeneT, u } = bei(plan, Math.min(tau, plan.abspann?.t0 - 1e-6 || tau));
   const t = Math.max(-VORLAUF, Math.min(sz.T, szeneT));
@@ -166,7 +167,7 @@ window.bild = (tau) => {
   cam.fov = k.fov;
   cam.updateProjectionMatrix();
   cam.lookAt(...k.ziel);
-  R.render(scene, cam);
+  if (zeichnen) R.render(scene, cam);
 
   // Overlays: title in the first section, section text, camera chip, end card.
   const erster = plan.abschnitte[0];
@@ -195,7 +196,7 @@ window.exportDaten = (fps = 30) => {
   const n = Math.round(plan.dauer * fps);
   for (let i = 0; i < n; i++) {
     const tau = i / fps;
-    window.bild(tau);
+    window.bild(tau, false);
     const { abschnitt: a, szeneT } = bei(plan, Math.min(tau, plan.abspann?.t0 - 1e-6 || tau));
     frames.push({
       bild: i, zeit: +tau.toFixed(4), szeneZeit: +Math.max(-VORLAUF, Math.min(sz.T, szeneT)).toFixed(4),
@@ -232,7 +233,7 @@ window.exportGlb = async (fps = 30) => {
   const n = Math.round(plan.dauer * fps), zeiten = [];
   const spuren = bewegt.map(() => ({ p: [], q: [], s: [] }));
   for (let i = 0; i < n; i++) {
-    window.bild(i / fps);
+    window.bild(i / fps, false);
     zeiten.push(i / fps);
     bewegt.forEach((o, j) => {
       spuren[j].p.push(...o.position.toArray());
