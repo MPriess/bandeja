@@ -2,6 +2,7 @@
 // (Quiz questions are checked in 25-quiz.mjs, court diagrams in 40-court-regeln.mjs.)
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { frontMatter } from "../lib/courts.mjs";
 
 export const name = "Pflichtfelder";
@@ -24,6 +25,7 @@ export default async ({ root }) => {
   const content = path.join(root, "content");
   const exists = (p) => typeof p === "string" && (fs.existsSync(path.join(content, p + ".md")) || fs.existsSync(path.join(content, p, "_index.md")));
   const ids = new Map();
+  const themen = (frontMatter(path.join(content, "videos", "_index.md")).themen ?? []).map((t) => t.id);
   let n = 0;
   for (const file of mdFiles(content)) {
     const rel = path.relative(content, file);
@@ -46,18 +48,19 @@ export default async ({ root }) => {
     } else if (rel.startsWith("videos/") && !isIndex) {
       for (const k of ["title", "description", "situation"]) need(text(fm[k]), `\`${k}\` fehlt`);
       need(posInt(fm.weight), "`weight` fehlt");
+      // Learning videos: own animation (local MP4 + poster), theme from content/videos/_index.md,
+      // length as m:ss that matches the file, linked to a lesson or an article.
       const statisch = (f) => typeof f === "string" && !f.startsWith("/") && fs.existsSync(path.join(root, "static", f));
-      if (fm.datei !== undefined) {
-        // Own animation: local MP4 and poster in static/, linked to a lesson or an article.
-        need(fm.youtube === undefined, "`datei` und `youtube` zusammen – ein Video ist entweder eigene Animation oder YouTube");
-        need(/\.mp4$/.test(fm.datei) && statisch(fm.datei), `\`datei: ${fm.datei}\` fehlt in static/ (MP4, Pfad ohne / am Anfang, erzeugen mit npm run videos:web)`);
-        need(/\.(jpe?g|png|webp)$/.test(fm.poster ?? "") && statisch(fm.poster), `\`poster: ${fm.poster}\` fehlt in static/ (Vorschaubild)`);
-        need(exists(fm.lektion) || exists(fm.wissen), "`lektion` oder `wissen` fehlt oder gibt es nicht");
-      } else {
-        need(/^[\w-]{11}$/.test(fm.youtube ?? ""), "`youtube` fehlt oder ist keine YouTube-ID (11 Zeichen, z. B. 45OvqqQtpjQ)");
-        need(fm.start === undefined || (Number.isInteger(fm.start) && fm.start >= 0), "`start` muss eine ganze Zahl ab 0 sein (Sekunden)");
-        need(fm.ende === undefined || (Number.isInteger(fm.ende) && fm.ende > (fm.start ?? 0)), "`ende` muss eine ganze Zahl größer als `start` sein (Sekunden)");
-        need(exists(fm.lektion), `\`lektion: ${fm.lektion}\` gibt es nicht`);
+      need(fm.youtube === undefined, "`youtube` gibt es nicht mehr – nur eigene Videos (`datei`)");
+      need(/\.mp4$/.test(fm.datei ?? "") && statisch(fm.datei), `\`datei: ${fm.datei}\` fehlt in static/ (MP4, Pfad ohne / am Anfang, erzeugen mit npm run videos:web)`);
+      need(/\.(jpe?g|png|webp)$/.test(fm.poster ?? "") && statisch(fm.poster), `\`poster: ${fm.poster}\` fehlt in static/ (Vorschaubild)`);
+      need(exists(fm.lektion) || exists(fm.wissen), "`lektion` oder `wissen` fehlt oder gibt es nicht");
+      need(themen.includes(fm.thema), `\`thema: ${fm.thema}\` ist kein Thema aus content/videos/_index.md (${themen.join(", ")})`);
+      const m = /^(\d+):([0-5]\d)$/.exec(fm.dauer ?? "");
+      need(m, "`dauer` fehlt oder ist nicht m:ss (z. B. \"0:21\")");
+      if (m && statisch(fm.datei)) {
+        const ist = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path.join(root, "static", fm.datei)], { encoding: "utf8" }));
+        need(Math.abs(ist - (Number(m[1]) * 60 + Number(m[2]))) <= 1.5, `\`dauer: ${fm.dauer}\` passt nicht zur Datei (${Math.round(ist)} s)`);
       }
       need(fm.achte === undefined || list(fm.achte), "`achte` muss eine Liste sein");
     } else if (/^lektionen\/[^/]+\/_index\.md$/.test(rel)) {

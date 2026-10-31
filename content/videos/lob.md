@@ -1,7 +1,9 @@
 ---
-title: "Animation: Der Lob"
+title: "Der Lob"
 description: Der Lob über die Netzspieler als 3D-Animation – so hoch fliegt der Ball, so rückt ihr danach vor.
-weight: 12
+weight: 2
+thema: grundschlaege
+dauer: "0:27"
 datei: media/animationen/lob.mp4
 poster: media/animationen/lob.jpg
 wissen: /wissen/schlagtechniken/t10

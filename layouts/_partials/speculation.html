@@ -2,15 +2,14 @@
   Speculation Rules: the browser prerenders a page when the visitor hovers or presses a link
   (eagerness "moderate"), so the click opens it instantly. JSON only, no JavaScript runs.
   Excluded: links that leave the site, open a new tab, partner links (nofollow/sponsored)
-  anything marked .ohne-vorladen and the video pages (they embed YouTube, which must only load
-  after a click – see layouts/videos/page.html). Checked by scripts/checks/85-uebergaenge.mjs.
+  and anything marked .ohne-vorladen. Video pages may be prerendered: their video only loads
+  after play (preload="none"). Checked by scripts/checks/85-uebergaenge.mjs.
 */ -}}
 {{- $base := "" | relURL -}}
 {{- $where := dict "and" (slice
   (dict "href_matches" (printf "%s*" $base))
   (dict "not" (dict "selector_matches" "[target=_blank], [rel~=nofollow], [rel~=sponsored], .ohne-vorladen"))
   (dict "not" (dict "href_matches" (printf "%s404.html" $base)))
-  (dict "not" (dict "href_matches" (printf "%svideos/:clip/" $base)))
 ) -}}
 {{- /* Written as a whole: Hugo would HTML-escape JSON inside an unknown script type. */ -}}
 {{- $rules := dict "prerender" (slice (dict "where" $where "eagerness" "moderate")) "prefetch" (slice (dict "where" $where "eagerness" "conservative")) -}}

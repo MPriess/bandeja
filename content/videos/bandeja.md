@@ -1,13 +1,13 @@
 ---
-title: "Lob über dich: die Bandeja"
-description: Was die Bandeja ist und wie du sie spielst – erklärt von Coach Hank (PadelCity Academy).
-weight: 4
-youtube: 45OvqqQtpjQ
-start: 0
-kanal: PadelCity TV
-sprache: Deutsch
+title: "Die Bandeja"
+description: Die Bandeja aus der Netzposition als 3D-Animation – Ausholen, Treffpunkt und sofort zurück ans Netz.
+weight: 1
+thema: ueberkopf
+dauer: "0:27"
+datei: media/animationen/bandeja.mp4
+poster: media/animationen/bandeja.jpg
 lektion: /lektionen/bandeja
 review: true
-situation: Du stehst am Netz, der Gegner spielt einen Lob über dich. Für einen Volley ist er zu hoch – mit der Bandeja hältst du trotzdem deine Netzposition.
-achte: [Seitlich zum Netz drehen, Ball vor dem Körper treffen, Kontrolle statt Tempo – danach sofort wieder nach vorn]
+situation: Der Gegner lobt, du spielst die Bandeja aus der Netzposition kontrolliert in die Ecke und gehst danach sofort zurück ans Netz.
+achte: [Seitlich stellen, Treffpunkt vor dem Körper über Kopfhöhe, Nach dem Schlag zurück ans Netz]
 ---

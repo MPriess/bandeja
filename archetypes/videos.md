@@ -1,17 +1,16 @@
 ---
-# Neues Video. Anlegen: npx hugo new content videos/<name>.md
-title: "Situation: der Schlag"
-description: Ein Satz, was das Video zeigt und wer es erklärt.
+# Neues Lernvideo. Anlegen: npx hugo new content videos/<name>.md
+# Vorher Drehbuch clips/<name>.yaml anlegen und rendern: npm run videos:web -- <name>
+title: "Der Schlag"
+description: Ein Satz, was das Video zeigt.
 weight: 10
-# Eigene Animation statt YouTube: youtube weglassen, dafür
-# datei: media/animationen/<clip>.mp4 und poster: media/animationen/<clip>.jpg (npm run videos:web)
-# Video-ID: der Teil nach v= in der YouTube-Adresse
-youtube: XXXXXXXXXXX
-# Optional: Start und Ende in Sekunden, um genau die Szene zu zeigen
-start: 0
-# ende: 90
-kanal: Name des Kanals
-sprache: Deutsch
+# Thema aus content/videos/_index.md: aufschlag-return, grundschlaege, ueberkopf, wand
+thema: grundschlaege
+# Länge (m:ss), muss zur Datei passen – steht in der Ausgabe von npm run videos:web
+dauer: "0:20"
+datei: media/animationen/<name>.mp4
+poster: media/animationen/<name>.jpg
+# Zugehörige Lektion – oder stattdessen wissen: /wissen/<kategorie>/<seite>
 lektion: /lektionen/bandeja
 draft: true
 review: true

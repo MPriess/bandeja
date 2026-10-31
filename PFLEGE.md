@@ -24,7 +24,7 @@ Neue Inhalte starten als Entwurf (`draft: true`) und erscheinen erst, wenn du da
 | --- | --- | --- |
 | Wissensartikel | `npx hugo new content wissen/schlagtechniken/t23.md` | `id`, `weight` und Texte ausfüllen |
 | Drill | `npx hugo new content drills/mein-drill.md` | `lesson` auf die passende Lektion setzen |
-| Video | `npx hugo new content videos/der-lob.md` | `youtube`, `lektion`, `situation` ausfüllen, Startzeit prüfen |
+| Lernvideo | `npx hugo new content videos/der-lob.md` | vorher rendern (`npm run videos:web -- der-lob`), dann `thema`, `dauer`, `lektion`, `situation` ausfüllen |
 | Lektion | `npx hugo new content --kind lektion lektionen/die-vibora` | weitere Kapitel als Kopie von `kapitel-2.md`; Lektion in `content/lernpfad/stufe-N/_index.md` unter `lessons` eintragen |
 
 Entwürfe in der Vorschau sehen: `npx hugo server -D`.
@@ -41,28 +41,36 @@ Entwürfe in der Vorschau sehen: `npx hugo server -D`.
 | Wissensartikel und Kategorie-Farben | `content/wissen/<kategorie>/` |
 | Impressum, Datenschutz | `content/impressum.md`, `content/datenschutz.md` |
 
-## Videos zu Spielsituationen
+## Lernvideos
 
-Ein Video ist eine Datei in `content/videos/`. Es erscheint in der Video-Übersicht und in allen Kapiteln der Lektion, die unter `lektion` steht.
+Die Video-Übersicht `/videos/` ist eine Bibliothek eigener 3D-Animationen, nach Themen gruppiert. Ein Video ist eine Datei in `content/videos/` plus MP4 und Vorschaubild in `static/media/animationen/`. Es erscheint automatisch in der Übersicht unter seinem Thema, auf der Video-Seite der anderen Videos desselben Themas („Mehr zum Thema“) und in der Lektion bzw. dem Wissensartikel, zu dem es gehört. YouTube gibt es nicht mehr: Alles liegt auf dem eigenen Server und lädt erst beim Abspielen.
+
+Neues Video in vier Schritten:
+
+1. Drehbuch `clips/<name>.yaml` anlegen (siehe „Court-Videos erzeugen“).
+2. Rendern:
+
+```bash
+npm run videos:web -- <name>
+```
+
+3. Eintrag anlegen:
+
+```bash
+npx hugo new content videos/<name>.md
+```
+
+4. Felder ausfüllen, `draft: false` setzen, `npm run check`.
 
 | Feld | Bedeutung |
 | --- | --- |
-| `youtube` | Die Video-ID: der Teil nach `v=` in der YouTube-Adresse (11 Zeichen) |
-| `start`, `ende` | Optional: ab welcher Sekunde das Video startet und wo es endet – so zeigst du genau die Szene |
-| `kanal`, `sprache` | Wer das Video gemacht hat und in welcher Sprache es ist (als Hinweis auf der Karte) |
-| `lektion` | Die passende Lektion, z. B. `/lektionen/bandeja` |
-| `situation` | Ein bis zwei Sätze: Was passiert auf dem Court? |
-| `achte` | Zwei bis drei Punkte, worauf man im Video achtet |
+| `thema` | Gruppe in der Übersicht, eine `id` aus `content/videos/_index.md` |
+| `dauer` | Länge als m:ss, muss zur Datei passen (die Prüfung misst nach) |
+| `datei`, `poster` | Pfade in `static/`, z. B. `media/animationen/smash.mp4` und `.jpg` |
+| `lektion` oder `wissen` | Wohin das Video gehört, z. B. `/lektionen/der-smash` oder `/wissen/schlagtechniken/t10` |
+| `situation`, `achte` | Text neben dem Video: was passiert, worauf achten |
 
-**Eigene Animationen** (3D-Videos aus `npm run videos:web`) haben statt `youtube` die Felder `datei` und `poster` (Pfade in `static/`, z. B. `media/animationen/smash.mp4`) und statt `lektion` wahlweise `wissen` (z. B. `/wissen/schlagtechniken/t10`). Sie laufen in einem eigenen Player ohne YouTube: nichts lädt vor dem Klick auf Play, nichts kommt von anderen Anbietern. Neu rendern und in die Seite übernehmen:
-
-```bash
-npm run videos:web
-```
-
-Schreibt `static/media/animationen/<clip>.mp4` (1280 × 720, ca. 1–2 MB) und `<clip>.jpg` für jedes Drehbuch in `clips/`.
-
-`review: true` heißt: Video noch nicht angeschaut – Inhalt und Startzeit prüfen, dann auf `false` setzen. Der YouTube-Player lädt nur auf der Video-Seite selbst; Lektionen zeigen eine Karte ohne Bild von YouTube. Bitte keine Vorschaubilder von YouTube einbauen, sonst lädt jede Lektion wieder Daten von Google.
+Neue Themen: in `content/videos/_index.md` unter `themen` eine Zeile mit `id`, `titel` und `text` ergänzen; die Reihenfolge dort ist die Reihenfolge auf der Seite.
 
 ## Court-Grafiken
 
@@ -159,7 +167,7 @@ Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf de
 
 ### Ton: Jingle und Voice-over
 
-Jedes Video bekommt den bandeja.-Jingle: einen Ball-„Pock“ mit kurzem Marimba-Motiv unter dem Titel und einen Schlussakkord unter dem Logo. Der Jingle wird im Skript erzeugt (`scripts/video/jingle.mjs`), es ist keine fremde Musik – frei nutzbar auf der Seite und auf YouTube (keine Content-ID-Treffer). Lautheit etwa −14 LUFS wie bei YouTube üblich.
+Jedes Video bekommt den bandeja.-Jingle: Schläger-„Pock“, Aufprall auf dem Boden und Ball gegen die Glaswand unter dem Titel, dazu ein Schlussakkord unter dem Logo. Der Jingle wird im Skript erzeugt (`scripts/video/jingle.mjs`), es ist keine fremde Musik – frei nutzbar auf der Seite und auf YouTube (keine Content-ID-Treffer). Lautheit etwa −14 LUFS wie bei YouTube üblich.
 
 Voice-over, Schritt für Schritt:
 
@@ -202,7 +210,7 @@ Legt `video-out/export/vibora-oder-bandeja.zip` an: die animierte 3D-Szene als `
 ### Hochladen
 
 - **YouTube Shorts:** die Datei `…-short.mp4` hochladen. Text steht oben, unten und rechts bleibt Platz für die YouTube-Knöpfe. Jingle ist drin; zusätzliche Musik am besten in YouTube hinzufügen (Lizenzen).
-- **Seite:** MP4-Dateien nicht ins Git. Auf YouTube hochladen und wie bisher unter `content/videos/` eintragen.
+- **Seite:** `npm run videos:web` legt die Web-Fassung (1280 × 720, ca. 1–2 MB) nach `static/media/animationen/`; eintragen wie unter „Lernvideos“ beschrieben. Die großen Fassungen in `video-out/` kommen nicht ins Git.
 
 ## Einnahmen (standardmäßig aus)
 

@@ -1,13 +1,13 @@
 ---
-title: "Am Netz: der Volley"
-description: Volley-Grundlagen und wie du den Platz vom Netz aus kontrollierst – Tipps der PadelCity Academy.
-weight: 2
-youtube: 6rVp3U--nLg
-start: 0
-kanal: PadelCity TV
-sprache: Deutsch
+title: "Der Volley"
+description: Der Volley am Netz als 3D-Animation – Treffpunkt vor dem Körper, bevor der Ball aufspringt.
+weight: 1
+thema: grundschlaege
+dauer: "0:19"
+datei: media/animationen/volley.mp4
+poster: media/animationen/volley.jpg
 lektion: /lektionen/der-volley
 review: true
-situation: Du stehst 2–3 m vor dem Netz, der Gegner spielt den Ball flach zu dir. Du nimmst ihn direkt aus der Luft und hältst die Netzposition.
-achte: [Split-Step beim Schlag des Gegners, Kaum ausholen – Ball vor dem Körper treffen, Tief in die Ecke statt hart in die Mitte]
+situation: Der Ball kommt flach. Du stehst am Netz und triffst ihn vor dem Körper, bevor er aufspringt.
+achte: [Kurze Bewegung, Treffpunkt vor dem Körper, Danach sofort wieder bereit]
 ---
