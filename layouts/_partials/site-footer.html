@@ -1,14 +1,18 @@
 {{ partial "newsletter.html" . }}
+{{- /* Startseite: links nur Impressum und Datenschutz, rechts das Logo. Sonst: Logo links, alle Links rechts. */}}
+{{- $home := .IsHome }}
 <footer class="bg-ink px-6 py-12 text-fog-2">
   <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-5 text-sm">
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-1 {{ if $home }}order-2 items-end text-right{{ end }}">
       {{ partial "ui/logo.html" (dict "class" "text-[28px]") }}
       <p class="m-0">Online-Padelschule</p>
     </div>
-    <nav aria-label="Fußzeile" class="flex flex-wrap gap-x-6">
+    <nav aria-label="Fußzeile" class="flex flex-wrap gap-x-6 {{ if $home }}order-1{{ end }}">
+      {{- if not $home }}
       <a href="{{ "wissen/" | relURL }}" class="inline-flex min-h-11 items-center text-fog-2 hover:text-lime">Wissen</a>
       <a href="{{ "stellungsspiel/" | relURL }}" class="inline-flex min-h-11 items-center text-fog-2 hover:text-lime">Stellungsspiel</a>
       <a href="{{ "videos/" | relURL }}" class="inline-flex min-h-11 items-center text-fog-2 hover:text-lime">Videos</a>
+      {{- end }}
       <a href="{{ "impressum/" | relURL }}" class="inline-flex min-h-11 items-center text-fog-2 hover:text-lime">Impressum</a>
       <a href="{{ "datenschutz/" | relURL }}" class="inline-flex min-h-11 items-center text-fog-2 hover:text-lime">Datenschutz</a>
     </nav>
