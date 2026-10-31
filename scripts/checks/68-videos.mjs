@@ -1,6 +1,6 @@
 // Learning videos are own animations on our own server:
 // - nowhere an <iframe>, nowhere a load from another host;
-// - every <video> (video pages, lesson chapters and the home page's sample lesson) is local with controls, poster,
+// - every <video> (video pages and lesson chapters) is local with controls, poster,
 //   preload="none", aria-label and an MP4 <source>; a video page has exactly one;
 // - in Chromium, neither a video page nor a lesson chapter requests the MP4 before play,
 //   and switching a chapter to its video view shows the player without loading anything else.
@@ -25,9 +25,9 @@ export default async ({ pub, htmlFiles }) => {
     const external = [...html.matchAll(/<(?:script|img|iframe|link|source|video|audio|embed|object)\b[^>]*?\s(?:src|href|data|poster)="?(?:https?:)?\/\/[^"\s>]+/g)].map((m) => m[0]).filter((t) => !/<link[^>]*rel="?(canonical|alternate)/.test(t));
     for (const t of external) errors.push(`${rel}: lädt von einem anderen Host: ${t.slice(0, 80)}`);
     const videos = [...html.matchAll(/<video\b[\s\S]*?<\/video>/g)].map((m) => m[0]);
-    const seite = VIDEO_PAGE.test(rel), kapitel = /^lektionen\/[^/]+\/kapitel-[^/]+\/index\.html$/.test(rel) || rel === "index.html";
+    const seite = VIDEO_PAGE.test(rel), kapitel = /^lektionen\/[^/]+\/kapitel-[^/]+\/index\.html$/.test(rel);
     if (!seite && !kapitel) {
-      if (videos.length) errors.push(`${rel}: <video> außerhalb von Video-Seite, Lektionskapitel und Startseite`);
+      if (videos.length) errors.push(`${rel}: <video> außerhalb von Video-Seite und Lektionskapitel`);
       continue;
     }
     if (seite) {
@@ -35,7 +35,7 @@ export default async ({ pub, htmlFiles }) => {
       if (videos.length !== 1) { errors.push(`${rel}: ${videos.length} Player statt genau 1`); continue; }
       beispiel ??= "/" + rel.replace(/index\.html$/, "");
     }
-    if (kapitel && videos.length > 1) errors.push(`${rel}: mehr als ein Video im Kapitel bzw. auf der Startseite`);
+    if (kapitel && videos.length > 1) errors.push(`${rel}: mehr als ein Video im Kapitel`);
     for (const v of videos) {
       const tag = v.match(/<video\b[^>]*>/)[0];
       if (!/\scontrols[\s>=]/.test(tag)) errors.push(`${rel}: <video> ohne controls`);
