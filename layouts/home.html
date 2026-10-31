@@ -23,7 +23,7 @@
 
         {{/* Spielsituationen: Auswahl per Radio-Buttons und :has(), ohne JavaScript. Alle Situationen liegen
              übereinander im selben Rasterfeld; sichtbar ist nur die gewählte, so bleibt die Kartenhöhe gleich. */}}
-        {{- $sit := .Params.situationen }}
+        {{- $sit := first 3 .Params.situationen }}
         <div class="probe min-w-0 flex-[1_1_480px]">
           <style>
             .probe-sit { visibility: hidden; }
@@ -43,11 +43,12 @@
               {{- range $i, $s := $sit }}
               {{- with site.GetPage $s.lektion }}
               <div class="probe-sit flex flex-col gap-5 [grid-area:1/1]" data-sit="{{ $i }}">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <a href="{{ partial "fn/href.html" . }}" class="inline-flex min-h-11 items-center font-display text-[26px] font-bold tracking-wide text-paper uppercase no-underline hover:text-lime">{{ .Title }}</a>
-                  <span class="rounded-full bg-ink/35 px-3 py-1.5 text-[13px] font-semibold">Stufe {{ .Params.stufe }} · {{ .Params.stufeName }}</span>
-                </div>
+                <a href="{{ partial "fn/href.html" . }}" class="inline-flex min-h-11 items-center self-start font-display text-[26px] font-bold tracking-wide text-paper uppercase no-underline hover:text-lime">{{ .Title }}</a>
+                {{- with $s.szene }}
+                <img src="{{ .bild | relURL }}" alt="{{ .alt }}" width="1280" height="720" decoding="async" class="block aspect-video w-full rounded-2xl bg-ink object-cover">
+                {{- else }}
                 {{ partial "court.html" (dict "d" ($s.court | default .Params.vorschau) "class" "w-full") }}
+                {{- end }}
                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {{- range $s.fakten }}
                   <div class="rounded-[14px] bg-ink/30 p-3.5">
