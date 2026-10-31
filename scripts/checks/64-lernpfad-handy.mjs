@@ -1,5 +1,5 @@
 // Learning area: on a phone the page heading is near the top (sidebar collapses to a bar),
-// on desktop the sidebar with the Stufen-Check box is shown.
+// on desktop the overview shows the sidebar box; level pages list the Stufen-Check as last step.
 import { withBrowser, SAMPLES } from "../lib/browser.mjs";
 
 export const name = "Lernpfad-Layout";
@@ -14,6 +14,7 @@ export default async ({ pub }) => {
         const r = await page.evaluate(() => ({
           h1: Math.round(document.querySelector("h1").getBoundingClientRect().top),
           box: [...document.querySelectorAll("aside .bg-court")].some((e) => e.checkVisibility()),
+          check: /\/check\/$/.test(document.querySelector('section[aria-labelledby="lektionen"] a:last-of-type')?.getAttribute("href") ?? ""),
           small: [...document.querySelectorAll('nav[aria-label="Lernbereich"] a')].filter((a) => a.getBoundingClientRect().height < 44).length,
           overflow: document.documentElement.scrollWidth > innerWidth,
           longTitles: [...document.querySelectorAll('section[aria-labelledby="lektionen"] a > span:nth-child(2) > span:first-child')]
@@ -23,7 +24,8 @@ export default async ({ pub }) => {
         }));
         const where = `${SAMPLES[key]} bei ${w} px`;
         if (r.h1 > maxTop) errors.push(`${where}: Überschrift beginnt erst bei ${r.h1} px (max. ${maxTop})`);
-        if (w >= 1024 && !r.box) errors.push(`${where}: Stufen-Check-Kasten fehlt in der Seitenleiste`);
+        if (w >= 1024 && key === "lernpfad" && !r.box) errors.push(`${where}: Kasten „Ohne Anmeldung“ fehlt in der Seitenleiste`);
+        if (key === "stufe" && !r.check) errors.push(`${where}: Stufen-Check fehlt als letzter Schritt`);
         if (r.small) errors.push(`${where}: ${r.small} Navigationslinks kleiner als 44 px`);
         if (r.rows > 1) errors.push(`${where}: Stufen-Umschalter bricht auf ${r.rows} Zeilen um`);
         for (const t of r.longTitles) errors.push(`${where}: Lektionstitel „${t}“ bricht auf mehr als 2 Zeilen um`);

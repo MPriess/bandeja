@@ -1,15 +1,13 @@
 {{- /*
-  One row in a lesson list.
+  One step in a level's list: number and title only.
   Usage: partial "lesson-row.html" (dict "page" $p "n" 3 "highlight" true)
+  Without "page", pass "href" and "title" directly (e.g. the Stufen-Check as last step).
 */ -}}
-{{- $p := .page -}}
-{{- $full := eq $p.Section "lektionen" -}}
-{{- $type := cond $full "Lektion" (cond (eq $p.Section "drills") "Drill" (cond (eq $p.Layout "schritte") "Überblick" "Wissen")) -}}
-<a href="{{ partial "fn/href.html" $p }}" class="flex min-h-16 items-center gap-3 rounded-[14px] px-2 py-2 sm:gap-4 sm:px-3 text-ink no-underline hover:bg-paper hover:text-ink {{ if .highlight }}bg-lime-soft{{ end }}">
+{{- $href := .href -}}{{- $title := .title -}}
+{{- with .page }}{{ $href = partial "fn/href.html" . }}{{ $title = .Title }}{{ end -}}
+<a href="{{ $href }}" class="flex min-h-14 items-center gap-3 rounded-[14px] px-2 py-2 sm:gap-4 sm:px-3 text-ink no-underline hover:bg-paper hover:text-ink {{ if .highlight }}bg-lime-soft{{ end }}">
   <span class="inline-flex size-9 flex-none items-center justify-center rounded-full text-sm font-bold {{ if .highlight }}bg-lime text-ink{{ else }}bg-sand text-mute{{ end }}">{{ .n }}</span>
-  <span class="flex min-w-0 flex-auto flex-col gap-0.5">
-    <span class="text-base font-semibold">{{ $p.Title }}</span>
-    <span class="text-[13px] text-mute"><span class="font-semibold sm:hidden">{{ $type }} · </span>{{ partial "fn/meta.html" $p }}</span>
+  <span class="flex min-w-0 flex-auto flex-col">
+    <span class="text-base font-semibold">{{ $title }}</span>
   </span>
-  <span class="hidden text-[13px] font-semibold text-mute sm:inline">{{ $type }}</span>
 </a>

@@ -11,9 +11,9 @@
     {{- end }}
     {{ partial "court.html" (dict "class" "w-[82%]" "d" ($d | default (dict "cap" "Padelcourt von oben"))) }}
   </div>
-  <div class="flex flex-[1_1_220px] flex-col gap-3">
+  <div class="flex min-w-0 flex-[1_1_220px] flex-col gap-3">
     <p class="m-0 text-[13px] font-semibold tracking-[0.07em] text-lime uppercase">{{ .eyebrow }}</p>
-    <p class="m-0 font-display text-4xl leading-none font-bold uppercase">{{ $p.Title }}</p>
+    <p class="m-0 font-display text-3xl leading-none font-bold break-words hyphens-auto uppercase sm:text-4xl">{{ $p.Title }}</p>
     <p class="m-0 text-[15px] text-fog">{{ partial "fn/meta.html" $p }}</p>
     <span class="inline-flex items-center gap-2 text-[15px] font-bold text-lime">Jetzt öffnen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
   </div>
