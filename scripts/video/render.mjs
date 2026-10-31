@@ -18,6 +18,7 @@ import { collectCourts } from "../lib/courts.mjs";
 import { szene } from "./szene.mjs";
 import { standardDrehbuch, zeitplan } from "./zeitplan.mjs";
 import { FORMATE } from "./kameras.mjs";
+import { pruefen } from "./regeln.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const OUT = path.join(root, "video-out");
@@ -162,6 +163,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(1);
   }
   for (const c of clips) {
+    // Only scenes that keep the padel rules are rendered (override with --trotzdem).
+    const fehler = pruefen(c.d);
+    if (fehler.length) {
+      console.log(`${c.name}: ${fehler.length} Regelverstöße\n  ${fehler.join("\n  ")}`);
+      if (!a.trotzdem) { console.log("  → nicht gerendert (mit --trotzdem trotzdem rendern)"); process.exitCode = 1; continue; }
+    }
     const plan = zeitplan(szene(c.d), c.buch);
     console.log(`${c.name}: ${plan.dauer.toFixed(1)} s, ${plan.abschnitte.length} Abschnitte`);
     const out = await rendern(c, { format: a.format, vorschau: !!a.vorschau, standbild: a.standbild ?? null, kamera: a.kamera ?? null, fps: Number(a.fps ?? 30) });

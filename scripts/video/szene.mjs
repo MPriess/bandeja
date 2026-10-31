@@ -24,10 +24,10 @@ export const HOEHE = {
   schlag: [1.0, 1.7, 0],
   volley: [1.1, 1.4, 0],
   lob: [0.9, 6.5, 0],
-  bandeja: [2.3, null, 0],
-  vibora: [2.25, null, 0],
-  smash: [2.65, null, 0],
-  chiquita: [0.5, 1.15, 0],
+  bandeja: [2.15, null, 0],
+  vibora: [2.1, null, 0],
+  smash: [2.4, null, 0],
+  chiquita: [0.6, 1.15, 0],
   stopp: [1.0, 1.3, 0],
   rueckwand: [1.1, 1.8, 0],
   ecke: [1.1, 1.8, 0],
@@ -36,7 +36,7 @@ export const HOEHE = {
   wand: [1.0, 1.6, 0],
 };
 // Hitting height at a `treffpunkt` (ball taken in the air or after the wall).
-const TREFF = { lob: 2.3, bajada: 1.6 };
+const TREFF = { lob: 2.15, bajada: 1.6 };
 const UEBER_NETZ = 0.35; // minimum clearance above the net tape
 
 const len = (pts) => pts.reduce((l, p, i) => (i ? l + Math.hypot(p.x - pts[i - 1].x, p.y - pts[i - 1].y) : 0), 0);
@@ -200,13 +200,18 @@ export function szene(d) {
     let von = d.von ? { k: d.von } : naechste(d, s.x, s.y);
     const wer = von.k === "g" ? "p" : von.k;
     const ziel = mitZiel && d.tx !== undefined ? { x: d.tx, y: d.ty } : null;
-    const w = ballweg(d, pfad, btyp, { treffpunkt: mitZiel && !!d.treffpunkt, ohneNetz: !!d.ohneNetz, ziel });
-    baelle.push({ typ: btyp, t0, t1, ...w, ziel: ziel ? { x: toX(ziel.x), z: toZ(ziel.y), treffpunkt: !!d.treffpunkt } : null });
-    if (wer) schlaege.push({ wer, t: t0, art: btyp, ball: baelle.length - 1, kontakt: w.punkte[0] });
+    // Wall drills without a net: the ball comes back to you and you play it again.
+    const rueck = ziel && d.ohneNetz && !d.treffpunkt && naechste(d, ziel.x, ziel.y, ["p", "q", "a", "b"]).dist < 30;
+    const treff = !!d.treffpunkt || rueck;
+    const w = ballweg(d, pfad, btyp, { treffpunkt: mitZiel && treff, ohneNetz: !!d.ohneNetz, ziel });
+    baelle.push({ typ: btyp, t0, t1, ...w, ziel: ziel ? { x: toX(ziel.x), z: toZ(ziel.y), treffpunkt: treff } : null });
+    // Wall situations name what you do; the opponent who starts them plays a drive (or a lob for the bajada).
+    const art = ["rueckwand", "ecke", "bajada"].includes(btyp) && ["a", "b"].includes(wer) ? (btyp === "bajada" ? "lob" : "schlag") : btyp;
+    if (wer) schlaege.push({ wer, t: t0, art, ball: baelle.length - 1, kontakt: w.punkte[0] });
     // Receiver plays the ball at the target if it is a contact point in the air or after the wall.
-    if (ziel && d.treffpunkt) {
+    if (ziel && treff) {
       const rec = naechste(d, ziel.x, ziel.y, ["p", "q", "a", "b"]);
-      if (rec.k && rec.k !== wer && rec.dist < 90) {
+      if (rec.k && (rec.k !== wer || rueck) && rec.dist < 90) {
         const tz = t0 + (t1 - t0) * w.sZiel;
         schlaege.push({ wer: rec.k, t: tz, art: d.annahme ?? annahme(btyp), ball: null, kontakt: w.punkte.find((p) => p.s >= w.sZiel) ?? w.punkte.at(-1) });
       }
@@ -226,7 +231,7 @@ export function szene(d) {
 // What the receiver does with a ball taken at a contact point.
 function annahme(typ) {
   if (typ === "lob") return "bandeja";
-  if (["rueckwand", "ecke", "bajada"].includes(typ)) return typ === "bajada" ? "smash" : "schlag";
+  if (["rueckwand", "ecke", "bajada"].includes(typ)) return "schlag";
   return "volley";
 }
 

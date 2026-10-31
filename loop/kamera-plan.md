@@ -19,7 +19,8 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 | --- | --- |
 | `scripts/video/szene.mjs` | Grafik → Szene in Metern: Personen mit Weg über die Zeit, Ball mit Höhe, Schläge (wer, wann, welche Art), Zonen |
 | `scripts/video/kameras.mjs` | Kameras `oben`, `tv`, `seite`, `schraeg`, `spieler`, `hinten` je Format, weiche Fahrten |
-| `scripts/video/drehbuch.mjs` | `clips/*.yaml` lesen, Quelle auflösen, Standard-Drehbuch für jede Grafik |
+| `scripts/video/zeitplan.mjs` | Drehbuch → Zeitplan (Kamera, Szenenzeit, Text je Moment), Standard-Drehbuch |
+| `scripts/video/regeln.mjs` | Padel-Regeln und Ballposition in 3D: Netz, Aufprall vor Wand, Aufschlag, Treffpunkt Schläger–Ball, Ball durch Körper, Netz und Wände für Spieler |
 | `scripts/video/welt/*.js` | three.js: Court (Kunstrasen, Linien, Netz, Glas, Gitter), Spieler mit Skelett und IK, Schläger, Posen und Schläge, Einblendungen |
 | `scripts/video/render.mjs` | CLI: Chromium, Bild für Bild, ffmpeg → MP4 + Vorschaubild |
 
@@ -38,6 +39,8 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 - [x] `PFLEGE.md`: Abschnitt „Videos erzeugen“
 
 ## Nächste Runde
+
+- [x] Regeln und Ballposition in 3D prüfen (`51-video-regeln.mjs` mit Selbsttest); `npm run video` rendert nur regelkonforme Szenen
 
 - [ ] Volle Renders aller Clips prüfen (Kontaktbogen je Clip), Auffälligkeiten beheben
 - [ ] Renderzeit senken (Screenshot als JPEG oder Canvas direkt auslesen; Ziel < 1 s pro Bild in 1080p)

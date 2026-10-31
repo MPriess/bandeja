@@ -66,10 +66,10 @@ export class Steuerung {
     const rueckhand = !UEBERKOPF.has(name) && name !== "aufschlag" && rel.x > 0.15;
     const ideal = new THREE.Vector3(...(KONTAKT[name] ?? KONTAKT.vorhand));
     if (rueckhand) ideal.x = -ideal.x * 0.85;
-    // Step towards the ball so it meets the racket at the ideal spot (at most 2.2 m).
+    // Step towards the ball so it meets the racket at the ideal spot (at most 4 m).
     const ziel = new THREE.Vector3(s.kontakt.x, 0, s.kontakt.z).sub(new THREE.Vector3(ideal.x, 0, ideal.z).applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw));
     const versatz = ziel.sub(new THREE.Vector3(basis.x, 0, basis.z));
-    if (versatz.length() > 2.2) versatz.setLength(2.2);
+    if (versatz.length() > 4) versatz.setLength(4);
     return { ...s, f, name, rueckhand, yaw, versatz, kontaktHand: null, ball3: new THREE.Vector3(s.kontakt.x, s.kontakt.y, s.kontakt.z) };
   }
 
@@ -96,18 +96,24 @@ export class Steuerung {
       const pos = position(p, t);
       let x = pos.x, z = pos.z;
       let yaw = this.#yaw(p);
-      // Strokes of this person whose window contains t.
-      let pose = null, sw = 0;
+      // The stroke of this person whose window contains t; with two overlapping strokes the one
+      // closer to its contact wins, so steps towards the ball never add up.
+      let pose = null, sw = 0, best = null;
       for (const s of this.schlaege) {
         if (s.f !== f) continue;
         const [w0, w1] = schlagFenster(s.name);
         const rt = t - s.t;
         if (rt <= w0 || rt >= w1) continue;
-        pose = schlagPose(s.name, rt, { rueckhand: s.rueckhand, kontakt: s.kontaktHand });
+        if (!best || Math.abs(rt) < Math.abs(t - best.t)) best = s;
+      }
+      if (best) {
+        const [w0, w1] = schlagFenster(best.name);
+        const rt = t - best.t;
+        pose = schlagPose(best.name, rt, { rueckhand: best.rueckhand, kontakt: best.kontaktHand });
         // Weight of the step towards the ball: in before contact, hold, back afterwards.
         sw = rt < 0 ? ease(clamp((rt - w0) / (-w0 * 0.85), 0, 1)) : 1 - ease(clamp((rt - 0.35) / (w1 - 0.35), 0, 1));
-        x += s.versatz.x * sw;
-        z += s.versatz.z * sw;
+        x += best.versatz.x * sw;
+        z += best.versatz.z * sw;
       }
       // Running: arms swing, feet are planted along the path.
       const k = clamp(pos.v / 1.6, 0, 1) * (1 - sw);

@@ -130,7 +130,7 @@ Ein Abschnitt im `ablauf`:
 | `dauer` | Sekunden; bei `abspielen` ergibt sie sich sonst aus der Szene |
 | `text` | Einblendung in diesem Abschnitt |
 
-Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf der Seite. Die Ballhöhe ergibt sich aus `type` (ein Lob steigt auf 6,5 m, eine Bandeja fällt ab 2,3 m). `npm run check` prüft alle Szenen und Drehbücher, ohne zu rendern: Ball über dem Netz, nie unter dem Boden, Shorts höchstens 60 s.
+Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf der Seite. Die Ballhöhe ergibt sich aus `type` (ein Lob steigt auf 6,5 m, eine Bandeja fällt ab 2,3 m). `npm run check` prüft alle Szenen und Drehbücher in 3D, ohne zu rendern: Ball über dem Netz (mit Durchhang), erst Boden dann Wand, höchstens ein Aufprall, nie durchs Glas oder über die Wand; Aufschlag höchstens in Hüfthöhe und ins diagonale Feld; der Schläger trifft den Ball (± 10 cm), der Ball fliegt durch niemanden, niemand läuft ans Netz oder in die Wand; Shorts höchstens 60 s. `npm run video` rendert nur Szenen, die diese Regeln einhalten.
 
 ### Hochladen
 
