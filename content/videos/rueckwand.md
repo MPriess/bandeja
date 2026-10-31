@@ -1,12 +1,13 @@
 ---
-title: "Ball hinter dir: Spiel mit der Rückwand"
-description: Regeln und Grundidee, wenn der Ball von der Rückwand zurückkommt – leicht erklärt.
-weight: 3
-youtube: B6MVv93EHOg
-start: 0
-sprache: Deutsch
+title: "Spiel mit der Rückwand"
+description: Erst aufspringen lassen, dann von der Rückwand spielen – als 3D-Animation, auch aus deiner Sicht.
+weight: 1
+thema: wand
+dauer: "0:25"
+datei: media/animationen/rueckwand.mp4
+poster: media/animationen/rueckwand.jpg
 lektion: /lektionen/spiel-mit-der-rueckwand
 review: true
-situation: Ein langer Ball fliegt an dir vorbei Richtung Rückwand. Statt panisch zurückzuspielen, lässt du ihn an die Wand und nimmst ihn nach dem Abprall.
-achte: [Seitlich zur Wand drehen, 1–2 m Abstand zur Wand halten, Nach dem Abprall mit dem Ball nach vorn gehen]
+situation: Der Ball springt in deinem Feld auf und prallt von der Rückwand ab. Du wartest, bis er von der Wand zurückkommt, und spielst ihn vor dem Körper nach vorn.
+achte: [Erst aufspringen lassen, Abstand zur Rückwand halten, Mit dem Ball nach vorn gehen]
 ---

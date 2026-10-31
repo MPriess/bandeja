@@ -1,0 +1,4 @@
+{{- /* Theme of a video page as {id, titel, text} from content/videos/_index.md, or an empty dict. */ -}}
+{{- $t := dict -}}
+{{- with .Params.thema }}{{ $id := . }}{{ range (site.GetPage "/videos").Params.themen }}{{ if eq .id $id }}{{ $t = . }}{{ end }}{{ end }}{{ end -}}
+{{- return $t -}}

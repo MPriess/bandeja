@@ -1,13 +1,13 @@
 ---
-title: "Aufschlag: der Start in den Punkt"
-description: Der Aufschlag von unten – Technik und erste Ziele, erklärt von der Deutschen Padel Akademie.
+title: "Der Aufschlag"
+description: Der Aufschlag von unten als 3D-Animation – von oben, aus der TV-Perspektive, von der Seite und hinter dir.
 weight: 1
-youtube: TGqQuKUYwvY
-start: 0
-kanal: Deutsche Padel Akademie
-sprache: Deutsch
+thema: aufschlag-return
+dauer: "0:21"
+datei: media/animationen/aufschlag.mp4
+poster: media/animationen/aufschlag.jpg
 lektion: /lektionen/der-aufschlag
 review: true
-situation: Du schlägst auf. Der Ball springt einmal hinter deiner Aufschlaglinie auf, dann triffst du ihn auf oder unter Hüfthöhe diagonal ins Feld.
-achte: [Seitlich hinter der Aufschlaglinie stehen, Treffpunkt auf oder unter Hüfthöhe, Nach dem Aufschlag zügig ans Netz]
+situation: Du schlägst von rechts auf. Der Ball springt einmal hinter deiner Aufschlaglinie auf, du triffst ihn höchstens auf Hüfthöhe, und er landet im diagonal gegenüberliegenden Aufschlagfeld.
+achte: [Hinter der Aufschlaglinie stehen, Treffpunkt höchstens auf Hüfthöhe, Danach neben deinen Partner ans Netz]
 ---

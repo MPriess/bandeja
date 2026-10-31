@@ -1,15 +1,54 @@
 {{ define "main" }}
+{{- /*
+  Video library: one section per theme (content/videos/_index.md → themen), in that order, each a grid
+  of cards; a row of jump links on top. Videos without a known theme go to "Weitere Videos".
+  New videos only need a file in content/videos/ with `thema` – no template changes.
+*/ -}}
+{{- $videos := .RegularPages.ByWeight -}}
+{{- $themen := .Params.themen | default slice -}}
+{{- $ids := slice -}}{{ range $themen }}{{ $ids = $ids | append .id }}{{ end -}}
+{{- $weitere := slice -}}{{ range $videos }}{{ if not (in $ids .Params.thema) }}{{ $weitere = $weitere | append . }}{{ end }}{{ end -}}
 <div class="min-h-screen">
   {{ partial "site-header.html" (dict "page" .) }}
   <main id="inhalt">
-    {{ partial "page-hero.html" (dict "eyebrow" "Videos" "title" "Szenen vom Court" "text" .Description) }}
-    <div class="mx-auto flex max-w-[1240px] flex-col gap-10 px-6 pt-12 pb-20">
-      {{ partial "video-hinweis.html" (dict "text" "Die Videos liegen bei YouTube. Diese Übersicht lädt nichts von dort – der Player erscheint erst, wenn du ein Video öffnest.") }}
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-5">
-        {{- range .RegularPages.ByWeight }}
-          {{ partial "video-karte.html" (dict "page" . "level" 2) }}
+    {{ partial "page-hero.html" (dict "eyebrow" "Videos" "title" .Title "text" .Description) }}
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-12 px-6 pt-10 pb-20">
+      <nav aria-label="Themen" class="flex flex-wrap gap-2.5">
+        {{- range $themen }}
+          {{- $n := len (where $videos "Params.thema" .id) }}
+          {{- if $n }}
+          <a href="#{{ .id }}" class="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-white px-4 text-[15px] font-semibold text-ink no-underline hover:border-ink hover:text-ink">{{ .titel }} <span class="text-mute">{{ $n }}</span></a>
+          {{- end }}
         {{- end }}
-      </div>
+      </nav>
+
+      {{- range $themen }}
+        {{- $t := . }}
+        {{- with where $videos "Params.thema" $t.id }}
+        <section id="{{ $t.id }}" aria-labelledby="{{ $t.id }}-titel" class="flex scroll-mt-6 flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <h2 id="{{ $t.id }}-titel" class="m-0 font-display text-[32px] leading-none font-extrabold uppercase">{{ $t.titel }}</h2>
+            {{- with $t.text }}<p class="m-0 text-[16px] leading-normal text-mute">{{ . }}</p>{{ end }}
+          </div>
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-5">
+            {{- range . }}
+              {{ partial "video-karte.html" (dict "page" . "level" 3) }}
+            {{- end }}
+          </div>
+        </section>
+        {{- end }}
+      {{- end }}
+
+      {{- with $weitere }}
+      <section id="weitere" aria-labelledby="weitere-titel" class="flex scroll-mt-6 flex-col gap-5">
+        <h2 id="weitere-titel" class="m-0 font-display text-[32px] leading-none font-extrabold uppercase">Weitere Videos</h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-5">
+          {{- range . }}
+            {{ partial "video-karte.html" (dict "page" . "level" 3) }}
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
     </div>
   </main>
   {{ partial "site-footer.html" . }}

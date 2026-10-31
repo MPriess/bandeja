@@ -1,12 +1,13 @@
 ---
-title: "Lob auf die Vorhandseite: die Vibora"
-description: Wie man eine Vibora spielt – der Überkopfball mit Seitschnitt, Folge der Reihe „Padel-Schule“.
-weight: 5
-youtube: qvONv_iRVQ8
-start: 0
-sprache: Deutsch
+title: "Bandeja oder Vibora?"
+description: Der Gegner lobt etwas zu kurz – Gelegenheit für die Vibora. Als 3D-Animation aus vier Perspektiven.
+weight: 2
+thema: ueberkopf
+dauer: "0:19"
+datei: media/animationen/vibora-oder-bandeja.mp4
+poster: media/animationen/vibora-oder-bandeja.jpg
 lektion: /lektionen/die-vibora
 review: true
-situation: Ein Lob kommt auf deine Vorhandseite, nicht zu hoch. Statt einer ruhigen Bandeja spielst du die Vibora mit Seitschnitt, damit der Ball flach vom Seitenglas abspringt.
-achte: [Schläger früh hoch hinter den Kopf, Fläche schneidet seitlich am Ball vorbei, Ziel Seitenglas – danach zurück ans Netz]
+situation: Der Gegner lobt etwas zu kurz. Du triffst den Ball seitlich vor dem Körper mit Seitschnitt und spielst ihn Richtung Seitenglas in der gegnerischen Ecke.
+achte: [Kürzerer Lob, Treffpunkt seitlich vor dem Körper, Ziel ist das Seitenglas]
 ---

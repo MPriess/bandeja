@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>bandeja. Video-Renderer</title>
+<style>
+  @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url(/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url(/node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 100 900; src: url(/node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2) format("woff2"); }
+  :root { --ink: #0c1a24; --paper: #f3f4ee; --lime: #cdeb3b; --court: #1e4fa0; }
+  html, body { margin: 0; background: var(--ink); overflow: hidden; }
+  #buehne { position: relative; overflow: hidden; }
+  canvas { display: block; }
+  .ebene { position: absolute; inset: 0; pointer-events: none; font-family: Inter, sans-serif; color: var(--paper); }
+  .marke { position: absolute; font-family: "Barlow Condensed"; font-weight: 800; letter-spacing: .01em; text-shadow: 0 2px 12px rgba(0,0,0,.35); }
+  .marke span { color: var(--lime); }
+  .titel { position: absolute; font-family: "Barlow Condensed"; font-weight: 800; text-transform: uppercase; line-height: .92; text-shadow: 0 3px 18px rgba(0,0,0,.45); }
+  .text { position: absolute; background: rgba(12,26,36,.82); border-left: .35em solid var(--lime); font-weight: 600; line-height: 1.25; border-radius: .25em; }
+  .kamera { position: absolute; font-family: "Barlow Condensed"; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; background: var(--lime); color: var(--ink); border-radius: 999px; }
+  .abspann { position: absolute; inset: 0; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .4em; }
+  .abspann .gross { font-family: "Barlow Condensed"; font-weight: 800; }
+  .abspann .gross span { color: var(--lime); }
+  .abspann .klein { color: #c9d2d8; font-weight: 500; }
+  /* Landscape: text and camera chip stay above the controls bar of a web or YouTube player */
+  .quer .marke { right: 56px; top: 40px; font-size: 54px; }
+  .quer .titel { left: 72px; top: 52px; font-size: 92px; max-width: 1200px; }
+  .quer .text { left: 72px; bottom: 150px; font-size: 40px; padding: 22px 32px; max-width: 1250px; }
+  .quer .kamera { right: 56px; bottom: 150px; font-size: 30px; padding: 8px 22px; }
+  .quer .abspann .gross { font-size: 160px; } .quer .abspann .klein { font-size: 44px; }
+  /* Shorts: keep the bottom fifth and the right edge free for the YouTube buttons */
+  .short .marke { left: 64px; top: 120px; font-size: 64px; }
+  .short .titel { left: 64px; right: 64px; top: 210px; font-size: 118px; }
+  .short .text { left: 64px; right: 200px; top: 520px; font-size: 46px; padding: 24px 32px; }
+  .short .kamera { left: 64px; bottom: 420px; font-size: 34px; padding: 10px 24px; }
+  .short .abspann .gross { font-size: 190px; } .short .abspann .klein { font-size: 54px; padding: 0 120px; }
+</style>
+<script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js" } }</script>
+</head>
+<body>
+<div id="buehne"></div>
+<script type="module" src="/scripts/video/welt/main.js"></script>
+</body>
+</html>

@@ -1,26 +1,28 @@
 {{- /*
-  Card that links to a video page. Loads nothing from YouTube: the player only appears on the
-  video page itself (two-click solution). The link carries .ohne-vorladen so hovering does not
-  prerender the page (and with it the YouTube player).
+  Card that links to a video page: poster, theme, title, description, length and the lesson or
+  article it belongs to. Loads only the local poster (lazy); the video loads on its page after play.
   Usage: partial "video-karte.html" (dict "page" $video "level" 3)   (level: heading level, 2 or 3)
 */ -}}
 {{- $v := .page -}}
-<a href="{{ $v.RelPermalink }}" class="ohne-vorladen flex flex-col gap-3 rounded-[22px] border border-line bg-white p-6 text-ink no-underline hover:border-ink hover:text-ink">
-  <span class="flex items-center gap-2.5">
-    <span class="inline-flex size-10 flex-none items-center justify-center rounded-full bg-ink text-lime">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-[22px]") }}</span>
-    {{ partial "ui/eyebrow.html" (dict "text" "Video · Spielsituation" "class" "text-[13px] text-court") }}
+{{- $thema := partial "fn/video-thema.html" $v -}}
+{{- $zu := false -}}{{ with $v.Params.lektion }}{{ $zu = site.GetPage . }}{{ else }}{{ with $v.Params.wissen }}{{ $zu = site.GetPage . }}{{ end }}{{ end -}}
+<a href="{{ $v.RelPermalink }}" class="flex flex-col gap-3 rounded-[22px] border border-line bg-white p-4 pb-5 text-ink no-underline hover:border-ink hover:text-ink">
+  <span class="relative block overflow-hidden rounded-2xl bg-ink">
+    {{- with $v.Params.poster }}
+    <img src="{{ . | relURL }}" alt="" width="1280" height="720" loading="lazy" decoding="async" class="block aspect-video w-full object-cover">
+    {{- end }}
+    <span class="absolute bottom-2.5 left-2.5 inline-flex size-10 items-center justify-center rounded-full bg-ink/85 text-lime">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-[22px]") }}</span>
+    {{- with $v.Params.dauer }}<span class="absolute right-2.5 bottom-2.5 rounded-full bg-ink/85 px-2.5 py-1 text-[13px] font-semibold text-paper">{{ . }}</span>{{ end }}
   </span>
-  {{- if eq .level 3 }}
-  <h3 class="m-0 text-xl font-bold">{{ $v.Title }}</h3>
-  {{- else }}
-  <h2 class="m-0 text-xl font-bold">{{ $v.Title }}</h2>
-  {{- end }}
-  <span class="text-sm leading-normal text-mute">{{ $v.Description }}</span>
-  <span class="flex flex-wrap gap-2">
-    {{- with $v.Params.sprache }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
-    {{- with $v.Params.kanal }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
+  <span class="flex flex-col gap-2 px-2">
+    {{ partial "ui/eyebrow.html" (dict "text" ($thema.titel | default "Lernvideo") "class" "text-[13px] text-court") }}
+    {{- if eq .level 3 }}
+    <h3 class="m-0 text-xl font-bold">{{ $v.Title }}</h3>
+    {{- else }}
+    <h2 class="m-0 text-xl font-bold">{{ $v.Title }}</h2>
+    {{- end }}
+    <span class="text-sm leading-normal text-mute">{{ $v.Description }}</span>
+    {{- with $zu }}<span class="text-[13px] font-semibold text-mute">Zu: {{ .Title }}</span>{{ end }}
   </span>
-  <span class="text-[13px] leading-normal text-mute">Öffnet den YouTube-Player. Erst dann werden Daten an YouTube übertragen.</span>
-  <span class="mt-auto inline-flex items-center gap-2 text-[15px] font-bold text-court">Video ansehen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
 </a>
 {{- /**/ -}}

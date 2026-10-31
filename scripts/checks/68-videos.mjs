@@ -1,70 +1,63 @@
-// YouTube only behind a click (two-click solution, no JavaScript):
-// - only video pages (videos/<name>/) embed anything from another host, and only
-//   one youtube-nocookie.com player with a title;
-// - every link to a video page carries .ohne-vorladen, and the speculation rules exclude them;
-// - in Chromium, a lesson page with a video card requests nothing from other hosts, and
-//   hovering or pressing the card does not preload the video page.
+// Learning videos are own animations on our own server:
+// - nowhere an <iframe>, nowhere a load from another host;
+// - every video page (videos/<name>/) has exactly one local <video> with controls, poster,
+//   preload="none", aria-label and an MP4 <source>; <video> appears only on video pages;
+// - in Chromium, opening a video page does not request the MP4 before play is pressed,
+//   and a lesson page with a video card requests nothing from other hosts.
 import fs from "node:fs";
 import path from "node:path";
 import { withBrowser, SAMPLES } from "../lib/browser.mjs";
 
-export const name = "Videos (Zwei-Klick)";
+export const name = "Lernvideos";
 const VIDEO_PAGE = /^videos\/[^/]+\/index\.html$/;
-const VIDEO_HREF = /\/videos\/[^/"#?]+\/$/;
 
 export default async ({ pub, htmlFiles }) => {
   const errors = [];
   let players = 0;
+  let beispiel = null;
+  const attr = (t, k) => t.match(new RegExp(`\\s${k}=(?:"([^"]*)"|([^\\s>]+))`))?.slice(1).find((x) => x !== undefined);
+  const lokal = (u) => u && !/^(https?:)?\/\//.test(u) && fs.existsSync(path.join(pub, decodeURIComponent(u.split("?")[0])));
   for (const file of htmlFiles()) {
     const html = fs.readFileSync(file, "utf8");
     if (/http-equiv="?refresh/i.test(html)) continue;
     const rel = path.relative(pub, file);
-    const frames = [...html.matchAll(/<iframe\b[^>]*>/g)].map((m) => m[0]);
-    const external = [...html.matchAll(/<(?:script|img|iframe|link|source|video|audio|embed|object)\b[^>]*?\s(?:src|href|data)="?(?:https?:)?\/\/[^"\s>]+/g)].map((m) => m[0]).filter((t) => !/<link[^>]*rel="?(canonical|alternate)/.test(t));
-    if (VIDEO_PAGE.test(rel)) {
-      players += frames.length;
-      if (frames.length !== 1) errors.push(`${rel}: ${frames.length} Player statt genau 1`);
-      for (const f of frames) {
-        if (!/src="?https:\/\/www\.youtube-nocookie\.com\/embed\/[\w-]{11}\?/.test(f)) errors.push(`${rel}: Player nicht über youtube-nocookie.com`);
-        if (!/\stitle="[^"]+"/.test(f)) errors.push(`${rel}: Player ohne title (Screenreader)`);
-      }
-      if (external.length !== frames.length) errors.push(`${rel}: lädt außer dem Player noch etwas von anderen Hosts`);
-    } else {
-      if (frames.length) errors.push(`${rel}: <iframe> außerhalb einer Video-Seite`);
-      for (const t of external) errors.push(`${rel}: lädt von einem anderen Host: ${t.slice(0, 80)}`);
+    if (/<iframe\b/.test(html)) errors.push(`${rel}: <iframe> – Videos laufen nur im eigenen Player`);
+    const external = [...html.matchAll(/<(?:script|img|iframe|link|source|video|audio|embed|object)\b[^>]*?\s(?:src|href|data|poster)="?(?:https?:)?\/\/[^"\s>]+/g)].map((m) => m[0]).filter((t) => !/<link[^>]*rel="?(canonical|alternate)/.test(t));
+    for (const t of external) errors.push(`${rel}: lädt von einem anderen Host: ${t.slice(0, 80)}`);
+    const videos = [...html.matchAll(/<video\b[\s\S]*?<\/video>/g)].map((m) => m[0]);
+    if (!VIDEO_PAGE.test(rel)) {
+      if (videos.length) errors.push(`${rel}: <video> außerhalb einer Video-Seite`);
+      continue;
     }
-    for (const m of html.matchAll(/<a\b[^>]*>/g)) {
-      const href = m[0].match(/href="?([^"\s>]+)/)?.[1] ?? "";
-      if (VIDEO_HREF.test(href) && !/class="?[^">]*\bohne-vorladen\b/.test(m[0])) errors.push(`${rel}: Link auf ${href} ohne Klasse ohne-vorladen`);
-    }
-    const rules = html.match(/<script type="?speculationrules"?>([\s\S]*?)<\/script>/)?.[1] ?? "";
-    if (!rules.includes("videos/:clip/")) errors.push(`${rel}: Vorlade-Regeln schließen Video-Seiten nicht aus`);
+    players += videos.length;
+    if (videos.length !== 1) { errors.push(`${rel}: ${videos.length} Player statt genau 1`); continue; }
+    beispiel ??= "/" + rel.replace(/index\.html$/, "");
+    const v = videos[0], tag = v.match(/<video\b[^>]*>/)[0];
+    if (!/\scontrols[\s>=]/.test(tag)) errors.push(`${rel}: <video> ohne controls`);
+    if (attr(tag, "preload") !== "none") errors.push(`${rel}: <video> lädt vor dem Abspielen (preload="none" fehlt)`);
+    if (!lokal(attr(tag, "poster"))) errors.push(`${rel}: Vorschaubild (poster) fehlt oder liegt nicht auf der Seite`);
+    if (!attr(tag, "aria-label")) errors.push(`${rel}: <video> ohne aria-label (Screenreader)`);
+    const src = v.match(/<source\b[^>]*>/)?.[0];
+    if (!src || !lokal(attr(src, "src")) || attr(src, "type") !== "video/mp4") errors.push(`${rel}: <source> fehlt, liegt nicht auf der Seite oder ist kein video/mp4`);
   }
   if (!players) errors.push("Keine Video-Seite mit Player gefunden");
 
   await withBrowser(pub, async (browser, base) => {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-    const foreign = [];
-    page.on("request", (r) => { if (!r.url().startsWith(base) && !r.url().startsWith("data:")) foreign.push(r.url()); });
-    const cdp = await page.context().newCDPSession(page);
-    const preload = [];
-    cdp.on("Preload.prefetchStatusUpdated", (e) => preload.push(e.prefetchUrl ?? e.key?.url ?? ""));
-    cdp.on("Preload.prerenderStatusUpdated", (e) => preload.push(e.prerenderingUrl ?? e.key?.url ?? ""));
-    await cdp.send("Preload.enable");
-    await page.goto(base + SAMPLES.kapitel);
-    const card = page.locator("a.ohne-vorladen[href*='/videos/']").first();
-    if (!(await card.count())) errors.push(`${SAMPLES.kapitel}: keine Video-Karte in der Lektion`);
-    else {
-      await card.hover();
+    const anfragen = [];
+    page.on("request", (r) => anfragen.push(r.url()));
+    // A video page must not fetch the video before play.
+    if (beispiel) {
+      await page.goto(base + beispiel);
       await page.waitForTimeout(800);
-      await page.mouse.down();
-      await page.waitForTimeout(800);
-      await page.mouse.move(0, 0);
-      await page.mouse.up();
-      const vids = preload.filter((u) => u.includes("/videos/"));
-      if (vids.length) errors.push(`${SAMPLES.kapitel}: Video-Seite wird vorgeladen (${vids[0]})`);
+      const mp4 = anfragen.filter((u) => u.endsWith(".mp4"));
+      if (mp4.length) errors.push(`${beispiel}: lädt das Video schon vor dem Abspielen (${mp4[0]})`);
     }
-    if (foreign.length) errors.push(`${SAMPLES.kapitel}: Anfrage an anderen Host: ${foreign[0]}`);
+    anfragen.length = 0;
+    await page.goto(base + SAMPLES.kapitel);
+    if (!(await page.locator("a[href*='/videos/']").count())) errors.push(`${SAMPLES.kapitel}: keine Video-Karte in der Lektion`);
+    const fremd = anfragen.filter((u) => !u.startsWith(base) && !u.startsWith("data:"));
+    if (fremd.length) errors.push(`${SAMPLES.kapitel}: Anfrage an anderen Host: ${fremd[0]}`);
     await page.close();
   });
   return { ok: errors.length === 0, errors, note: `${players} Video-Seiten` };

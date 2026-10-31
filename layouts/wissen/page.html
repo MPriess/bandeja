@@ -79,6 +79,15 @@
           {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-5 text-lime") }}
         </a>
         {{- end }}{{ end }}
+        {{- /* Own animations for this article (field `wissen` in content/videos/). */}}
+        {{- with where (site.GetPage "/videos").RegularPages.ByWeight "Params.wissen" .Path }}
+        <section aria-labelledby="videos" class="flex flex-col gap-3">
+          <h2 id="videos" class="m-0 text-xl font-bold">Im Video</h2>
+          {{- range . }}
+            {{ partial "video-karte.html" (dict "page" . "level" 3) }}
+          {{- end }}
+        </section>
+        {{- end }}
         {{- with partial "fn/level-of.html" . }}
         <p class="m-0 rounded-[18px] bg-lime-soft px-5 py-4 text-[15px] leading-normal">Diese Seite gehört zu <a href="{{ .RelPermalink }}" class="font-bold">{{ .Title }}</a> im Lernpfad.</p>
         {{- end }}

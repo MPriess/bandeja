@@ -1,0 +1,9 @@
+titel: Die Bandeja
+quelle: content/lektionen/bandeja/kapitel-6.md
+ablauf:
+  - { kamera: oben, dauer: 2.2, ab: start, text: "Bandeja aus der Netzposition", sprecher: "Bandeja aus der Netzposition." }
+  - { fahrt: hinten, dauer: 1.6, ab: start, sprecher: "Seitlich stellen." }
+  - { kamera: hinten, abspielen: true, ab: start, text: "Nach dem Schlag sofort zurück ans Netz", sprecher: "Treffpunkt vor dem Körper, über Kopfhöhe, mit leichtem Unterschnitt." }
+  - { kamera: seite, abspielen: true, ab: start, tempo: 0.5, sprecher: "Die Bandeja ist kein Smash. Du spielst kontrolliert in die Ecke und behältst das Netz." }
+  - { kamera: tv, abspielen: true, ab: start, sprecher: "Nach dem Schlag sofort zurück ans Netz." }
+abspann: { text: "Ganze Lektion: Die Bandeja" }

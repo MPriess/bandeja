@@ -1,0 +1,9 @@
+titel: Spiel mit der Rückwand
+quelle: content/lektionen/spiel-mit-der-rueckwand/kapitel-1.md
+ablauf:
+  - { kamera: oben, dauer: 2.4, ab: start, text: "Erst aufspringen lassen, dann von der Wand", sprecher: "Erst aufspringen lassen." }
+  - { fahrt: schraeg, dauer: 1.6, ab: start, sprecher: "Dann die Wand." }
+  - { kamera: schraeg, abspielen: true, ab: start, sprecher: "Der Ball springt in deinem Feld auf und prallt von der Rückwand ab." }
+  - { kamera: hinten, abspielen: true, ab: start, tempo: 0.5, text: "Warten, bis der Ball von der Wand kommt", sprecher: "Warte, bis er von der Wand zurückkommt. Geh mit dem Ball nach vorn und triff ihn vor dem Körper." }
+  - { kamera: spieler, abspielen: true, ab: start, sprecher: "So sieht es aus deiner Sicht aus." }
+abspann: { text: "Ganze Lektion: Spiel mit der Rückwand" }

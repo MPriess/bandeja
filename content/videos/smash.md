@@ -1,12 +1,13 @@
 ---
-title: "Kurzer Lob: der Smash"
-description: Der Kick-Smash nach einem zu kurzen Lob, Folge der Reihe „Padel-Schule“.
-weight: 6
-youtube: k5ojaVfLRyU
-start: 0
-sprache: Deutsch
+title: "Der Smash"
+description: Der flache Smash zwischen die Gegner als 3D-Animation, auch in Zeitlupe von der Seite.
+weight: 3
+thema: ueberkopf
+dauer: "0:18"
+datei: media/animationen/smash.mp4
+poster: media/animationen/smash.jpg
 lektion: /lektionen/der-smash
 review: true
-situation: Der Gegner spielt einen zu kurzen Lob, der Ball kommt hoch und langsam in deine Hälfte. Jetzt lohnt sich der Smash – mit Seitsteps unter den Ball und dann mit dem ganzen Körper schlagen.
-achte: [Mit Seitsteps unter den Ball, Hoch und vor dem Körper treffen, Nach dem Smash sofort wieder bereit]
+situation: Der Lob ist zu kurz. Du triffst den Ball hoch vor dem Körper und schlägst ihn flach zwischen die beiden Gegner.
+achte: [Ball hoch vor dem Körper treffen, Kraftvoll nach unten schlagen, Ziel ist die Mitte zwischen den Gegnern]
 ---
