@@ -40,7 +40,7 @@
                 <label class="probe-teaser inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-2 border-lime pr-4 pl-1.5 text-sm font-bold text-lime has-[:checked]:bg-lime has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-paper">
                   <input type="radio" name="probe-ansicht" id="probe-video" class="sr-only">
                   <span class="inline-flex size-8 items-center justify-center rounded-full bg-lime text-ink">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-[18px]") }}</span>
-                  Video ansehen{{ with .Params.dauer }}<span class="font-semibold opacity-75">{{ . }}</span>{{ end }}
+                  Video ansehen
                 </label>
               </div>
               {{- end }}
