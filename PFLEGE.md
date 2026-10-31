@@ -38,7 +38,7 @@ Entwürfe in der Vorschau sehen: `npx hugo server -D`.
 | Schnellstart (8 Schritte auf einer Seite, mit Grafiken) | `content/schnellstart.md` |
 | Stellungsspiel (Angriff, Abwehr, Rückkehr in die Ausgangsposition – 11 Schritte auf einer Seite) | `content/stellungsspiel.md` |
 | Eine Stufe: Lektionen, Drills, Stufen-Check | `content/lernpfad/stufe-N/_index.md` |
-| Lektion: Bewegungsablauf, Kapitel, Quiz | `content/lektionen/<name>/` |
+| Lektion: Kapitel, Quiz (das Video kommt aus `content/videos/` über `lektion`) | `content/lektionen/<name>/` |
 | Wissensartikel und Kategorie-Farben | `content/wissen/<kategorie>/` |
 | Impressum, Datenschutz | `content/impressum.md`, `content/datenschutz.md` |
 

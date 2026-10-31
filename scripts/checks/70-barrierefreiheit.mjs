@@ -11,7 +11,7 @@ const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 const STATES = {
   quiz: async (page) => { await page.click('label:has([name="frage-0"][value="0"])'); await page.click('label:has([name="frage-1"][value="1"])'); },
   drill: async (page) => { await page.click('label:has([name="satz-1-ball-1"])'); },
-  kapitel: async (page) => { await page.click('label:has(#ansicht-flow)'); },
+  kapitel: async (page) => { await page.click('label:has(#ansicht-video)'); },
 };
 
 export default async ({ pub }) => {

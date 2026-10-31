@@ -67,7 +67,6 @@ export default async ({ root }) => {
       for (const k of ["title", "description"]) need(text(fm[k]), `\`${k}\` fehlt`);
       need([1, 2, 3, 4].includes(fm.stufe), "`stufe` muss 1–4 sein");
       need(exists(fm.drill), `\`drill: ${fm.drill}\` gibt es nicht`);
-      need(list(fm.phases, 2) && fm.phases.every((p) => text(p.title) && list(p.items)), "`phases`: mind. 2 Phasen mit `title` und `items`");
     } else if (/^lektionen\/[^/]+\/[^/]+\.md$/.test(rel) && fm.layout !== "quiz") {
       for (const k of ["title", "dauer", "intro"]) need(text(fm[k]), `\`${k}\` fehlt`);
       need(posInt(fm.weight), "`weight` fehlt");
