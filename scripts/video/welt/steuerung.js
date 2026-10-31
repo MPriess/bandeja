@@ -119,6 +119,7 @@ export class Steuerung {
       const k = clamp(pos.v / 1.6, 0, 1) * (1 - sw);
       let fuesse = null;
       const phase = p.weg ? (pos.strecke ?? 0) / (2 * SCHRITT) : 0;
+      const wq = this.#quer(f, pos, yaw);
       if (!pose) {
         const atmen = 0.012 * Math.sin(t * 2.3 + f.seed);
         const lauf = {
@@ -128,29 +129,55 @@ export class Steuerung {
           links: [0.28, 1.05 - 0.06 * Math.sin(phase * 2 * Math.PI), 0.1 - 0.22 * Math.sin(phase * 2 * Math.PI)],
           lean: 18, tief: 0.08 + 0.035 * Math.abs(Math.sin(phase * 2 * Math.PI)),
         };
-        pose = mischen({ ...BEREIT, tief: BEREIT.tief + atmen }, lauf, k);
+        // Side steps: low ready position, racket in front, no arm swing.
+        const seit = { ...BEREIT, lean: 16, tief: 0.17 + 0.03 * Math.abs(Math.sin((pos.strecke ?? 0) / 0.5 * Math.PI)) };
+        pose = mischen({ ...BEREIT, tief: BEREIT.tief + atmen }, mischen(lauf, seit, wq), k);
       }
-      if (p.weg && k > 0.01) fuesse = this.#fuesse(f, pos, phase, k, x - pos.x, z - pos.z, yaw);
+      if (p.weg && k > 0.01) fuesse = this.#fuesse(f, pos, k, x - pos.x, z - pos.z, yaw, wq);
       f.figur.stellen({ x, z, yaw, pose, blick: ballJetzt ?? new THREE.Vector3(-p.seite * 6, 1, 0), fuesse });
     }
   }
 
-  #fuesse(f, pos, phase, k, ox, oz, yaw) {
+  // How much a movement goes sideways to the facing direction (0 = forward/back, 1 = sideways).
+  #quer(f, pos, yaw) {
+    if (!pos.richtung) return 0;
+    const l = Math.hypot(pos.richtung.x, pos.richtung.z) || 1;
+    const dot = Math.abs((pos.richtung.x * Math.sin(yaw) + pos.richtung.z * Math.cos(yaw)) / l);
+    return clamp((0.75 - dot) / 0.4, 0, 1);
+  }
+
+  // Feet while moving: running steps along the path, or side steps (shuffle) when the path goes
+  // sideways – then the feet stay on their side of the body, the leading foot steps first and the
+  // other one closes up, they never cross.
+  #fuesse(f, pos, k, ox, oz, yaw, wq) {
     const L = SCHRITT, s = pos.strecke ?? 0;
     const out = {};
+    const Yachse = new THREE.Vector3(0, 1, 0);
+    const links = new THREE.Vector3(1, 0, 0).applyAxisAngle(Yachse, yaw); // the player's left in the world
+    const r = pos.richtung ?? { x: 1, z: 0 };
+    const vorLinks = r.x * links.x + r.z * links.z > 0; // moving towards the left: the left foot leads
     for (const [seite, versatz, quer] of [["l", 0, 1], ["r", L, -1]]) {
+      // Running.
       const sv = s + versatz;
       const n = Math.floor(sv / (2 * L)), u = sv / (2 * L) - n;
       let sf = 2 * L * n + L / 2 + (u < 0.5 ? 0 : ease((u - 0.5) / 0.5) * 2 * L) - versatz;
       sf = Math.min(sf, f.laenge);
       const w = wegPunkt(f.person, sf);
       const hub = u < 0.5 ? 0 : 0.14 * Math.sin(Math.PI * (u - 0.5) / 0.5);
-      // Sideways from the path direction, so the feet do not cross.
       const lauf = new THREE.Vector3(w.x - quer * w.dz * 0.12 + ox, 0.075 + hub, w.z + quer * w.dx * 0.12 + oz);
-      const stand = new THREE.Vector3(pos.x + ox, 0.075, pos.z + oz).add(new THREE.Vector3(quer * 0.23, 0, quer * 0.04).applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw));
-      out[seite] = stand.lerp(lauf, k);
+      // Side steps: step length 0.5 m, the leading foot moves in the first half of each cycle.
+      const Q = 0.5;
+      const fuehrt = (quer > 0) === vorLinks;
+      const sq = s / Q, m = Math.floor(sq), v = sq - m;
+      const anteil = fuehrt ? ease(clamp(v / 0.5, 0, 1)) : ease(clamp((v - 0.5) / 0.5, 0, 1));
+      const sf2 = Math.min(f.laenge, (m + anteil) * Q);
+      const w2 = wegPunkt(f.person, sf2);
+      const hub2 = 0.06 * Math.sin(Math.PI * (fuehrt ? clamp(v / 0.5, 0, 1) : clamp((v - 0.5) / 0.5, 0, 1)));
+      const seit = new THREE.Vector3(w2.x + ox, 0.075 + hub2, w2.z + oz).add(links.clone().multiplyScalar(quer * 0.24));
+      const bewegt = lauf.lerp(seit, wq);
+      const stand = new THREE.Vector3(pos.x + ox, 0.075, pos.z + oz).add(new THREE.Vector3(quer * 0.23, 0, quer * 0.04).applyAxisAngle(Yachse, yaw));
+      out[seite] = stand.lerp(bewegt, k);
     }
-    void phase;
     return out;
   }
 

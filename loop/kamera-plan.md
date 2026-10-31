@@ -43,6 +43,6 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 - [x] Regeln und Ballposition in 3D prüfen (`51-video-regeln.mjs` mit Selbsttest); `npm run video` rendert nur regelkonforme Szenen
 
 - [ ] Volle Renders aller Clips prüfen (Kontaktbogen je Clip), Auffälligkeiten beheben
-- [ ] Renderzeit senken (Screenshot als JPEG oder Canvas direkt auslesen; Ziel < 1 s pro Bild in 1080p)
-- [ ] Laufen: Seitschritte statt Vorwärtslauf, wenn der Weg quer zur Blickrichtung geht (Bandeja Kapitel 2, Smash Kapitel 2)
+- [x] Renderzeit senken: JPEG statt PNG, 1,6 → 0,8 s pro Bild in 1080p (Zeichnen allein 0,2 s; nächster Schritt wäre WebCodecs im Browser)
+- [x] Laufen: Seitschritte statt Vorwärtslauf, wenn der Weg quer zur Blickrichtung geht (Füße kreuzen nicht, führender Fuß zuerst, tiefe Bereitschaftshaltung)
 - [ ] Gegner und Partner reagieren (Split-Step beim gegnerischen Schlag, Blick zum Ball) – teilweise erledigt (Blick)

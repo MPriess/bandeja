@@ -123,8 +123,9 @@ export async function rendern(clip, { format, fps = 30, vorschau = false, standb
       const start = Date.now();
       for (let i = 0; i < n; i++) {
         await page.evaluate((t) => window.bild(t), i / rate);
-        const png = await page.screenshot({ type: "png" });
-        if (!enc.stdin.write(png)) await new Promise((r) => enc.stdin.once("drain", r));
+        // JPEG (q 95) is twice as fast as PNG; H.264 at CRF 20 hides the difference.
+        const bild = await page.screenshot({ type: "jpeg", quality: 95 });
+        if (!enc.stdin.write(bild)) await new Promise((r) => enc.stdin.once("drain", r));
         if (i % rate === 0 || i === n - 1) {
           const s = (Date.now() - start) / 1000;
           process.stdout.write(`\r  ${clip.name} ${f}: Bild ${i + 1}/${n}  (${(s / (i + 1)).toFixed(2)} s/Bild, noch ~${Math.round((s / (i + 1)) * (n - i - 1))} s)   `);
