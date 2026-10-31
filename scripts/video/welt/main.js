@@ -7,6 +7,7 @@ import { szene, ballBei } from "../szene.mjs";
 import { kamera, FORMATE, fahrt } from "../kameras.mjs";
 import { zeitplan, bei, KAMERA_NAMEN, VORLAUF } from "../zeitplan.mjs";
 
+let pfosten = null;
 let R, scene, cam, steuerung, sz, plan, job, ballMesh, schatten, spur, ringe, ebene;
 
 function himmel() {
@@ -204,6 +205,10 @@ window.bild = (tau, zeichnen = true) => {
   };
   ballMesh.scale.setScalar(groesse(ballMesh));
   for (const m of spur) m.scale.setScalar(groesse(m));
+  // Posts right in front of the camera (behind the glass) would be thick dark bars: hide them,
+  // like a broadcast camera would frame around them.
+  if (!pfosten) { pfosten = []; scene.traverse((o) => { if (o.name === "pfosten") pfosten.push(o); }); }
+  for (const o of pfosten) o.visible = Math.hypot(o.position.x - cam.position.x, o.position.z - cam.position.z) > 7;
   if (zeichnen) R.render(scene, cam);
 
   // Overlays: title in the first section, section text, camera chip, end card.
@@ -293,3 +298,5 @@ window.exportGlb = async (fps = 30) => {
   for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
   return btoa(bin);
 };
+
+

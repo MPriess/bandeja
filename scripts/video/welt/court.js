@@ -133,6 +133,7 @@ export function baueCourt() {
   };
   const pfosten = (x, z, h) => {
     const p = new THREE.Mesh(new THREE.BoxGeometry(0.06, h, 0.06), kante);
+    p.name = "pfosten";
     p.position.set(x, h / 2, z);
     p.castShadow = true;
     court.add(p);
@@ -140,7 +141,8 @@ export function baueCourt() {
   for (const sx of [-1, 1]) {
     const x = sx * 10;
     // Back wall: 3 m glass in 2 m panels, 1 m mesh above.
-    for (let i = 0; i < 5; i++) wand(glas, 1.98, 3, x, 1.5, -4 + i * 2, Math.PI / 2);
+    // One continuous pane: gaps between panels look like dark stripes right in front of the camera behind the glass.
+    wand(glas, 10, 3, x, 1.5, 0, Math.PI / 2);
     wand(gitter(10, 1), 10, 1, x, 3.5, 0, Math.PI / 2);
     for (let i = 0; i <= 5; i++) pfosten(x, -5 + i * 2, 4);
     // Side walls: first 2 m glass 3 m high (with 1 m mesh above), next 2 m glass stepping down to 2 m.
