@@ -42,7 +42,7 @@
       <section class="group/q flex flex-col gap-6" aria-labelledby="frage-{{ $qi }}-titel">
         <div class="flex flex-col gap-2.5">
           {{ partial "ui/eyebrow.html" (dict "text" (printf "Frage %d von %d" (add $qi 1) $total)) }}
-          <h2 id="frage-{{ $qi }}-titel" class="m-0 font-display text-4xl leading-[0.98] font-extrabold uppercase md:text-[52px]">{{ $q.text }}</h2>
+          <h2 id="frage-{{ $qi }}-titel" class="m-0 font-display text-4xl leading-none font-extrabold uppercase md:text-[52px]">{{ $q.text }}</h2>
         </div>
 
         {{- with $q.court }}
@@ -88,7 +88,7 @@
 
       <section aria-labelledby="ergebnis" class="flex flex-col items-center gap-6 border-t border-line pt-14 text-center">
         <div class="quiz-pending flex flex-col items-center gap-4">
-          <h2 class="m-0 font-display text-4xl leading-[0.95] font-extrabold uppercase md:text-5xl">Fast geschafft</h2>
+          <h2 class="m-0 font-display text-4xl leading-none font-extrabold uppercase md:text-5xl">Fast geschafft</h2>
           <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">Noch offen: <strong class="text-ink"><span class="quiz-open-out"></span> von {{ $total }} Fragen</strong>. Beantworte alle, dann siehst du dein Ergebnis.</p>
         </div>
         <div class="quiz-done flex flex-col items-center gap-6">
@@ -96,7 +96,7 @@
             <span class="font-display text-7xl leading-[0.9] font-extrabold text-lime"><span class="tally-out"></span>/{{ $total }}</span>
             <span class="text-sm text-fog">richtig</span>
           </div>
-          <h2 id="ergebnis" class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-6xl">Dein Ergebnis</h2>
+          <h2 id="ergebnis" class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-6xl">Dein Ergebnis</h2>
           {{- with .Params.ergebnis }}
           <p class="m-0 max-w-[560px] text-lg leading-relaxed text-mute">{{ . }}</p>
           {{- end }}

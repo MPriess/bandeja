@@ -19,7 +19,7 @@
       <div class="contents lg:flex lg:flex-col">
       <div class="order-1 lg:order-none flex flex-col gap-2 px-5 pt-6">
         {{ partial "ui/eyebrow.html" (dict "text" (printf "%s · %d Min" $p.with $p.minutes) "class" "text-[13px] text-lime") }}
-        <h1 class="m-0 font-display text-[40px] leading-[0.95] font-extrabold uppercase">{{ .Title }}</h1>
+        <h1 class="m-0 font-display text-[40px] leading-none font-extrabold uppercase">{{ .Title }}</h1>
         <p class="m-0 text-[15px] leading-normal text-fog">{{ .Description }}</p>
       </div>
 

@@ -17,9 +17,9 @@
       <div class="mx-auto flex max-w-[1240px] flex-col gap-6">
         {{ partial "ui/eyebrow.html" (dict "text" "Padel-Wissen" "class" "text-lime") }}
         {{- if $isRoot }}
-          <h1 class="m-0 max-w-[960px] font-display text-5xl leading-[0.9] font-extrabold uppercase sm:text-6xl md:text-8xl">{{ len $root.RegularPagesRecursive }} Seiten.<br>Alles, was du über Padel wissen musst.</h1>
+          <h1 class="m-0 max-w-[960px] font-display text-5xl leading-none font-extrabold uppercase sm:text-6xl md:text-8xl">{{ len $root.RegularPagesRecursive }} Seiten.<br>Alles, was du über Padel wissen musst.</h1>
         {{- else }}
-          <h1 class="m-0 max-w-[960px] font-display text-5xl leading-[0.9] font-extrabold uppercase sm:text-6xl md:text-8xl">{{ .Title }}</h1>
+          <h1 class="m-0 max-w-[960px] font-display text-5xl leading-none font-extrabold uppercase sm:text-6xl md:text-8xl">{{ .Title }}</h1>
         {{- end }}
         <p class="m-0 max-w-[640px] text-[19px] leading-relaxed text-fog">{{ .Description }}</p>
       </div>
