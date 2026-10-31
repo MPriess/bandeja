@@ -132,6 +132,13 @@ export class Steuerung {
         // Side steps: low ready position, racket in front, no arm swing.
         const seit = { ...BEREIT, lean: 16, tief: 0.17 + 0.03 * Math.abs(Math.sin((pos.strecke ?? 0) / 0.5 * Math.PI)) };
         pose = mischen({ ...BEREIT, tief: BEREIT.tief + atmen }, mischen(lauf, seit, wq), k);
+        // Split step: when someone on the other side hits, hop lightly at the contact and land low.
+        for (const sch of this.schlaege) {
+          if (sch.f.person.team === p.team) continue;
+          const rt = t - sch.t;
+          if (rt > -0.25 && rt < 0.05) pose.sprung += 0.07 * Math.sin(Math.PI * (rt + 0.25) / 0.3);
+          if (rt >= 0.05 && rt < 0.45) pose.tief += 0.08 * Math.sin(Math.PI * (rt - 0.05) / 0.4);
+        }
       }
       if (p.weg && k > 0.01) fuesse = this.#fuesse(f, pos, k, x - pos.x, z - pos.z, yaw, wq);
       f.figur.stellen({ x, z, yaw, pose, blick: ballJetzt ?? new THREE.Vector3(-p.seite * 6, 1, 0), fuesse });
