@@ -54,3 +54,4 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 - [x] Renderzeit senken: JPEG statt PNG, 1,6 → 0,8 s pro Bild in 1080p (Zeichnen allein 0,2 s; nächster Schritt wäre WebCodecs im Browser)
 - [x] Laufen: Seitschritte statt Vorwärtslauf, wenn der Weg quer zur Blickrichtung geht (Füße kreuzen nicht, führender Fuß zuerst, tiefe Bereitschaftshaltung)
 - [x] Gegner und Partner reagieren: Split-Step zum gegnerischen Treffpunkt, Blick zum Ball
+- [x] Paare verschieben sich gemeinsam zur Ballseite (wie im Match), Kameras TV/Seite/Schräg schwenken dezent mit dem Ball

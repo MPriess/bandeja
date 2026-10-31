@@ -31,6 +31,24 @@ export class Steuerung {
 
   #figur(id) { return this.figuren.find((f) => f.person.id === id); }
 
+  // Base position: the diagram position (or the walking path), plus the shift of the pair towards
+  // the side the ball is going to – in padel both partners move together with the ball, about 3 m
+  // apart. Players with their own walking path keep it.
+  #basis(f, t) {
+    const pos = position(f.person, t);
+    if (f.person.weg) return pos;
+    let dz = 0;
+    for (const b of [...this.sz.baelle].sort((x, y) => x.t0 - y.t0)) {
+      const ende = b.ziel ?? b.punkte.at(-1);
+      const ziel = THREE.MathUtils.clamp(ende.z * 0.25, -0.9, 0.9);
+      const w = ease(clamp((t - b.t0 - 0.15) / 0.9, 0, 1));
+      dz += (ziel - dz) * w;
+    }
+    // Stay inside the court.
+    const z = clamp(pos.z + dz, -4.4, 4.4);
+    return { ...pos, z, v: Math.max(pos.v, 0) };
+  }
+
   #yaw(person) { return person.seite < 0 ? Math.PI / 2 : -Math.PI / 2; }
 
   #planen(s) {
@@ -38,7 +56,7 @@ export class Steuerung {
     if (!f) return null;
     const name = SCHLAG_FUER[s.art] ?? "vorhand";
     const yaw = this.#yaw(f.person);
-    const basis = position(f.person, s.t);
+    const basis = this.#basis(f, s.t);
     // Ball relative to the body decides forehand or backhand (overheads are always on the right).
     const rel = new THREE.Vector3(s.kontakt.x - basis.x, 0, s.kontakt.z - basis.z).applyAxisAngle(new THREE.Vector3(0, 1, 0), -yaw);
     const rueckhand = !UEBERKOPF.has(name) && name !== "aufschlag" && rel.x > 0.15;
@@ -53,7 +71,7 @@ export class Steuerung {
 
   // Solve the contact pose a few times so the sweet spot lands on the ball.
   #kontaktEinmessen(s) {
-    const basis = position(s.f.person, s.t);
+    const basis = this.#basis(s.f, s.t);
     const x = basis.x + s.versatz.x, z = basis.z + s.versatz.z;
     const ideal = new THREE.Vector3(...(KONTAKT[s.name] ?? KONTAKT.vorhand));
     let hand = [ideal.x * (s.rueckhand ? -0.85 : 1) * 0.6, s.ball3.y - 0.25, ideal.z * 0.7];
@@ -70,7 +88,7 @@ export class Steuerung {
   // Body of a person at time t without the feet: position, facing, pose, where they look.
   #koerper(f, t, ballJetzt) {
     const p = f.person;
-    const pos = position(p, t);
+    const pos = this.#basis(f, t);
     let x = pos.x, z = pos.z;
     let yaw = this.#yaw(p);
     // The stroke of this person whose window contains t; with two overlapping strokes the one

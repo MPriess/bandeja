@@ -113,8 +113,21 @@ window.vorbereiten = async (j) => {
   return { dauer: plan.dauer, T: sz.T };
 };
 
+// TV, side and oblique cameras pan a little with the ball, like a broadcast; the weight fades in
+// after the hit and out before the ball arrives, so the camera never jerks.
+const FOLGT = { tv: [0.12, 0.25], seite: [0.25, 0.1], schraeg: [0.12, 0.2] };
 function kameraBei(name, t) {
-  return KAMERAS[name](sz, job.format, t);
+  const k = KAMERAS[name](sz, job.format, t);
+  const f = FOLGT[name];
+  if (!f) return k;
+  for (const b of sz.baelle) {
+    const p = ballBei(b, t);
+    if (!p || t > b.t1) continue;
+    const w = Math.max(0, Math.min(1, (t - b.t0) / 0.4, (b.t1 - t) / 0.5));
+    const e = w * w * (3 - 2 * w);
+    return { ...k, ziel: [k.ziel[0] + p.x * f[0] * e, k.ziel[1] + Math.max(0, p.y - 1.5) * 0.12 * e, k.ziel[2] + p.z * f[1] * e] };
+  }
+  return k;
 }
 
 function ballZeigen(t) {
