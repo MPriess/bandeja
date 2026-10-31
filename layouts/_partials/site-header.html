@@ -1,6 +1,7 @@
 {{- /*
   Dark top bar used on content pages.
   Usage: partial "site-header.html" (dict "page" . "crumbs" (slice (dict "title" "Wissen" "href" "wissen/")) "width" "max-w-[1240px]")
+  With "ohneNav" true only the logo is shown (home page).
 */ -}}
 {{- $p := .page -}}
 {{- $nav := slice
@@ -23,6 +24,7 @@
       </nav>
       {{- end }}
     </div>
+    {{- if not .ohneNav }}
     <nav aria-label="Hauptnavigation" class="order-3 -mx-6 flex w-[calc(100%+3rem)] flex-none items-center gap-x-6 overflow-x-auto px-6 text-[15px] font-medium whitespace-nowrap [scrollbar-width:none] md:order-2 md:mx-0 md:w-auto md:overflow-visible md:px-0">
       {{- range $nav }}
         {{- $active := hasPrefix $p.RelPermalink (.href | relURL) }}
@@ -32,5 +34,6 @@
     <div class="order-2 flex-none md:order-3">
       {{ partial "ui/button.html" (dict "href" ("lernpfad/stufe-1/" | relURL) "label" "Kurs starten" "size" "sm") }}
     </div>
+    {{- end }}
   </div>
 </header>
