@@ -29,7 +29,9 @@ export default async ({ pub, htmlFiles }) => {
         if (hasPath && /^(wissen\/[^/]+\/[^/]+|lektionen\/[^/]+\/kapitel-[^/]+)\//.test(rel)) errors.push(`${rel}: Grafik mit Ballweg/Laufweg ist nicht animiert`);
         continue;
       }
-      if (!html.includes("court-pause")) errors.push(`${rel}: Animation ohne Anhalten-Steuerung (WCAG 2.2.2)`);
+      // Without a pause control the animation must play once and be over within 5 s (WCAG 2.2.2).
+      const einmal = anims.every((a) => a["data-einmal"] && +a["data-einmal"] + +a["data-cycle"] <= 5);
+      if (!html.includes("court-pause") && !einmal) errors.push(`${rel}: Animation ohne Anhalten-Steuerung und länger als 5 s (WCAG 2.2.2)`);
       const drawn = [...svg.matchAll(/<path[^>]*>/g)].map((m) => attrs(m[0]));
       const people = [...svg.matchAll(/<circle[^>]*data-r="?(du|partner|frueher|gegner)[^>]*>/g)].map((m) => attrs(m[0]));
       const byKind = {};

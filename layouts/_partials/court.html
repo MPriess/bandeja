@@ -1,6 +1,8 @@
 {{- /*
   Padel court seen from above (net in the middle), drawn as inline SVG.
   Usage: partial "court.html" (dict "d" $diagram "class" "w-full" "animate" true)
+  With "einmal" (seconds of delay) the animation plays once after that delay instead of looping;
+  start delay plus one cycle must stay within 5 s, then no pause control is needed (80-animationen.mjs).
 
   $diagram keys (all optional, coordinates in a 440 × 230 box):
     cap            caption, used as the accessible label
@@ -98,9 +100,9 @@
         {{- $path := index $d $part.k }}
         {{- $typ := cond (eq $part.k "ball2") (or $d.typ2 $d.type) (cond (eq $part.k "mv") "lauf" $d.type) }}
         {{- if eq $part.k "mv" }}
-  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
+  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s{{ with $.einmal }}; animation-iteration-count: 1; animation-fill-mode: both; animation-delay: {{ . }}s{{ end }}"{{ with $.einmal }} data-einmal="{{ . }}"{{ end }}/>
         {{- else }}
-  <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s"/>
+  <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s{{ with $.einmal }}; animation-iteration-count: 1; animation-fill-mode: both; animation-delay: {{ . }}s{{ end }}"{{ with $.einmal }} data-einmal="{{ . }}"{{ end }}/>
         {{- end }}
       {{- end }}
     {{- end }}
