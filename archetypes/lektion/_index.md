@@ -13,12 +13,4 @@ review: true
 build:
   render: never
   list: always
-# Bewegungsablauf: drei Phasen, gezeigt in der zweiten Ansicht jedes Kapitels.
-phases:
-  - title: Vorbereitung
-    items: [Punkt eins, Punkt zwei]
-  - title: Treffen
-    items: [Punkt eins, Punkt zwei]
-  - title: Ausschwingen
-    items: [Punkt eins, Punkt zwei]
 ---

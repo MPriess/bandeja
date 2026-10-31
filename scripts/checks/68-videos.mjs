@@ -1,9 +1,9 @@
 // Learning videos are own animations on our own server:
 // - nowhere an <iframe>, nowhere a load from another host;
-// - every video page (videos/<name>/) has exactly one local <video> with controls, poster,
-//   preload="none", aria-label and an MP4 <source>; <video> appears only on video pages;
-// - in Chromium, opening a video page does not request the MP4 before play is pressed,
-//   and a lesson page with a video card requests nothing from other hosts.
+// - every <video> (video pages and lesson chapters) is local with controls, poster,
+//   preload="none", aria-label and an MP4 <source>; a video page has exactly one;
+// - in Chromium, neither a video page nor a lesson chapter requests the MP4 before play,
+//   and switching a chapter to its video view shows the player without loading anything else.
 import fs from "node:fs";
 import path from "node:path";
 import { withBrowser, SAMPLES } from "../lib/browser.mjs";
@@ -25,20 +25,26 @@ export default async ({ pub, htmlFiles }) => {
     const external = [...html.matchAll(/<(?:script|img|iframe|link|source|video|audio|embed|object)\b[^>]*?\s(?:src|href|data|poster)="?(?:https?:)?\/\/[^"\s>]+/g)].map((m) => m[0]).filter((t) => !/<link[^>]*rel="?(canonical|alternate)/.test(t));
     for (const t of external) errors.push(`${rel}: lädt von einem anderen Host: ${t.slice(0, 80)}`);
     const videos = [...html.matchAll(/<video\b[\s\S]*?<\/video>/g)].map((m) => m[0]);
-    if (!VIDEO_PAGE.test(rel)) {
-      if (videos.length) errors.push(`${rel}: <video> außerhalb einer Video-Seite`);
+    const seite = VIDEO_PAGE.test(rel), kapitel = /^lektionen\/[^/]+\/kapitel-[^/]+\/index\.html$/.test(rel);
+    if (!seite && !kapitel) {
+      if (videos.length) errors.push(`${rel}: <video> außerhalb von Video-Seite und Lektionskapitel`);
       continue;
     }
-    players += videos.length;
-    if (videos.length !== 1) { errors.push(`${rel}: ${videos.length} Player statt genau 1`); continue; }
-    beispiel ??= "/" + rel.replace(/index\.html$/, "");
-    const v = videos[0], tag = v.match(/<video\b[^>]*>/)[0];
-    if (!/\scontrols[\s>=]/.test(tag)) errors.push(`${rel}: <video> ohne controls`);
-    if (attr(tag, "preload") !== "none") errors.push(`${rel}: <video> lädt vor dem Abspielen (preload="none" fehlt)`);
-    if (!lokal(attr(tag, "poster"))) errors.push(`${rel}: Vorschaubild (poster) fehlt oder liegt nicht auf der Seite`);
-    if (!attr(tag, "aria-label")) errors.push(`${rel}: <video> ohne aria-label (Screenreader)`);
-    const src = v.match(/<source\b[^>]*>/)?.[0];
-    if (!src || !lokal(attr(src, "src")) || attr(src, "type") !== "video/mp4") errors.push(`${rel}: <source> fehlt, liegt nicht auf der Seite oder ist kein video/mp4`);
+    if (seite) {
+      players += videos.length;
+      if (videos.length !== 1) { errors.push(`${rel}: ${videos.length} Player statt genau 1`); continue; }
+      beispiel ??= "/" + rel.replace(/index\.html$/, "");
+    }
+    if (kapitel && videos.length > 1) errors.push(`${rel}: mehr als ein Video im Kapitel`);
+    for (const v of videos) {
+      const tag = v.match(/<video\b[^>]*>/)[0];
+      if (!/\scontrols[\s>=]/.test(tag)) errors.push(`${rel}: <video> ohne controls`);
+      if (attr(tag, "preload") !== "none") errors.push(`${rel}: <video> lädt vor dem Abspielen (preload="none" fehlt)`);
+      if (!lokal(attr(tag, "poster"))) errors.push(`${rel}: Vorschaubild (poster) fehlt oder liegt nicht auf der Seite`);
+      if (!attr(tag, "aria-label")) errors.push(`${rel}: <video> ohne aria-label (Screenreader)`);
+      const src = v.match(/<source\b[^>]*>/)?.[0];
+      if (!src || !lokal(attr(src, "src")) || attr(src, "type") !== "video/mp4") errors.push(`${rel}: <source> fehlt, liegt nicht auf der Seite oder ist kein video/mp4`);
+    }
   }
   if (!players) errors.push("Keine Video-Seite mit Player gefunden");
 
@@ -55,7 +61,16 @@ export default async ({ pub, htmlFiles }) => {
     }
     anfragen.length = 0;
     await page.goto(base + SAMPLES.kapitel);
-    if (!(await page.locator("a[href*='/videos/']").count())) errors.push(`${SAMPLES.kapitel}: keine Video-Karte in der Lektion`);
+    // Chapter: switch to the video view – the player shows, the MP4 still waits for play.
+    if (!(await page.locator("#ansicht-video").count())) errors.push(`${SAMPLES.kapitel}: kein Umschalter auf das Video`);
+    else {
+      await page.click("label:has(#ansicht-video)");
+      await page.waitForTimeout(500);
+      if (!(await page.locator("video").isVisible())) errors.push(`${SAMPLES.kapitel}: Video-Ansicht zeigt keinen Player`);
+      if (await page.locator(".court-scope").isVisible()) errors.push(`${SAMPLES.kapitel}: Court bleibt in der Video-Ansicht sichtbar`);
+    }
+    const mp4 = anfragen.filter((u) => u.endsWith(".mp4"));
+    if (mp4.length) errors.push(`${SAMPLES.kapitel}: lädt das Video schon vor dem Abspielen (${mp4[0]})`);
     const fremd = anfragen.filter((u) => !u.startsWith(base) && !u.startsWith("data:"));
     if (fremd.length) errors.push(`${SAMPLES.kapitel}: Anfrage an anderen Host: ${fremd[0]}`);
     await page.close();

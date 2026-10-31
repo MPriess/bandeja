@@ -10,12 +10,4 @@ review: true
 build:
   render: never
   list: always
-# Bewegungsablauf: drei Phasen, gezeigt in der zweiten Ansicht jedes Kapitels.
-phases:
-  - title: Vorbereitung
-    items: [Seitlich hinter der Aufschlaglinie stehen, Vorderer Fuß zeigt Richtung Ziel, Ball locker vor dem Körper halten]
-  - title: Treffen
-    items: [Ball neben dem vorderen Fuß fallen lassen, Nach dem Aufspringen treffen, Treffpunkt auf oder unter Hüfthöhe]
-  - title: Ausschwingen
-    items: [Schläger schwingt Richtung Ziel, Kurz stehen bleiben, Dann zügig Richtung Netz]
 ---

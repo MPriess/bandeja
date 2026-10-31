@@ -31,7 +31,7 @@ Wie du Inhalte anlegst, prüfst und Court-Grafiken baust, steht in [PFLEGE.md](P
 | Pfad | Inhalt |
 | --- | --- |
 | `content/lernpfad/stufe-N/_index.md` | Eine Stufe: Lektionen, Drills und die Punkte für den Stufen-Check |
-| `content/lektionen/<lektion>/` | Eine Lektion: `_index.md` (Bewegungsablauf, Drill), je Kapitel eine Datei, `quiz.md` |
+| `content/lektionen/<lektion>/` | Eine Lektion: `_index.md` (Drill, Vorschau), je Kapitel eine Datei, `quiz.md` |
 | `content/drills/` | Drills für den Court |
 | `content/videos/` | Lernvideos (eigene 3D-Animationen), je Video eine Datei mit `thema`, `datei`, `poster`, `lektion` oder `wissen`; Themen in `_index.md` |
 | `content/wissen/<kategorie>/` | Die 100 Wissensseiten; Farben der Kategorie in `_index.md` |
@@ -42,7 +42,7 @@ Wie du Inhalte anlegst, prüfst und Court-Grafiken baust, steht in [PFLEGE.md](P
 
 ## Interaktion ohne JavaScript
 
-- **Ansicht umschalten** (Court / Bewegungsablauf) und **Quiz-Feedback**: Radio-Buttons plus CSS `:has()`.
+- **Ansicht umschalten** (Court / Video) und **Quiz-Feedback**: Radio-Buttons plus CSS `:has()`.
 - **Quiz-Punktzahl** und **Treffer im Drill**: CSS-Counter (`.tally` in `main.css`).
 - **Neu starten**: `<button type="reset">`.
 - Nichts wird gespeichert; Kapitel, Stufen und Seiten sind einfache Links.

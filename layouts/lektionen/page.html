@@ -34,36 +34,42 @@
   <main id="inhalt" class="mx-auto flex max-w-[1360px] flex-wrap items-start gap-6 px-6 pt-7 pb-12">
     <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
 
-      {{/* Court view / movement view, switched with radio buttons and :has() — no JavaScript */}}
+      {{/* Court view / video view, switched with radio buttons and :has() — no JavaScript.
+           The video is the lesson's first learning video; it loads only after play (preload="none"). */}}
+      {{- $video := index (where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $lesson.Path) 0 }}
       <div class="vt-lektion-court group/view overflow-hidden rounded-[22px] bg-ink text-paper">
+        {{- with $video }}
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-2 px-[18px] py-3.5">
           <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink-2 p-1">
             <label class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
-              <input type="radio" name="ansicht" id="ansicht-court" class="sr-only" checked>Court<span class="hidden sm:inline">-Ansicht</span>
+              <input type="radio" name="ansicht" id="ansicht-court" class="sr-only" checked>Court
             </label>
-            <label class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
-              <input type="radio" name="ansicht" id="ansicht-flow" class="sr-only"><span class="sm:hidden">Ablauf</span><span class="hidden sm:inline">Bewegungsablauf</span>
+            <label class="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+              <input type="radio" name="ansicht" id="ansicht-video" class="sr-only">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-4") }}Video
             </label>
           </div>
+          {{- with .Params.dauer }}<span class="text-sm text-fog">3D-Animation · {{ . }}</span>{{ end }}
         </div>
+        {{- end }}
 
-        <div class="court-scope hidden flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7 group-has-[#ansicht-court:checked]/view:flex">
+        <div class="court-scope {{ if $video }}hidden group-has-[#ansicht-court:checked]/view:flex{{ else }}flex{{ end }} flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7">
           {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]" "animate" true) }}
           <p class="m-0 max-w-[620px] text-center text-base font-semibold">{{ $court.cap }}</p>
           {{ partial "court-legend.html" (dict "d" $court "class" "justify-center text-sky") }}
         </div>
 
-        <div class="hidden grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3.5 p-6 group-has-[#ansicht-flow:checked]/view:grid">
-          {{- range $i, $ph := $lesson.Params.phases }}
-          <div class="flex flex-col gap-3 rounded-[18px] bg-ink-2 p-5">
-            <span class="font-display text-[44px] leading-none font-extrabold text-lime">{{ printf "%02d" (add $i 1) }}</span>
-            <span class="text-lg font-bold">{{ $ph.title }}</span>
-            <ul class="m-0 flex flex-col gap-1.5 pl-[18px] text-sm leading-normal text-fog">
-              {{- range $ph.items }}<li>{{ . }}</li>{{ end }}
-            </ul>
+        {{- with $video }}
+        <div class="hidden flex-col group-has-[#ansicht-video:checked]/view:flex">
+          <video class="aspect-video w-full bg-ink" controls preload="none" playsinline poster="{{ .Params.poster | relURL }}" aria-label="{{ .Title }}">
+            <source src="{{ .Params.datei | relURL }}" type="video/mp4">
+            <a href="{{ .Params.datei | relURL }}">Video herunterladen (MP4)</a>
+          </video>
+          <div class="flex flex-wrap items-center justify-between gap-3 px-[18px] py-3.5 text-sm text-fog">
+            <span class="font-semibold text-paper">{{ .Title }}</span>
+            <a href="{{ .RelPermalink }}" class="link-light inline-flex min-h-11 items-center font-semibold">Zur Video-Seite</a>
           </div>
-          {{- end }}
         </div>
+        {{- end }}
       </div>
 
       <section aria-labelledby="kap" class="flex flex-col gap-[18px] rounded-[22px] border border-line bg-white p-7">
@@ -135,15 +141,6 @@
       </section>
       {{- end }}
 
-      {{- /* Videos for this lesson: only a card here; the player sits on the video page. */}}
-      {{- with where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $lesson.Path }}
-      <section aria-labelledby="videos" class="flex flex-col gap-3">
-        <h2 id="videos" class="m-0 ml-2 text-base font-bold">Im Video</h2>
-        {{- range . }}
-          {{ partial "video-karte.html" (dict "page" . "level" 3) }}
-        {{- end }}
-      </section>
-      {{- end }}
     </aside>
   </main>
 </div>
