@@ -3,6 +3,8 @@
 {{- if eq .Section "lektionen" -}}
   {{- $n := len (where .RegularPages "Layout" "ne" "quiz") -}}
   {{- $meta = printf "%d Kapitel · Quiz · Drill" $n -}}
+{{- else if eq .Layout "schritte" -}}
+  {{- $meta = printf "Eine Seite · %d Schritte" (len .Params.schritte) -}}
 {{- else if eq .Section "drills" -}}
   {{- $meta = printf "Drill · %s · %d Min" .Params.with .Params.minutes -}}
 {{- else -}}

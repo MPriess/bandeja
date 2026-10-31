@@ -4,8 +4,9 @@ name: Taktik
 stufe: 3
 weight: 3
 description: Positionierung als Team und die drei Überkopfbälle Bandeja, Vibora und Smash, um das Netz zu halten.
-tags: [Bandeja, Vibora, Smash]
+tags: [Stellungsspiel, Bandeja, Vibora, Smash]
 lessons:
+  - /stellungsspiel
   - /wissen/training/tr13
   - /wissen/training/tr14
   - /lektionen/bandeja

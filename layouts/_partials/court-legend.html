@@ -2,20 +2,23 @@
   Legend for a court diagram. Shows only what the diagram contains, drawn with the same
   shapes as court.html on court blue, so it reads the same on light and dark backgrounds.
   Usage: partial "court-legend.html" (dict "d" $diagram "class" "text-sky")
+  With "sprite" true the swatches point to symbols from court-legend-sprite.html, which the page
+  must include once (saves bytes on pages with many diagrams).
 */ -}}
 {{- $d := .d | default dict -}}
+{{- $shapes := partial "fn/legend-shapes.html" -}}
 {{- $items := slice -}}
-{{- if isset $d "px" }}{{ $items = $items | append (dict "r" "du" "t" "Du" "svg" `<circle cx="14" cy="14" r="8" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5"/>`) }}{{ end -}}
-{{- if isset $d "qx" }}{{ $items = $items | append (dict "r" "partner" "t" "Partner" "svg" `<circle cx="14" cy="14" r="8" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2" opacity="0.6"/>`) }}{{ end -}}
-{{- if isset $d "gx" }}{{ $items = $items | append (dict "r" "frueher" "t" "Vorher" "svg" `<circle cx="14" cy="14" r="8" fill="none" stroke="var(--color-paper)" stroke-width="2" opacity="0.7"/>`) }}{{ end -}}
-{{- if or (isset $d "ax") (isset $d "bx") }}{{ $items = $items | append (dict "r" "gegner" "t" "Gegner" "svg" `<circle cx="14" cy="14" r="8" fill="none" stroke="var(--color-paper)" stroke-width="2" stroke-dasharray="3 3"/>`) }}{{ end -}}
-{{- if or $d.ball $d.ball2 (isset $d "tx") }}{{ $items = $items | append (dict "r" "ball" "t" (cond (isset $d "tx") "Ball / Ziel" "Ball") "svg" `<path d="M3 21 Q10 4 20 12" fill="none" stroke="var(--color-lime)" stroke-width="2.5" stroke-dasharray="4 3"/><circle cx="21" cy="13" r="4" fill="var(--color-lime)"/>`) }}{{ end -}}
-{{- with $d.mv }}{{ $items = $items | append (dict "r" "lauf" "t" "Laufweg" "svg" `<path d="M4 14 H24" stroke="var(--color-paper)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 4"/>`) }}{{ end -}}
-{{- if or $d.zw $d.yw }}{{ $items = $items | append (dict "r" "zone" "t" "Zielzone" "svg" `<rect x="5" y="7" width="18" height="14" fill="var(--color-lime)" opacity="0.5"/>`) }}{{ end -}}
+{{- if isset $d "px" }}{{ $items = $items | append (dict "r" "du" "t" "Du" "svg" (index $shapes "du")) }}{{ end -}}
+{{- if isset $d "qx" }}{{ $items = $items | append (dict "r" "partner" "t" "Partner" "svg" (index $shapes "partner")) }}{{ end -}}
+{{- if isset $d "gx" }}{{ $items = $items | append (dict "r" "frueher" "t" "Vorher" "svg" (index $shapes "frueher")) }}{{ end -}}
+{{- if or (isset $d "ax") (isset $d "bx") }}{{ $items = $items | append (dict "r" "gegner" "t" "Gegner" "svg" (index $shapes "gegner")) }}{{ end -}}
+{{- if or $d.ball $d.ball2 (isset $d "tx") }}{{ $items = $items | append (dict "r" "ball" "t" (cond (isset $d "tx") "Ball / Ziel" "Ball") "svg" (index $shapes "ball")) }}{{ end -}}
+{{- with $d.mv }}{{ $items = $items | append (dict "r" "lauf" "t" "Laufweg" "svg" (index $shapes "lauf")) }}{{ end -}}
+{{- if or $d.zw $d.yw }}{{ $items = $items | append (dict "r" "zone" "t" "Zielzone" "svg" (index $shapes "zone")) }}{{ end -}}
 {{- with $items }}
-<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[13px] {{ $.class | default "text-sky" }}" aria-label="Legende">
+<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-2 p-0 text-[13px] {{ $.class | default "text-sky" }}{{ if $.sprite }} [&>[data-legend]]:inline-flex [&>[data-legend]]:items-center [&>[data-legend]]:gap-1.5{{ end }}" aria-label="Legende">
   {{- range . }}
-  <li data-legend="{{ .r }}" class="inline-flex items-center gap-1.5"><svg viewBox="0 0 28 28" class="size-6 flex-none" aria-hidden="true"><rect width="28" height="28" rx="7" fill="var(--color-court-2)"/>{{ .svg | safeHTML }}</svg>{{ .t }}</li>
+  <li data-legend="{{ .r }}"{{ if not $.sprite }} class="inline-flex items-center gap-1.5"{{ end }}>{{ if $.sprite }}<svg class="size-6 flex-none" aria-hidden="true"><use href="#legende-{{ .r }}"/></svg>{{ else }}<svg viewBox="0 0 28 28" class="size-6 flex-none" aria-hidden="true"><rect width="28" height="28" rx="7" fill="var(--color-court-2)"/>{{ .svg | safeHTML }}</svg>{{ end }}{{ .t }}</li>
   {{- end }}
   {{- if or $d.ball $d.ball2 $d.mv }}
   <li class="court-pause-control items-center">

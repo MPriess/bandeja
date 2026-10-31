@@ -40,6 +40,7 @@ export const SAMPLES = {
   artikel: "/wissen/schlagtechniken/der-aufschlag-technik/",
   fehler: "/404.html",
   schnellstart: "/schnellstart/",
+  stellungsspiel: "/stellungsspiel/",
   videos: "/videos/",
   video: "/videos/bandeja/",
 };
