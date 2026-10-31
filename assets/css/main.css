@@ -189,20 +189,18 @@
     .court-scope:has(.court-pause:checked) .court-anim {
       animation-play-state: paused;
     }
-    /* Startseite: Flugbahn läuft in Flugrichtung, Zielpunkt und Video-Teaser pulsieren. */
+    /* Startseite, einmal beim Laden (zusammen unter 5 s): Flugbahn läuft in Flugrichtung,
+       Zielpunkt und Video-Teaser pulsieren. */
     .court-richtung path[data-r="ball"] {
-      animation: richtung 0.7s linear infinite;
+      animation: richtung 0.7s linear 6;
     }
     .court-richtung circle[data-r="ball"] {
       transform-box: fill-box;
       transform-origin: center;
-      animation: ziel-puls 1.6s ease-in-out infinite;
+      animation: ziel-puls 1.6s ease-in-out 3;
     }
     .probe-teaser:not(:has(:checked)) {
-      animation: teaser-puls 2s ease-out infinite;
-    }
-    .court-scope:has(.court-pause:checked) :is(.court-richtung path, .court-richtung circle, .probe-teaser) {
-      animation-play-state: paused;
+      animation: teaser-puls 1.6s ease-out 3;
     }
   }
 }

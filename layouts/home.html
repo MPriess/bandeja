@@ -25,12 +25,12 @@
         {{/* Probelektion: Court-Grafik und Lernvideo, umgeschaltet mit Radio-Buttons und :has() wie auf den Lektionsseiten */}}
         {{- $video := index (where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $probe.Path) 0 }}
         <div class="group/probe min-w-0 flex-[1_1_480px]">
-          <div class="court-scope flex flex-col gap-5 rounded-3xl bg-court p-5 text-paper sm:p-7">
+          <div class="flex flex-col gap-5 rounded-3xl bg-court p-5 text-paper sm:p-7">
             <div class="flex flex-wrap items-center justify-between gap-3">
               <a href="{{ partial "fn/href.html" $probe }}" class="inline-flex min-h-11 items-center font-display text-[26px] font-bold tracking-wide text-paper uppercase no-underline hover:text-lime">{{ $probe.Title }}</a>
               <span class="rounded-full bg-ink/35 px-3 py-1.5 text-[13px] font-semibold">Stufe {{ $probe.Params.stufe }} · {{ $probe.Params.stufeName }}</span>
             </div>
-            {{- /* Umschalter: Court oder Video. „Video ansehen“ ist grün umrahmt und pulsiert, solange nichts angehalten ist. */}}
+            {{- /* Umschalter: Court oder Video. „Video ansehen“ ist grün umrahmt und pulsiert kurz. */}}
             <div class="flex flex-wrap items-center justify-between gap-3">
               {{- with $video }}
               <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink/35 p-1">
@@ -44,17 +44,12 @@
                 </label>
               </div>
               {{- end }}
-              <span class="court-pause-control items-center {{ if $video }}group-has-[#probe-video:checked]/probe:invisible{{ end }}">
-                <label class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-current/40 px-3 text-sm font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
-                  <input type="checkbox" class="court-pause peer sr-only">
-                  <span class="peer-checked:hidden">❚❚ Anhalten</span><span class="hidden peer-checked:inline">▶ Weiter</span>
-                </label>
-              </span>
             </div>
             {{- /* Gleiche Höhe wie das 16:9-Video, damit die Seite beim Umschalten nicht springt.
-                 court-richtung: die gestrichelte Flugbahn läuft in Flugrichtung, bevor der Ball fliegt. */}}
+                 court-richtung: die gestrichelte Flugbahn läuft in Flugrichtung, dann fliegt der Ball einmal.
+                 Alles läuft nur einmal beim Laden und ist nach 5 s still (WCAG 2.2.2, daher kein Anhalten-Knopf). */}}
             <div class="court-richtung flex aspect-video items-center {{ if $video }}group-has-[#probe-video:checked]/probe:hidden{{ end }}">
-              {{ partial "court.html" (dict "d" .Params.probe.court "class" "w-full" "animate" true) }}
+              {{ partial "court.html" (dict "d" .Params.probe.court "class" "w-full" "animate" true "einmal" 1.2) }}
             </div>
             {{- with $video }}
             <div class="hidden overflow-hidden rounded-2xl bg-ink group-has-[#probe-video:checked]/probe:block">
