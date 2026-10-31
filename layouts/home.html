@@ -3,7 +3,7 @@
 {{- $probe := site.GetPage .Params.probe.lektion -}}
 {{- $first := index $levels 0 -}}
 <div class="min-h-screen">
-  {{ partial "site-header.html" (dict "page" .) }}
+  {{ partial "site-header.html" (dict "page" . "ohneNav" true) }}
 
   <main id="inhalt">
     {{/* Hero */}}
@@ -11,7 +11,7 @@
       <div class="mx-auto flex max-w-[1240px] flex-wrap items-center gap-14">
         <div class="flex min-w-0 flex-[1_1_460px] flex-col gap-7">
           <p class="m-0 inline-flex items-center gap-2.5 self-start text-sm font-semibold tracking-[0.08em] text-fog-2 uppercase">
-            <span class="size-2.5 rounded-full bg-lime"></span>Online-Padelschule · offen für alle
+            <span class="size-2.5 rounded-full bg-lime"></span>Online-Padelschule
           </p>
           <h1 class="m-0 font-display text-[64px] leading-none font-extrabold tracking-tight uppercase sm:text-[84px] lg:text-[104px]">
             Lerne Padel.<br><span class="text-lime">Schlag für Schlag.</span>
@@ -20,7 +20,6 @@
           <div class="flex flex-wrap gap-3">
             {{ partial "ui/button.html" (dict "href" $first.RelPermalink "label" "Lernpfad starten" "size" "lg" "icon" "arrow-right") }}
           </div>
-          <p class="m-0 text-sm text-fog-3">Kostenlos und ohne Anmeldung. Für Anfänger, Wiedereinsteiger und Tennisspieler, die umsteigen.</p>
         </div>
 
         {{/* Probelektion: Court-Grafik und Lernvideo, umgeschaltet mit Radio-Buttons und :has() wie auf den Lektionsseiten */}}
@@ -41,8 +40,9 @@
               </label>
             </div>
             {{- end }}
-            <div class="{{ if $video }}group-has-[#probe-video:checked]/probe:hidden{{ end }}">
-              {{ partial "court.html" (dict "d" .Params.probe.court) }}
+            {{- /* Gleiche Höhe wie das 16:9-Video, damit die Seite beim Umschalten nicht springt */}}
+            <div class="flex aspect-video items-center {{ if $video }}group-has-[#probe-video:checked]/probe:hidden{{ end }}">
+              {{ partial "court.html" (dict "d" .Params.probe.court "class" "w-full") }}
             </div>
             {{- with $video }}
             <div class="hidden overflow-hidden rounded-2xl bg-ink group-has-[#probe-video:checked]/probe:block">
