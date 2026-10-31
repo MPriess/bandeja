@@ -35,10 +35,19 @@
     <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
 
       {{/* Court view / video view, switched with radio buttons and :has() — no JavaScript.
-           The video is the lesson's first learning video; it loads only after play (preload="none"). */}}
+           The video shows this chapter's situation (static/media/kapitel/<lesson>/<chapter>.mp4,
+           made by npm run videos:kapitel); without one, the lesson's first learning video.
+           It loads only after play (preload="none"). */}}
       {{- $video := index (where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $lesson.Path) 0 }}
+      {{- $clip := false }}
+      {{- $eigen := printf "media/kapitel/%s/%s.mp4" (path.Base .File.Dir) .File.ContentBaseName }}
+      {{- if fileExists (printf "static/%s" $eigen) }}
+        {{- $clip = dict "datei" $eigen "poster" (replace $eigen ".mp4" ".jpg") "titel" (printf "Kapitel %d: %s" (add $pos 1) .Title) "info" "3D-Animation dieser Situation" "link" $video "linkText" "Ganzes Lernvideo" }}
+      {{- else if $video }}
+        {{- $clip = dict "datei" $video.Params.datei "poster" $video.Params.poster "titel" $video.Title "info" (printf "3D-Animation · %s" ($video.Params.dauer | default "")) "link" $video "linkText" "Zur Video-Seite" }}
+      {{- end }}
       <div class="vt-lektion-court group/view overflow-hidden rounded-[22px] bg-ink text-paper">
-        {{- with $video }}
+        {{- with $clip }}
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-ink-2 px-[18px] py-3.5">
           <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 rounded-full bg-ink-2 p-1">
             <label class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
@@ -48,25 +57,27 @@
               <input type="radio" name="ansicht" id="ansicht-video" class="sr-only">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-4") }}Video
             </label>
           </div>
-          {{- with .Params.dauer }}<span class="text-sm text-fog">3D-Animation · {{ . }}</span>{{ end }}
+          <span class="text-sm text-fog">{{ .info }}</span>
         </div>
         {{- end }}
 
-        <div class="court-scope {{ if $video }}hidden group-has-[#ansicht-court:checked]/view:flex{{ else }}flex{{ end }} flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7">
+        <div class="court-scope {{ if $clip }}hidden group-has-[#ansicht-court:checked]/view:flex{{ else }}flex{{ end }} flex-col items-center gap-[18px] bg-court px-2 py-5 sm:p-7">
           {{ partial "court.html" (dict "d" $court "class" "w-full max-w-[760px]" "animate" true) }}
           <p class="m-0 max-w-[620px] text-center text-base font-semibold">{{ $court.cap }}</p>
           {{ partial "court-legend.html" (dict "d" $court "class" "justify-center text-sky") }}
         </div>
 
-        {{- with $video }}
+        {{- with $clip }}
         <div class="hidden flex-col group-has-[#ansicht-video:checked]/view:flex">
-          <video class="aspect-video w-full bg-ink" controls preload="none" playsinline poster="{{ .Params.poster | relURL }}" aria-label="{{ .Title }}">
-            <source src="{{ .Params.datei | relURL }}" type="video/mp4">
-            <a href="{{ .Params.datei | relURL }}">Video herunterladen (MP4)</a>
+          <video class="aspect-video w-full bg-ink" controls preload="none" playsinline poster="{{ .poster | relURL }}" aria-label="{{ .titel }}">
+            <source src="{{ .datei | relURL }}" type="video/mp4">
+            <a href="{{ .datei | relURL }}">Video herunterladen (MP4)</a>
           </video>
           <div class="flex flex-wrap items-center justify-between gap-3 px-[18px] py-3.5 text-sm text-fog">
-            <span class="font-semibold text-paper">{{ .Title }}</span>
-            <a href="{{ .RelPermalink }}" class="link-light inline-flex min-h-11 items-center font-semibold">Zur Video-Seite</a>
+            <span class="font-semibold text-paper">{{ .titel }}</span>
+            {{- with .link }}
+            <a href="{{ .RelPermalink }}" class="link-light inline-flex min-h-11 items-center font-semibold">{{ $clip.linkText }}</a>
+            {{- end }}
           </div>
         </div>
         {{- end }}
