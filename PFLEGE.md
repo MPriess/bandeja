@@ -77,6 +77,16 @@ npx hugo new content videos/<name>.md
 | `lektion` oder `wissen` | Wohin das Video gehört, z. B. `/lektionen/der-smash` oder `/wissen/schlagtechniken/t10` |
 | `situation`, `achte` | Text neben dem Video: was passiert, worauf achten |
 
+**Videos in den Lektionen.** In jedem Kapitel schaltest du zwischen „Court“ und „Video“ um. Das Video zeigt genau die Situation der Kapitel-Grafik (`static/media/kapitel/<lektion>/<kapitel>.mp4`, etwa 13 s, ohne Ton). Gibt es keins, erscheint das erste Lernvideo der Lektion. Erzeugen – fertige Videos werden übersprungen, `--neu` rendert neu (z. B. nach einer geänderten Grafik):
+
+```bash
+npm run videos:kapitel
+```
+
+```bash
+npm run videos:kapitel -- bandeja/kapitel-2 --neu
+```
+
 Neue Themen: in `content/videos/_index.md` unter `themen` eine Zeile mit `id`, `titel` und `text` ergänzen; die Reihenfolge dort ist die Reihenfolge auf der Seite.
 
 ## Court-Grafiken
