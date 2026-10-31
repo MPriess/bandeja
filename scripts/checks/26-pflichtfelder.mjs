@@ -77,6 +77,7 @@ export default async ({ root }) => {
     } else if (/^lernpfad\/stufe-\d\/_index\.md$/.test(rel)) {
       for (const k of ["title", "name", "description", "checkTitle"]) need(text(fm[k]), `\`${k}\` fehlt`);
       need(list(fm.lessons) && list(fm.check), "`lessons` und `check` dürfen nicht leer sein");
+      if (fm.bloecke) need(fm.bloecke.reduce((n, b) => n + (b.anzahl ?? 0), 0) === (fm.lessons ?? []).length, "`bloecke`: die Summe von `anzahl` muss der Zahl der `lessons` entsprechen");
       for (const p of [...(fm.lessons ?? []), ...(fm.drills ?? [])]) need(exists(p), `Verweis \`${p}\` gibt es nicht (Hugo würde ihn still weglassen)`);
     }
   }

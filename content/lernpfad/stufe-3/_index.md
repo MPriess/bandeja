@@ -15,6 +15,11 @@ lessons:
   - /wissen/schlagtechniken/t22
   - /wissen/schlagtechniken/t17
   - /wissen/schlagtechniken/t20
+# Die Schritte in Blöcken: je Block ein Titel und wie viele der `lessons` (der Reihe nach) dazugehören.
+bloecke:
+  - { titel: Als Team spielen, anzahl: 3 }
+  - { titel: Überkopf, anzahl: 4 }
+  - { titel: Spiel mit der Wand, anzahl: 2 }
 drills:
   - /drills/bandeja-an-die-seitenwand
   - /drills/vibora-ans-seitenglas

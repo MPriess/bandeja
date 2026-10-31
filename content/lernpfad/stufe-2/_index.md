@@ -14,6 +14,11 @@ lessons:
   - /wissen/regeln/r09
   - /wissen/schlagtechniken/t07
   - /wissen/schlagtechniken/t10
+# Die Schritte in Blöcken: je Block ein Titel und wie viele der `lessons` (der Reihe nach) dazugehören.
+bloecke:
+  - { titel: Beinarbeit und Wand, anzahl: 2 }
+  - { titel: Volley, anzahl: 3 }
+  - { titel: Return und Lob, anzahl: 3 }
 drills:
   - /wissen/training/tr06
   - /drills/rueckwand-zuspiel

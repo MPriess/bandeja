@@ -13,6 +13,11 @@ lessons:
   - /wissen/training/tr15
   - /wissen/spielmodi/m04
   - /wissen/spielmodi/m12
+# Die Schritte in Blöcken: je Block ein Titel und wie viele der `lessons` (der Reihe nach) dazugehören.
+bloecke:
+  - { titel: Weiche Schläge, anzahl: 2 }
+  - { titel: Smash ins Aus, anzahl: 2 }
+  - { titel: Kopf und Turnier, anzahl: 3 }
 drills:
   - /drills/chiquita-an-die-fuesse
   - /wissen/training/tr10

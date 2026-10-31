@@ -15,6 +15,11 @@ lessons:
   - /wissen/regeln/r10
   - /wissen/regeln/r04
   - /wissen/regeln/r05
+# Die Schritte in Blöcken: je Block ein Titel und wie viele der `lessons` (der Reihe nach) dazugehören.
+bloecke:
+  - { titel: Erste Schritte, anzahl: 3 }
+  - { titel: Deine ersten Schläge, anzahl: 3 }
+  - { titel: Regeln und Zählweise, anzahl: 3 }
 drills:
   - /wissen/training/tr02
   - /wissen/training/tr03

@@ -14,7 +14,7 @@ export default async ({ pub }) => {
         const r = await page.evaluate(() => ({
           h1: Math.round(document.querySelector("h1").getBoundingClientRect().top),
           box: [...document.querySelectorAll("aside .bg-court")].some((e) => e.checkVisibility()),
-          check: /\/check\/$/.test(document.querySelector('section[aria-labelledby="lektionen"] a:last-of-type')?.getAttribute("href") ?? ""),
+          check: /\/check\/$/.test([...document.querySelectorAll('section[aria-labelledby="lektionen"] a')].at(-1)?.getAttribute("href") ?? ""),
           small: [...document.querySelectorAll('nav[aria-label="Lernbereich"] a')].filter((a) => a.getBoundingClientRect().height < 44).length,
           overflow: document.documentElement.scrollWidth > innerWidth,
           longTitles: [...document.querySelectorAll('section[aria-labelledby="lektionen"] a > span:nth-child(2) > span:first-child')]

@@ -64,14 +64,25 @@
 
         <div class="flex">{{ partial "lernpfad/feature.html" (dict "page" $start "eyebrow" "Hier startest du") }}</div>
 
-        <section aria-labelledby="lektionen" class="flex min-w-0 flex-col gap-1.5 rounded-[22px] border border-line bg-white p-4 sm:p-6">
-          <h2 id="lektionen" class="m-0 px-2 pb-2.5 text-lg font-bold sm:px-0">Deine Schritte</h2>
-          {{- range $i, $l := $lessons }}
-            {{ partial "lesson-row.html" (dict "page" $l "n" (add $i 1) "highlight" (eq $i 0)) }}
+        {{- /* Steps in small blocks (bloecke: titel + anzahl, in order). Without bloecke: one list. Numbers run on. */}}
+        {{- $bloecke := .Params.bloecke | default (slice (dict "titel" "" "anzahl" (len $lessons))) }}
+        <section aria-labelledby="lektionen" class="flex min-w-0 flex-col gap-6 rounded-[22px] border border-line bg-white p-4 sm:p-6">
+          <h2 id="lektionen" class="m-0 px-2 text-lg font-bold sm:px-0">Deine Schritte</h2>
+          {{- $pos := 0 }}
+          {{- range $bloecke }}
+          <div class="flex flex-col gap-1.5">
+            {{- with .titel }}<h3 class="m-0 px-2 text-[13px] font-semibold tracking-[0.07em] text-court uppercase sm:px-3">{{ . }}</h3>{{ end }}
+            {{- range $l := first .anzahl (after $pos $lessons) }}
+              {{- $pos = add $pos 1 }}
+              {{ partial "lesson-row.html" (dict "page" $l "n" $pos "highlight" (eq $pos 1)) }}
+            {{- end }}
+          </div>
           {{- end }}
-          {{- /* Last step: the Stufen-Check */}}
           {{- with site.GetPage (printf "%s/check" .Path) }}
-          {{ partial "lesson-row.html" (dict "href" .RelPermalink "title" "Stufen-Check" "n" (add (len $lessons) 1)) }}
+          <div class="flex flex-col gap-1.5">
+            <h3 class="m-0 px-2 text-[13px] font-semibold tracking-[0.07em] text-court uppercase sm:px-3">Abschluss</h3>
+            {{ partial "lesson-row.html" (dict "href" .RelPermalink "title" "Stufen-Check" "n" (add (len $lessons) 1)) }}
+          </div>
           {{- end }}
         </section>
 
