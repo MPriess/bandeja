@@ -65,23 +65,23 @@ export const SCHLAEGE = {
   ],
   bandeja: [
     K(-1.0, {}),
-    K(-0.55, { hand: [-0.3, 1.75, -0.08], dir: [-0.15, 0.75, -0.6], norm: [-0.3, 0.3, 0.9], links: [0.25, 2.0, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.7, -0.1, -0.1], drehung: -65, twist: -10, lean: 4, tief: 0.12 }),
-    K(-0.22, { hand: [-0.35, 1.85, -0.22], dir: [0, 0.45, -0.9], norm: [-0.2, 0.9, 0.3], links: [0.3, 1.85, 0.5], ellbogen: [-0.8, 0.1, -0.1], drehung: -60, twist: -10, lean: 2 }),
+    K(-0.55, { hand: [-0.24, 1.6, -0.1], dir: [0.05, 0.75, -0.65], norm: [-0.3, 0.3, 0.9], links: [0.25, 1.95, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.75, 0.25, -0.15], drehung: -65, twist: -10, lean: 4, tief: 0.12 }),
+    K(-0.22, { hand: [-0.28, 1.66, -0.2], dir: [0.1, 0.4, -0.9], norm: [-0.2, 0.9, 0.3], links: [0.3, 1.8, 0.5], ellbogen: [-0.8, 0.3, -0.1], drehung: -60, twist: -10, lean: 2 }),
     K(0, { dir: [-0.1, 0.72, 0.68], norm: [0, 0.45, 1], links: [0.4, 1.4, 0.2], ellbogen: [-0.8, 0.0, 0.2], drehung: -35, twist: 5, lean: 6, tief: 0.06 }),
     K(0.32, { hand: [0.1, 1.35, 0.6], dir: [0.3, 0.3, 0.9], norm: [0, 0.8, 0.6], links: [0.45, 1.05, -0.15], ellbogen: [-0.3, -0.7, 0.3], drehung: -15, twist: 15, lean: 14 }),
     K(1.0, {}),
   ],
   vibora: [
     K(-1.0, {}),
-    K(-0.55, { hand: [-0.35, 1.75, -0.12], dir: [-0.25, 0.7, -0.65], norm: [-0.6, 0.3, 0.7], links: [0.25, 2.0, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.8, -0.1, -0.1], drehung: -70, twist: -15, lean: 4, tief: 0.12 }),
-    K(-0.2, { hand: [-0.45, 1.8, -0.28], dir: [-0.2, 0.35, -0.9], norm: [-0.9, 0.3, 0.2], links: [0.3, 1.85, 0.5], ellbogen: [-0.9, 0.1, -0.2], drehung: -65, twist: -15 }),
+    K(-0.55, { hand: [-0.28, 1.6, -0.12], dir: [-0.1, 0.7, -0.7], norm: [-0.6, 0.3, 0.7], links: [0.25, 1.95, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.8, 0.25, -0.15], drehung: -70, twist: -15, lean: 4, tief: 0.12 }),
+    K(-0.2, { hand: [-0.38, 1.66, -0.26], dir: [-0.1, 0.35, -0.93], norm: [-0.9, 0.3, 0.2], links: [0.3, 1.8, 0.5], ellbogen: [-0.9, 0.3, -0.2], drehung: -65, twist: -15 }),
     K(0, { dir: [-0.45, 0.7, 0.55], norm: [0.6, 0.2, 0.8], links: [0.4, 1.35, 0.2], ellbogen: [-0.9, 0.0, 0.2], drehung: -30, twist: 10, lean: 8, tief: 0.06 }),
     K(0.3, { hand: [0.35, 1.05, 0.45], dir: [0.7, 0.15, 0.7], norm: [0.4, 0.8, 0.4], links: [0.45, 1.0, -0.2], ellbogen: [-0.2, -0.8, 0.3], drehung: 0, twist: 30, lean: 16 }),
     K(1.0, {}),
   ],
   smash: [
     K(-1.0, {}),
-    K(-0.6, { hand: [-0.3, 1.8, -0.1], dir: [-0.1, 0.8, -0.55], norm: [-0.3, 0.3, 0.9], links: [0.25, 2.05, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.75, -0.05, -0.1], drehung: -70, twist: -20, lean: -4, tief: 0.15 }),
+    K(-0.6, { hand: [-0.25, 1.62, -0.12], dir: [0, 0.8, -0.6], norm: [-0.3, 0.3, 0.9], links: [0.25, 2.0, 0.55], linksEllbogen: [0.5, 0.2, 0.3], ellbogen: [-0.75, 0.25, -0.15], drehung: -70, twist: -20, lean: -4, tief: 0.15 }),
     K(-0.2, { hand: [-0.3, 1.75, -0.3], dir: [0.05, -0.5, -0.85], norm: [-0.2, -0.2, 1], links: [0.3, 1.9, 0.45], ellbogen: [-0.6, 0.6, -0.2], drehung: -55, twist: -20, lean: -8, tief: 0.2 }),
     K(0, { dir: [0, 0.92, 0.38], norm: [0, 0.3, 1], links: [0.35, 1.35, 0.15], ellbogen: [-0.7, 0.3, 0.1], drehung: -10, twist: 20, lean: 4, tief: 0, sprung: 0.18 }),
     K(0.3, { hand: [0.28, 0.95, 0.4], dir: [0.35, -0.55, 0.75], norm: [0.2, 0.8, 0.4], links: [0.4, 1.0, -0.2], ellbogen: [-0.2, -0.8, 0.2], drehung: 10, twist: 30, lean: 25, tief: 0.12, sprung: 0 }),
@@ -129,8 +129,26 @@ export function schlagPose(name, t, { rueckhand = false, kontakt = null } = {}) 
   if (t <= keys[0].t || t >= keys.at(-1).t) return null;
   let i = 0;
   while (keys[i + 1].t < t) i++;
-  const a = keys[i], b = keys[i + 1];
-  return mischen(a, b, ease((t - a.t) / (b.t - a.t)));
+  return hermite(keys, i, (t - keys[i].t) / (keys[i + 1].t - keys[i].t));
+}
+
+// Smooth curve through all key poses (cubic Hermite with finite-difference tangents): the motion
+// keeps its speed through the keys – the racket swings through the ball instead of stopping at
+// it – and still passes every key exactly, so the contact stays on the ball. Start and end
+// (ready position) have zero speed.
+function hermite(keys, i, u) {
+  const a = keys[i], b = keys[i + 1], dt = b.t - a.t;
+  const tangente = (j, wert) => {
+    if (j === 0 || j === keys.length - 1) return 0;
+    return (wert(keys[j + 1]) - wert(keys[j - 1])) / (keys[j + 1].t - keys[j - 1].t);
+  };
+  const u2 = u * u, u3 = u2 * u;
+  const h00 = 2 * u3 - 3 * u2 + 1, h10 = u3 - 2 * u2 + u, h01 = -2 * u3 + 3 * u2, h11 = u3 - u2;
+  const kurve = (wert) => h00 * wert(a) + h10 * dt * tangente(i, wert) + h01 * wert(b) + h11 * dt * tangente(i + 1, wert);
+  const o = {};
+  for (const k of VEC) o[k] = [0, 1, 2].map((c) => kurve((x) => x[k][c]));
+  for (const k of NUM) o[k] = kurve((x) => x[k]);
+  return o;
 }
 
 export const schlagFenster = (name) => [SCHLAEGE[name][0].t, SCHLAEGE[name].at(-1).t];

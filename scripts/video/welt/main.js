@@ -1,7 +1,7 @@
 // Renderer page: builds the world for one clip and draws any moment on request.
 // The CLI calls window.vorbereiten(job) once and then window.bild(tau) for every frame.
 import * as THREE from "three";
-import { baueCourt, baueLicht, baueMarkierungen, FARBEN } from "./court.js";
+import { baueCourt, baueLicht, baueMarkierungen, baueUmgebung, FARBEN } from "./court.js";
 import { Steuerung } from "./steuerung.js";
 import { szene, ballBei } from "../szene.mjs";
 import { KAMERAS, FORMATE, fahrt } from "../kameras.mjs";
@@ -69,6 +69,7 @@ window.vorbereiten = async (j) => {
   cam = new THREE.PerspectiveCamera(40, breite / hoehe, 0.1, 200);
   baueLicht(scene);
   scene.add(baueCourt());
+  scene.add(await baueUmgebung());
   sz = szene(j.d);
   if (j.markierungen !== false) scene.add(baueMarkierungen(sz));
   steuerung = new Steuerung(scene, sz);

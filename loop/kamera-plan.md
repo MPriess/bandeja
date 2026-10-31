@@ -40,6 +40,9 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 
 ## Nächste Runde
 
+- [x] Realistischere Bewegung: Schläge als Spline durch alle Posen (Schläger schwingt durch den Ball), Schrittfolge mit festen Standfüßen statt Gleiten, Körper dreht mit dem Ball, Wippen in Bereitschaft, Ausholen mit gebeugtem Arm, kräftigere Arme und Beine
+- [x] Umgebung: Banden mit „bandeja.“-Logo rund um den Court, Flutlichtmasten, Boden um den Court
+
 - [x] Jingle (selbst erzeugt, −14 LUFS) am Anfang und im Abspann jedes Videos; `--nur-ton` mischt in fertige Videos
 - [x] Voice-over eingeplant: `sprecher` je Abschnitt, `--sprechertext` mit Zeitbudget, Aufnahmen aus `clips/sprache/<clip>/<nr>.wav`, Abschnitt verlängert sich bei langen Aufnahmen
 - [ ] Voice-over aufnehmen oder per TTS erzeugen (Piper-Stimmen liegen auf Hugging Face, hier gesperrt) und für alle Clips Sprechertexte schreiben

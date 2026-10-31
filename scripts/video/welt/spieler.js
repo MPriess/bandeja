@@ -106,11 +106,11 @@ export class Spieler {
     this.glieder = {};
     const g = (name, ...meshes) => { this.glieder[name] = meshes; meshes.forEach((m) => this.gruppe.add(m)); };
     for (const s of ["l", "r"]) {
-      g(`oberarm${s}`, kapsel(0.042, MASS.oberarm, mHaut), kapsel(0.056, 0.1, mTrikot));
-      g(`unterarm${s}`, kapsel(0.035, MASS.unterarm, mHaut));
-      g(`hand${s}`, kapsel(0.038, 0.05, mHaut));
-      g(`oberschenkel${s}`, kapsel(0.066, MASS.oberschenkel, mHaut), kapsel(0.085, 0.18, mHose));
-      g(`unterschenkel${s}`, kapsel(0.05, MASS.unterschenkel, mHaut), kapsel(0.053, 0.1, mat(socken, 0.9)));
+      g(`oberarm${s}`, kapsel(0.05, MASS.oberarm, mHaut), kapsel(0.064, 0.11, mTrikot));
+      g(`unterarm${s}`, kapsel(0.041, MASS.unterarm, mHaut));
+      g(`hand${s}`, kapsel(0.041, 0.05, mHaut));
+      g(`oberschenkel${s}`, kapsel(0.08, MASS.oberschenkel, mHaut), kapsel(0.097, 0.19, mHose));
+      g(`unterschenkel${s}`, kapsel(0.058, MASS.unterschenkel, mHaut), kapsel(0.061, 0.1, mat(socken, 0.9)));
       const schuh = new THREE.Group();
       const ober = kapsel(0.048, 0.17, mat(schuhe, 0.5));
       ober.rotation.x = Math.PI / 2;

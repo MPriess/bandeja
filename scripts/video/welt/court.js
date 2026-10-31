@@ -60,9 +60,9 @@ export function baueCourt() {
   court.name = "court";
 
   // Surroundings: a larger floor so the court does not float in space.
-  const umfeld = new THREE.Mesh(new THREE.PlaneGeometry(80, 60), new THREE.MeshStandardMaterial({ color: FARBEN.umfeld, roughness: 1 }));
+  const umfeld = new THREE.Mesh(new THREE.PlaneGeometry(120, 90), new THREE.MeshStandardMaterial({ color: 0x1b2a33, roughness: 1 }));
   umfeld.rotation.x = -Math.PI / 2;
-  umfeld.position.y = -0.01;
+  umfeld.position.y = -0.02;
   umfeld.receiveShadow = true;
   court.add(umfeld);
 
@@ -196,6 +196,101 @@ export function baueMarkierungen(sz) {
     m.rotation.x = -Math.PI / 2;
     m.position.set((z.x0 + z.x1) / 2, 0.006, (z.z0 + z.z1) / 2);
     g.add(m);
+  }
+  return g;
+}
+
+// Board texture: the bandeja. logo and the claim on dark ink, repeated along the board.
+async function bandenTextur(laenge) {
+  await document.fonts.load('800 160px "Barlow Condensed"');
+  await document.fonts.load('600 60px "Inter"');
+  const c = document.createElement("canvas");
+  const h = 128, w = Math.round(h * laenge / 0.8);
+  c.width = Math.min(8192, w); c.height = h;
+  const g = c.getContext("2d");
+  const s = c.width / w;
+  g.scale(s, 1);
+  g.fillStyle = "#0c1a24";
+  g.fillRect(0, 0, w, h);
+  g.fillStyle = "#cdeb3b";
+  g.fillRect(0, h - 10, w, 10);
+  const feld = 900;
+  for (let x = 0, i = 0; x < w; x += feld, i++) {
+    g.textBaseline = "middle";
+    if (i % 2 === 0) {
+      g.font = '800 104px "Barlow Condensed"';
+      g.fillStyle = "#f3f4ee";
+      g.fillText("bandeja", x + 140, h / 2 - 4);
+      const bw = g.measureText("bandeja").width;
+      g.fillStyle = "#cdeb3b";
+      g.fillText(".", x + 140 + bw, h / 2 - 4);
+    } else {
+      g.font = '600 46px "Inter"';
+      g.fillStyle = "#c9d2d8";
+      g.fillText("Lerne Padel. Kostenlos.", x + 110, h / 2 - 2);
+    }
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+// Surroundings: advertising boards with the logo, floodlight masts and a darker ground around.
+// Boards are 0.8 m high so they never hide the court, and stay behind the camera "hinten" (x ±12.5).
+export async function baueUmgebung() {
+  const g = new THREE.Group();
+  const boden = new THREE.Mesh(new THREE.PlaneGeometry(36, 20), new THREE.MeshStandardMaterial({ color: 0x2c3a44, roughness: 0.95 }));
+  boden.rotation.x = -Math.PI / 2;
+  boden.position.y = -0.005;
+  boden.receiveShadow = true;
+  g.add(boden);
+  const bande = async (laenge, x, z, ry) => {
+    const tex = await bandenTextur(laenge);
+    const front = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.6 });
+    const seite = new THREE.MeshStandardMaterial({ color: 0x0c1a24, roughness: 0.7 });
+    const m = new THREE.Mesh(new THREE.BoxGeometry(laenge, 0.8, 0.06), [seite, seite, seite, seite, front, front]);
+    m.position.set(x, 0.4, z);
+    m.rotation.y = ry;
+    m.castShadow = true;
+    m.receiveShadow = true;
+    g.add(m);
+  };
+  for (const s of [-1, 1]) {
+    await bande(16, s * 14.5, 0, Math.PI / 2);
+    await bande(26, 0, s * 7.2, 0);
+  }
+  // Floodlights: four masts at the corners, lamp heads tilted towards the court, with a soft glow.
+  const stahl = new THREE.MeshStandardMaterial({ color: 0x5d6b75, metalness: 0.5, roughness: 0.45 });
+  const lampe = new THREE.MeshBasicMaterial({ color: 0xfff6dc });
+  const glow = (() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 64;
+    const x = c.getContext("2d"), r = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    r.addColorStop(0, "rgba(255,246,220,0.9)");
+    r.addColorStop(0.25, "rgba(255,246,220,0.35)");
+    r.addColorStop(1, "rgba(255,246,220,0)");
+    x.fillStyle = r;
+    x.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c);
+  })();
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 8, 10), stahl);
+    mast.position.set(sx * 11.2, 4, sz * 6.4);
+    mast.castShadow = true;
+    g.add(mast);
+    const kopf = new THREE.Group();
+    kopf.position.set(sx * 11.2, 8.05, sz * 6.4);
+    kopf.lookAt(sx * 4, 0, sz * 1.5);
+    const gehaeuse = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.12), stahl);
+    const flaeche = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.4), lampe);
+    flaeche.position.z = 0.065;
+    kopf.add(gehaeuse, flaeche);
+    g.add(kopf);
+    const schein = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, depthWrite: false, transparent: true }));
+    schein.scale.set(2.6, 2.6, 1);
+    schein.position.copy(kopf.position).add(new THREE.Vector3(-sx * 0.15, -0.05, -sz * 0.1));
+    g.add(schein);
   }
   return g;
 }

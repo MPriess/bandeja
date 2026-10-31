@@ -16,35 +16,13 @@ const SCHRITT = 0.62; // step length while running, m
 const ease = (t) => t * t * (3 - 2 * t);
 const clamp = THREE.MathUtils.clamp;
 
-// Distance along a person's path → world point (for planting the feet).
-function wegPunkt(person, s) {
-  const pts = person.weg.punkte;
-  let rest = Math.max(0, s);
-  for (let i = 1; i < pts.length; i++) {
-    const a = pts[i - 1], b = pts[i];
-    const l = Math.hypot(b.x - a.x, b.z - a.z);
-    if (rest <= l || i === pts.length - 1) {
-      const u = l ? clamp(rest / l, 0, 1) : 0;
-      return { x: a.x + (b.x - a.x) * u, z: a.z + (b.z - a.z) * u, dx: (b.x - a.x) / (l || 1), dz: (b.z - a.z) / (l || 1) };
-    }
-    rest -= l;
-  }
-  return { x: pts.at(-1).x, z: pts.at(-1).z, dx: 1, dz: 0 };
-}
-function wegLaenge(person) {
-  const pts = person.weg.punkte;
-  let l = 0;
-  for (let i = 1; i < pts.length; i++) l += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].z - pts[i - 1].z);
-  return l;
-}
-
 export class Steuerung {
   constructor(scene, sz) {
     this.sz = sz;
     this.figuren = sz.personen.map((p, i) => {
       const f = new Spieler({ ...AUSSEHEN[p.id], name: p.id });
       scene.add(f.gruppe);
-      return { person: p, figur: f, seed: i * 1.7, laenge: p.weg ? wegLaenge(p) : 0 };
+      return { person: p, figur: f, seed: i * 1.7 };
     });
     // Each stroke: who, when, which motion, forehand or backhand, and where the body should be at contact.
     this.schlaege = sz.schlaege.map((s) => this.#planen(s)).filter(Boolean);
@@ -89,59 +67,139 @@ export class Steuerung {
     s.kontaktHand = hand;
   }
 
+  // Body of a person at time t without the feet: position, facing, pose, where they look.
+  #koerper(f, t, ballJetzt) {
+    const p = f.person;
+    const pos = position(p, t);
+    let x = pos.x, z = pos.z;
+    let yaw = this.#yaw(p);
+    // The stroke of this person whose window contains t; with two overlapping strokes the one
+    // closer to its contact wins, so steps towards the ball never add up.
+    let pose = null, sw = 0, best = null, imSchlag = 0;
+    for (const s of this.schlaege) {
+      if (s.f !== f) continue;
+      const [w0, w1] = schlagFenster(s.name);
+      const rt = t - s.t;
+      if (rt <= w0 || rt >= w1) continue;
+      if (!best || Math.abs(rt) < Math.abs(t - best.t)) best = s;
+    }
+    if (best) {
+      const [w0, w1] = schlagFenster(best.name);
+      const rt = t - best.t;
+      pose = schlagPose(best.name, rt, { rueckhand: best.rueckhand, kontakt: best.kontaktHand });
+      // Weight of the step towards the ball: in before contact, hold, back afterwards.
+      sw = rt < 0 ? ease(clamp((rt - w0) / (-w0 * 0.85), 0, 1)) : 1 - ease(clamp((rt - 0.35) / (w1 - 0.35), 0, 1));
+      imSchlag = Math.min(ease(clamp((rt - w0) / 0.3, 0, 1)), ease(clamp((w1 - rt) / 0.3, 0, 1)));
+      x += best.versatz.x * sw;
+      z += best.versatz.z * sw;
+    }
+    // Turn towards the ball while it is in the air (not during the own stroke, which has its own turn).
+    if (ballJetzt) {
+      const zumBall = Math.atan2(ballJetzt.x - x, ballJetzt.z - z);
+      let d = zumBall - yaw;
+      d = Math.atan2(Math.sin(d), Math.cos(d));
+      yaw += clamp(d, -0.9, 0.9) * 0.55 * ballJetzt.gewicht * (1 - imSchlag);
+    }
+    const k = clamp(pos.v / 1.6, 0, 1) * (1 - sw);
+    const phase = p.weg ? (pos.strecke ?? 0) / (2 * SCHRITT) : 0;
+    const wq = this.#quer(f, pos, yaw);
+    if (!pose) {
+      // Ready position: breathing, and a light bounce on the toes while the ball is in play.
+      const wippen = ballJetzt ? 0.018 * Math.abs(Math.sin(t * Math.PI * 1.8 + f.seed)) : 0.012 * Math.sin(t * 2.3 + f.seed);
+      const lauf = {
+        ...BEREIT,
+        // Racket carried in front of the body, arms swinging a little with the steps.
+        hand: [-0.24, 1.08 + 0.04 * Math.sin(phase * 2 * Math.PI), 0.3 + 0.1 * Math.sin(phase * 2 * Math.PI)],
+        dir: [0.1, 0.85, 0.45], norm: [0, -0.2, 1],
+        links: [0.22, 1.08 - 0.04 * Math.sin(phase * 2 * Math.PI), 0.22 - 0.14 * Math.sin(phase * 2 * Math.PI)],
+        lean: 18, tief: 0.08 + 0.035 * Math.abs(Math.sin(phase * 2 * Math.PI)),
+      };
+      // Side steps: low ready position, racket in front, no arm swing.
+      const seit = { ...BEREIT, lean: 16, tief: 0.17 + 0.03 * Math.abs(Math.sin((pos.strecke ?? 0) / 0.5 * Math.PI)) };
+      pose = mischen({ ...BEREIT, tief: BEREIT.tief + wippen }, mischen(lauf, seit, wq), k);
+      // Split step: when someone on the other side hits, hop lightly at the contact and land low.
+      for (const sch of this.schlaege) {
+        if (sch.f.person.team === p.team) continue;
+        const rt = t - sch.t;
+        if (rt > -0.25 && rt < 0.05) pose.sprung += 0.07 * Math.sin(Math.PI * (rt + 0.25) / 0.3);
+        if (rt >= 0.05 && rt < 0.45) pose.tief += 0.08 * Math.sin(Math.PI * (rt - 0.05) / 0.4);
+      }
+    }
+    return { x, z, yaw, pose };
+  }
+
+  // Where each foot would stand under the body right now (stance turned with the hips).
+  #stand(k) {
+    const r = (k.yaw + THREE.MathUtils.degToRad(k.pose.drehung)) * 0.85;
+    const Y = new THREE.Vector3(0, 1, 0);
+    return {
+      l: new THREE.Vector3(0.23, 0, 0.04).applyAxisAngle(Y, r).add(new THREE.Vector3(k.x, 0, k.z)),
+      r: new THREE.Vector3(-0.23, 0, -0.04).applyAxisAngle(Y, r).add(new THREE.Vector3(k.x, 0, k.z)),
+    };
+  }
+
+  // Footwork, simulated once over the whole scene: every foot stays planted until the body has
+  // moved too far from it, then it steps – one foot after the other, aiming a little ahead in the
+  // direction of travel. Covers running, side steps, the step to the ball and walking back.
+  #schrittfolge(f) {
+    const DT = 1 / 120, t0 = -1.5, t1 = this.sz.T + 0.6;
+    const koerper = (t) => this.#koerper(f, t, this.#ballJetzt(t));
+    let k = koerper(t0);
+    const fuss = { l: { pos: this.#stand(k).l, schritt: null }, r: { pos: this.#stand(k).r, schritt: null } };
+    let zuletzt = "r";
+    const spur = [];
+    for (let t = t0; t <= t1 + 1e-9; t += DT) {
+      k = koerper(t);
+      const vor = koerper(t + 0.05);
+      const vx = (vor.x - k.x) / 0.05, vz = (vor.z - k.z) / 0.05, v = Math.hypot(vx, vz);
+      const soll = this.#stand(k);
+      // Finish steps that have landed.
+      for (const s of ["l", "r"]) {
+        const st = fuss[s].schritt;
+        if (st && t >= st.t1) { fuss[s].pos = st.nach.clone(); fuss[s].schritt = null; zuletzt = s; }
+      }
+      // Start a new step if a foot is too far from where it should be.
+      const abstand = (s) => fuss[s].pos.distanceTo(soll[s]);
+      const grenze = v > 0.4 ? 0.1 : 0.17;
+      const frei = (s) => !fuss[s].schritt;
+      const kandidaten = ["l", "r"].filter((s) => frei(s) && abstand(s) > grenze).sort((a, b) => abstand(b) - abstand(a));
+      const anderer = (s) => (s === "l" ? "r" : "l");
+      for (const s of kandidaten) {
+        // One foot at a time, alternating; both only when running fast (flight phase).
+        if (fuss[anderer(s)].schritt && abstand(s) < 0.5) continue;
+        if (s === zuletzt && kandidaten.length > 1 && frei(anderer(s))) continue;
+        const dauer = clamp(0.3 - 0.045 * v, 0.13, 0.3);
+        const ziel = this.#stand(koerper(t + dauer))[s].add(new THREE.Vector3(vx, 0, vz).multiplyScalar(0.09));
+        fuss[s].schritt = { t0: t, t1: t + dauer, von: fuss[s].pos.clone(), nach: ziel, hub: 0.05 + 0.025 * Math.min(v, 4) };
+        zuletzt = s;
+      }
+      const lage = (s) => {
+        const st = fuss[s].schritt;
+        if (!st) return fuss[s].pos.clone();
+        const u = clamp((t - st.t0) / (st.t1 - st.t0), 0, 1);
+        return st.von.clone().lerp(st.nach, ease(u)).setY(Math.sin(Math.PI * u) * st.hub);
+      };
+      spur.push({ l: lage("l"), r: lage("r") });
+    }
+    return { t0, DT, spur };
+  }
+
+  #fuesseBei(f, t, sprung) {
+    if (!f.schritte) f.schritte = this.#schrittfolge(f);
+    const { t0, DT, spur } = f.schritte;
+    const g = clamp((t - t0) / DT, 0, spur.length - 1);
+    const i = Math.min(spur.length - 2, Math.floor(g)), u = g - i;
+    const out = {};
+    for (const s of ["l", "r"]) out[s] = spur[i][s].clone().lerp(spur[i + 1][s], u).add(new THREE.Vector3(0, 0.075 + sprung, 0));
+    return out;
+  }
+
   stellen(t) {
     const ballJetzt = this.#ballJetzt(t);
     for (const f of this.figuren) {
-      const p = f.person;
-      const pos = position(p, t);
-      let x = pos.x, z = pos.z;
-      let yaw = this.#yaw(p);
-      // The stroke of this person whose window contains t; with two overlapping strokes the one
-      // closer to its contact wins, so steps towards the ball never add up.
-      let pose = null, sw = 0, best = null;
-      for (const s of this.schlaege) {
-        if (s.f !== f) continue;
-        const [w0, w1] = schlagFenster(s.name);
-        const rt = t - s.t;
-        if (rt <= w0 || rt >= w1) continue;
-        if (!best || Math.abs(rt) < Math.abs(t - best.t)) best = s;
-      }
-      if (best) {
-        const [w0, w1] = schlagFenster(best.name);
-        const rt = t - best.t;
-        pose = schlagPose(best.name, rt, { rueckhand: best.rueckhand, kontakt: best.kontaktHand });
-        // Weight of the step towards the ball: in before contact, hold, back afterwards.
-        sw = rt < 0 ? ease(clamp((rt - w0) / (-w0 * 0.85), 0, 1)) : 1 - ease(clamp((rt - 0.35) / (w1 - 0.35), 0, 1));
-        x += best.versatz.x * sw;
-        z += best.versatz.z * sw;
-      }
-      // Running: arms swing, feet are planted along the path.
-      const k = clamp(pos.v / 1.6, 0, 1) * (1 - sw);
-      let fuesse = null;
-      const phase = p.weg ? (pos.strecke ?? 0) / (2 * SCHRITT) : 0;
-      const wq = this.#quer(f, pos, yaw);
-      if (!pose) {
-        const atmen = 0.012 * Math.sin(t * 2.3 + f.seed);
-        const lauf = {
-          ...BEREIT,
-          hand: [-0.3, 1.02 + 0.06 * Math.sin(phase * 2 * Math.PI), 0.15 + 0.18 * Math.sin(phase * 2 * Math.PI)],
-          dir: [-0.15, 0.7, 0.7], norm: [-1, 0, 0.2],
-          links: [0.28, 1.05 - 0.06 * Math.sin(phase * 2 * Math.PI), 0.1 - 0.22 * Math.sin(phase * 2 * Math.PI)],
-          lean: 18, tief: 0.08 + 0.035 * Math.abs(Math.sin(phase * 2 * Math.PI)),
-        };
-        // Side steps: low ready position, racket in front, no arm swing.
-        const seit = { ...BEREIT, lean: 16, tief: 0.17 + 0.03 * Math.abs(Math.sin((pos.strecke ?? 0) / 0.5 * Math.PI)) };
-        pose = mischen({ ...BEREIT, tief: BEREIT.tief + atmen }, mischen(lauf, seit, wq), k);
-        // Split step: when someone on the other side hits, hop lightly at the contact and land low.
-        for (const sch of this.schlaege) {
-          if (sch.f.person.team === p.team) continue;
-          const rt = t - sch.t;
-          if (rt > -0.25 && rt < 0.05) pose.sprung += 0.07 * Math.sin(Math.PI * (rt + 0.25) / 0.3);
-          if (rt >= 0.05 && rt < 0.45) pose.tief += 0.08 * Math.sin(Math.PI * (rt - 0.05) / 0.4);
-        }
-      }
-      if (p.weg && k > 0.01) fuesse = this.#fuesse(f, pos, k, x - pos.x, z - pos.z, yaw, wq);
-      f.figur.stellen({ x, z, yaw, pose, blick: ballJetzt ?? new THREE.Vector3(-p.seite * 6, 1, 0), fuesse });
+      const k = this.#koerper(f, t, ballJetzt);
+      const fuesse = this.#fuesseBei(f, t, k.pose.sprung);
+      f.figur.stellen({ x: k.x, z: k.z, yaw: k.yaw, pose: k.pose, blick: ballJetzt ?? new THREE.Vector3(-f.person.seite * 6, 1, 0), fuesse });
     }
   }
 
@@ -153,46 +211,17 @@ export class Steuerung {
     return clamp((0.75 - dot) / 0.4, 0, 1);
   }
 
-  // Feet while moving: running steps along the path, or side steps (shuffle) when the path goes
-  // sideways – then the feet stay on their side of the body, the leading foot steps first and the
-  // other one closes up, they never cross.
-  #fuesse(f, pos, k, ox, oz, yaw, wq) {
-    const L = SCHRITT, s = pos.strecke ?? 0;
-    const out = {};
-    const Yachse = new THREE.Vector3(0, 1, 0);
-    const links = new THREE.Vector3(1, 0, 0).applyAxisAngle(Yachse, yaw); // the player's left in the world
-    const r = pos.richtung ?? { x: 1, z: 0 };
-    const vorLinks = r.x * links.x + r.z * links.z > 0; // moving towards the left: the left foot leads
-    for (const [seite, versatz, quer] of [["l", 0, 1], ["r", L, -1]]) {
-      // Running.
-      const sv = s + versatz;
-      const n = Math.floor(sv / (2 * L)), u = sv / (2 * L) - n;
-      let sf = 2 * L * n + L / 2 + (u < 0.5 ? 0 : ease((u - 0.5) / 0.5) * 2 * L) - versatz;
-      sf = Math.min(sf, f.laenge);
-      const w = wegPunkt(f.person, sf);
-      const hub = u < 0.5 ? 0 : 0.14 * Math.sin(Math.PI * (u - 0.5) / 0.5);
-      const lauf = new THREE.Vector3(w.x - quer * w.dz * 0.12 + ox, 0.075 + hub, w.z + quer * w.dx * 0.12 + oz);
-      // Side steps: step length 0.5 m, the leading foot moves in the first half of each cycle.
-      const Q = 0.5;
-      const fuehrt = (quer > 0) === vorLinks;
-      const sq = s / Q, m = Math.floor(sq), v = sq - m;
-      const anteil = fuehrt ? ease(clamp(v / 0.5, 0, 1)) : ease(clamp((v - 0.5) / 0.5, 0, 1));
-      const sf2 = Math.min(f.laenge, (m + anteil) * Q);
-      const w2 = wegPunkt(f.person, sf2);
-      const hub2 = 0.06 * Math.sin(Math.PI * (fuehrt ? clamp(v / 0.5, 0, 1) : clamp((v - 0.5) / 0.5, 0, 1)));
-      const seit = new THREE.Vector3(w2.x + ox, 0.075 + hub2, w2.z + oz).add(links.clone().multiplyScalar(quer * 0.24));
-      const bewegt = lauf.lerp(seit, wq);
-      const stand = new THREE.Vector3(pos.x + ox, 0.075, pos.z + oz).add(new THREE.Vector3(quer * 0.23, 0, quer * 0.04).applyAxisAngle(Yachse, yaw));
-      out[seite] = stand.lerp(bewegt, k);
-    }
-    return out;
-  }
-
   #ballJetzt(t) {
     for (const b of this.sz.baelle) {
       const p = ballBei(b, t);
-      if (p && t <= b.t1) return new THREE.Vector3(p.x, p.y, p.z);
+      if (p && t <= b.t1) {
+        const v = new THREE.Vector3(p.x, p.y, p.z);
+        // Fade the reaction in after the hit and out before the ball arrives.
+        v.gewicht = Math.min(ease(clamp((t - b.t0) / 0.3, 0, 1)), ease(clamp((b.t1 - t) / 0.25, 0, 1)));
+        return v;
+      }
     }
     return null;
   }
+
 }
