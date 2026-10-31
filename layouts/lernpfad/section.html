@@ -69,12 +69,13 @@
           {{- range $i, $l := $lessons }}
             {{ partial "lesson-row.html" (dict "page" $l "n" (add $i 1) "highlight" (eq $i 0)) }}
           {{- end }}
+          {{- /* Last step: the Stufen-Check */}}
+          {{- with site.GetPage (printf "%s/check" .Path) }}
+          {{ partial "lesson-row.html" (dict "href" .RelPermalink "title" "Stufen-Check" "n" (add (len $lessons) 1)) }}
+          {{- end }}
         </section>
 
         <div class="flex flex-wrap gap-x-8 gap-y-2 text-[15px] font-bold">
-          {{- with site.GetPage (printf "%s/check" .Path) }}
-          <a href="{{ .RelPermalink }}" class="inline-flex min-h-11 items-center">Am Ende: Stufen-Check →</a>
-          {{- end }}
           {{- with $next }}
           <a href="{{ .RelPermalink }}" class="inline-flex min-h-11 items-center">Weiter zu Stufe {{ .Params.stufe }} →</a>
           {{- end }}
