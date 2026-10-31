@@ -30,7 +30,8 @@ export const KAMERAS = {
       ? { pos: [s * 17, 10.5, 0], ziel: [-s * 1.5, 0, 0], fov: 62 }
       : { pos: [s * 18, 8, 0], ziel: [-s * 0.5, 0.4, 0], fov: 40 };
   },
-  seite: (sz, f) => (f === "short" ? { pos: [seiteVonDu(sz) * 5, 4.2, 16], ziel: [seiteVonDu(sz) * 0.8, 1.3, 0], fov: 62 } : { pos: [0, 3.6, 13], ziel: [0, 1.2, 0], fov: 50 }),
+  // In portrait the side view frames your half: centred a little in front of you, towards the net.
+  seite: (sz, f) => (f === "short" ? (() => { const s = seiteVonDu(sz), x = du(sz).pos.x - s * 2.2; return { pos: [x - s * 0.8, 3.2, 11.5], ziel: [x, 1.1, -0.5], fov: 62 }; })() : { pos: [0, 3.6, 13], ziel: [0, 1.2, 0], fov: 50 }),
   schraeg: (sz, f) => {
     const s = seiteVonDu(sz);
     return f === "short" ? { pos: [s * 15, 13, 13], ziel: [0, 0.5, 0], fov: 58 } : { pos: [s * 16, 10, 13], ziel: [-s * 0.5, 0.5, 0], fov: 40 };

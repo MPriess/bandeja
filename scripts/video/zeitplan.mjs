@@ -10,7 +10,7 @@ export function standardDrehbuch(sz) {
     abschnitte: [
       { kamera: "oben", dauer: 2.2, ab: "start", text: sz.cap },
       { fahrt: "tv", dauer: 1.6, ab: "start" },
-      { kamera: "tv", abspielen: true, ab: "start", text: sz.cap },
+      { kamera: "tv", abspielen: true, ab: "start" },
       { kamera: "seite", abspielen: true, ab: "start", tempo: 0.6 },
       { kamera: "hinten", abspielen: true, ab: "start" },
     ],
