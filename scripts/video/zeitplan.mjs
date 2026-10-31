@@ -2,7 +2,7 @@
 // at every moment of the video. Pure module, shared by the CLI (frame count) and the renderer.
 export const VORLAUF = 1.2; // scene starts this long before the first contact, so the swing is visible
 
-export const KAMERA_NAMEN = { oben: "Von oben", tv: "TV", seite: "Von der Seite", schraeg: "Schräg", hinten: "Hinter dir", spieler: "Deine Sicht" };
+export const KAMERA_NAMEN = { oben: "Von oben", tv: "TV", seite: "Von der Seite", schraeg: "Schräg", hinten: "Hinter dir", spieler: "Deine Sicht", nah: "Nah" };
 
 export function standardDrehbuch(sz) {
   return {

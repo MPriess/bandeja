@@ -40,6 +40,9 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 
 ## Nächste Runde
 
+- [x] Referenz-Clip „Bandeja oder Vibora?“: `npm run referenz` (Regeln, Entwurf, Kontaktbogen, Nahaufnahme in ~1 min)
+- [x] Spieler-Aussehen: Gesicht, Pferdeschwanz, Stirnband, Kragen, Hosenstreifen; Trikot über der Hose, Schultern geschlossen; Kamera `nah`
+
 - [x] Realistischere Bewegung: Schläge als Spline durch alle Posen (Schläger schwingt durch den Ball), Schrittfolge mit festen Standfüßen statt Gleiten, Körper dreht mit dem Ball, Wippen in Bereitschaft, Ausholen mit gebeugtem Arm, kräftigere Arme und Beine
 - [x] Umgebung: Banden mit „bandeja.“-Logo rund um den Court, Flutlichtmasten, Boden um den Court
 

@@ -47,6 +47,12 @@ export const KAMERAS = {
       ? { pos: [s * x, 2.4, z], ziel: [-s * 4, 0.7, p.z * 0.75], fov: 60, folgen: true }
       : { pos: [s * x, 2.4, z], ziel: [-s * 4, 1.0, p.z * 0.25], fov: 44, folgen: true };
   },
+  // Close-up of you from the front-side (for details and for close shots in scripts).
+  nah: (sz, f, t) => {
+    const s = seiteVonDu(sz);
+    const p = position(du(sz), t);
+    return { pos: [p.x - s * 3.2, 1.7, p.z + 1.6], ziel: [p.x, 1.25, p.z], fov: f === "short" ? 55 : 35, folgen: true };
+  },
   // Over your shoulder: what you see on court.
   spieler: (sz, f, t) => {
     const s = seiteVonDu(sz);

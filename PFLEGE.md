@@ -113,6 +113,14 @@ npm run videos
 
 Alle Drehbücher in `clips/`.
 
+### Referenz-Clip zum schnellen Abstimmen
+
+```bash
+npm run referenz
+```
+
+Prüft die Regeln, rendert den Referenz-Clip „Bandeja oder Vibora?“ als Entwurf, legt einen Kontaktbogen (2 Bilder pro Sekunde) und eine Nahaufnahme im Treffpunkt an – in etwa einer Minute: `video-out/referenz-entwurf.mp4`, `referenz-blatt.png`, `referenz-nah.png`. Jede Änderung zuerst hier prüfen, danach erst alle Clips. Anderer Clip als Referenz: `npm run referenz -- smash`.
+
 ### Drehbuch (`clips/<name>.yaml`)
 
 | Feld | Bedeutung |
@@ -130,7 +138,7 @@ Ein Abschnitt im `ablauf`:
 
 | Feld | Bedeutung |
 | --- | --- |
-| `kamera` | `oben`, `tv`, `seite`, `schraeg`, `hinten` (hinter dir, durchs Glas), `spieler` (über deine Schulter) |
+| `kamera` | `oben`, `tv`, `seite`, `schraeg`, `hinten` (hinter dir, durchs Glas), `spieler` (über deine Schulter), `nah` (Nahaufnahme von dir) |
 | `fahrt` | statt `kamera`: weiche Kamerafahrt von der vorigen Kamera zu dieser |
 | `abspielen` | `true`: die Spielszene läuft; sonst steht sie |
 | `ab` | `start` (Szene von vorn), `ende` oder eine Sekundenzahl |

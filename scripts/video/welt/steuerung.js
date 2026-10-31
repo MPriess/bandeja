@@ -6,10 +6,10 @@ import { BEREIT, KONTAKT, SCHLAG_FUER, UEBERKOPF, schlagPose, schlagFenster, mis
 import { position, ballBei } from "../szene.mjs";
 
 const AUSSEHEN = {
-  p: { trikot: 0xcdeb3b, hose: 0x0c1a24, haut: 0xd6a07c, haare: 0x3a2516, schuhe: 0xf3f4ee, schlaeger: { farbe: 0x0c1a24, akzent: 0xcdeb3b } },
-  q: { trikot: 0xf3f4ee, hose: 0x0c1a24, haut: 0x8d5a3b, haare: 0x14100c, schuhe: 0x0c1a24, kappe: 0x0c1a24, schlaeger: { farbe: 0xf3f4ee, akzent: 0x2a63be } },
-  a: { trikot: 0xc2552e, hose: 0x22323e, haut: 0xe2b694, haare: 0x6b4a2a, schuhe: 0xf3f4ee, schlaeger: { farbe: 0x22323e, akzent: 0xe07a52 } },
-  b: { trikot: 0xe07a52, hose: 0x22323e, haut: 0xb07a55, haare: 0x1a1410, schuhe: 0x22323e, kappe: 0xf3f4ee, schlaeger: { farbe: 0xc2552e, akzent: 0xf3f4ee } },
+  p: { akzent: 0x0c1a24, stirnband: 0x0c1a24, trikot: 0xcdeb3b, hose: 0x0c1a24, haut: 0xd6a07c, haare: 0x3a2516, schuhe: 0xf3f4ee, schlaeger: { farbe: 0x0c1a24, akzent: 0xcdeb3b } },
+  q: { akzent: 0x2a63be, trikot: 0xf3f4ee, hose: 0x0c1a24, haut: 0x8d5a3b, haare: 0x14100c, schuhe: 0x0c1a24, kappe: 0x0c1a24, schlaeger: { farbe: 0xf3f4ee, akzent: 0x2a63be } },
+  a: { akzent: 0xf3f4ee, frisur: "zopf", trikot: 0xc2552e, hose: 0x22323e, haut: 0xe2b694, haare: 0x6b4a2a, schuhe: 0xf3f4ee, schlaeger: { farbe: 0x22323e, akzent: 0xe07a52 } },
+  b: { akzent: 0x0c1a24, trikot: 0xe07a52, hose: 0x22323e, haut: 0xb07a55, haare: 0x1a1410, schuhe: 0x22323e, kappe: 0xf3f4ee, schlaeger: { farbe: 0xc2552e, akzent: 0xf3f4ee } },
 };
 
 const SCHRITT = 0.62; // step length while running, m

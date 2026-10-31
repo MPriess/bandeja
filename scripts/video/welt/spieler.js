@@ -3,7 +3,7 @@
 import * as THREE from "three";
 import { baueSchlaeger } from "./schlaeger.js";
 
-const MASS = { oberarm: 0.3, unterarm: 0.26, oberschenkel: 0.44, unterschenkel: 0.44, knoechel: 0.075, huefte: 0.95, schulter: 0.19, schulterY: 0.42, huefteX: 0.095 };
+const MASS = { oberarm: 0.3, unterarm: 0.26, oberschenkel: 0.44, unterschenkel: 0.44, knoechel: 0.075, huefte: 0.95, schulter: 0.175, schulterY: 0.41, huefteX: 0.095 };
 const Y = new THREE.Vector3(0, 1, 0);
 const v = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 
@@ -46,7 +46,7 @@ function zwischen(mesh, a, b, versatz = 0.5) {
 }
 
 export class Spieler {
-  constructor({ trikot = 0xcdeb3b, hose = 0x0c1a24, haut = 0xd9a07a, haare = 0x2b1d14, schuhe = 0xf3f4ee, socken = 0xf3f4ee, schlaeger = {}, kappe = null, name = "" } = {}) {
+  constructor({ trikot = 0xcdeb3b, hose = 0x0c1a24, haut = 0xd9a07a, haare = 0x2b1d14, schuhe = 0xf3f4ee, socken = 0xf3f4ee, schlaeger = {}, kappe = null, akzent = 0x0c1a24, frisur = "kurz", stirnband = null, name = "" } = {}) {
     this.name = name;
     this.gruppe = new THREE.Group();
     this.root = new THREE.Group();
@@ -64,13 +64,27 @@ export class Spieler {
 
     const mTrikot = mat(trikot, 0.85), mHose = mat(hose, 0.85), mHaut = mat(haut, 0.6), mHaare = mat(haare, 0.9);
     // Torso: shirt from the waist to the shoulders, shorts around the hips.
-    this.brust.add(drehkoerper([[0.0, -0.08], [0.135, -0.08], [0.145, 0.05], [0.15, 0.2], [0.175, 0.33], [0.165, 0.41], [0.1, 0.46], [0.055, 0.48], [0, 0.48]], mTrikot, 0.62));
-    const hals = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.12, 10), mHaut);
+    // The shirt ends straight over the shorts and is wide at the shoulders, so the arms join the body.
+    this.brust.add(drehkoerper([[0.0, -0.02], [0.148, -0.02], [0.152, 0.05], [0.158, 0.18], [0.182, 0.31], [0.192, 0.39], [0.16, 0.45], [0.08, 0.485], [0, 0.49]], mTrikot, 0.6));
+    const hals = new THREE.Mesh(new THREE.CylinderGeometry(0.047, 0.055, 0.1, 10), mHaut);
     hals.position.y = 0.5;
     hals.castShadow = true;
     this.brust.add(hals);
-    const hose_ = drehkoerper([[0, 0.12], [0.145, 0.12], [0.16, 0.0], [0.165, -0.1], [0, -0.1]], mHose, 0.72);
+    // Rounded at the top (no flat lid that shows when the upper body leans back).
+    const hose_ = drehkoerper([[0, 0.15], [0.08, 0.145], [0.13, 0.12], [0.158, 0.06], [0.166, -0.02], [0.17, -0.12], [0, -0.12]], mHose, 0.78);
     this.becken.add(hose_);
+    // Shirt collar and a stripe on the shorts in the accent colour.
+    const mAkzent = mat(akzent, 0.7);
+    const kragen = new THREE.Mesh(new THREE.TorusGeometry(0.058, 0.012, 6, 20), mAkzent);
+    kragen.rotation.x = Math.PI / 2;
+    kragen.scale.set(1, 0.75, 1);
+    kragen.position.y = 0.465;
+    this.brust.add(kragen);
+    for (const sx of [-1, 1]) {
+      const streifen = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.16, 0.045), mAkzent);
+      streifen.position.set(sx * 0.166, -0.03, 0);
+      this.becken.add(streifen);
+    }
     // Head: skull, hair, nose and ears so the facing reads from far away.
     const schaedel = new THREE.Mesh(new THREE.SphereGeometry(0.1, 20, 14), mHaut);
     schaedel.scale.set(0.9, 1.12, 1);
@@ -89,6 +103,38 @@ export class Spieler {
       ohr.scale.set(0.5, 1, 0.8);
       ohr.position.set(s * 0.092, 0, 0);
       this.kopf.add(ohr);
+    }
+    // Face: eyes, brows and mouth – small, but they make the head read as a face in close shots.
+    const dunkel = mat(0x1a1410, 0.5);
+    for (const sx of [-1, 1]) {
+      const auge = new THREE.Mesh(new THREE.SphereGeometry(0.011, 8, 6), dunkel);
+      auge.position.set(sx * 0.032, 0.018, 0.088);
+      this.kopf.add(auge);
+      const braue = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.006, 0.008), mHaare);
+      braue.position.set(sx * 0.033, 0.038, 0.09);
+      braue.rotation.z = sx * -0.12;
+      this.kopf.add(braue);
+    }
+    const mund = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.005, 0.006), mat(0x7a3b30, 0.6));
+    mund.position.set(0, -0.045, 0.093);
+    this.kopf.add(mund);
+    // Hair styles: short (default) or a ponytail; optional headband.
+    if (frisur === "zopf") {
+      const zopf = kapsel(0.028, 0.12, mHaare);
+      zopf.position.set(0, 0.0, -0.115);
+      zopf.rotation.x = 0.5;
+      this.kopf.add(zopf);
+      const gummi = new THREE.Mesh(new THREE.TorusGeometry(0.026, 0.006, 6, 12), mat(akzent, 0.6));
+      gummi.position.set(0, 0.04, -0.1);
+      gummi.rotation.x = Math.PI / 2 + 0.5;
+      this.kopf.add(gummi);
+    }
+    if (stirnband !== null) {
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(0.098, 0.1, 0.03, 20, 1, true), mat(stirnband, 0.8));
+      band.scale.set(0.93, 1, 1.03);
+      band.position.y = 0.045;
+      band.rotation.x = -0.12;
+      this.kopf.add(band);
     }
     if (kappe !== null) {
       const mk = mat(kappe, 0.8);
