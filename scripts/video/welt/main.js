@@ -183,6 +183,16 @@ window.bild = (tau, zeichnen = true) => {
   cam.fov = k.fov;
   cam.updateProjectionMatrix();
   cam.lookAt(...k.ziel);
+  // The ball is only 6.5 cm: from far cameras it would be a pixel. Keep it at least ~9 px tall
+  // (at 1080p) by scaling it with the distance; close up it stays true to size. Trail likewise.
+  const mindestPx = 9 * (FORMATE[job.format].hoehe / 1080);
+  const groesse = (o) => {
+    const d = cam.position.distanceTo(o.position);
+    const px = (0.1 / (2 * d * Math.tan(THREE.MathUtils.degToRad(cam.fov) / 2))) * FORMATE[job.format].hoehe;
+    return Math.max(1, mindestPx / px);
+  };
+  ballMesh.scale.setScalar(groesse(ballMesh));
+  for (const m of spur) m.scale.setScalar(groesse(m));
   if (zeichnen) R.render(scene, cam);
 
   // Overlays: title in the first section, section text, camera chip, end card.
