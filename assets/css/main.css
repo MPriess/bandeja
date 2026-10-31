@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @source "hugo_stats.json";
 
 /* Fonts are self-hosted from @fontsource (mounted to /fonts in hugo.toml). */
