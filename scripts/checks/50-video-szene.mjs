@@ -14,12 +14,12 @@ export const name = "Video-Szenen";
 export default async ({ root, pub, htmlFiles }) => {
   const errors = [];
   const courts = collectCourts(root);
-  const zyklen = new Set();
+  const zyklen = [];
   for (const c of courts) {
     const where = `${c.file} ${c.where}`;
     let sz;
     try { sz = szene(c.d); } catch (e) { errors.push(`${where}: Szene nicht baubar (${e.message})`); continue; }
-    zyklen.add(sz.T.toFixed(2));
+    zyklen.push(sz.T);
     for (const b of sz.baelle) {
       const min = Math.min(...b.punkte.map((p) => p.y));
       if (min < -0.001) errors.push(`${where}: Ball (${b.typ}) unter dem Boden (${min.toFixed(2)} m)`);
@@ -34,7 +34,8 @@ export default async ({ root, pub, htmlFiles }) => {
     const html = fs.readFileSync(file, "utf8");
     for (const m of html.matchAll(/data-cycle="?([\d.]+)/g)) {
       geprueft++;
-      if (!zyklen.has(Number(m[1]).toFixed(2))) errors.push(`${path.relative(pub, file)}: Animationszyklus ${Number(m[1]).toFixed(2)} s passt zu keiner Video-Szene – Zeiten in court.html und szene.mjs weichen ab`);
+      // The site writes the cycle with 3 decimals: compare numerically (±6 ms), not as rounded text.
+      if (!zyklen.some((t) => Math.abs(t - Number(m[1])) < 0.006)) errors.push(`${path.relative(pub, file)}: Animationszyklus ${Number(m[1]).toFixed(2)} s passt zu keiner Video-Szene – Zeiten in court.html und szene.mjs weichen ab`);
     }
   }
   // Clip scripts.

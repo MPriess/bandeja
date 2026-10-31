@@ -1,0 +1,91 @@
+{{ define "main" }}
+{{- /*
+  One-page guide in numbered steps (Schnellstart, Stellungsspiel). Front matter:
+    schritte     list of {titel, text, punkte, court, mehr}; optional `teil` groups steps under a heading
+    eyebrow      small label in the hero (default "Schnellstart · 10 Minuten")
+    ueberschrift big hero heading (default "Padel in acht Schritten")
+    weiter       page linked at the end; weiterTitel and weiterLabel change its heading and button
+*/ -}}
+{{- $steps := .Params.schritte -}}
+{{- /* Group the steps by `teil`; each step keeps its running number. */ -}}
+{{- $groups := slice -}}
+{{- $cur := dict -}}
+{{- $items := slice -}}
+{{- range $i, $s := $steps }}
+  {{- $t := $s.teil | default "" }}
+  {{- if or (eq $i 0) (ne $t $cur.titel) }}
+    {{- if $i }}{{ $groups = $groups | append (merge $cur (dict "schritte" $items)) }}{{ end }}
+    {{- $cur = dict "titel" $t "nr" (len $groups) }}{{ $items = slice }}
+  {{- end }}
+  {{- $items = $items | append (merge $s (dict "nr" (add $i 1))) }}
+{{- end }}
+{{- if $steps }}{{ $groups = $groups | append (merge $cur (dict "schritte" $items)) }}{{ end }}
+{{- $grouped := gt (len (where $groups "titel" "!=" "")) 0 -}}
+<div class="min-h-screen">
+  {{ partial "site-header.html" (dict "page" .) }}
+  <main id="inhalt">
+    {{ partial "court-legend-sprite.html" . }}
+    {{ partial "page-hero.html" (dict "eyebrow" (.Params.eyebrow | default "Schnellstart · 10 Minuten") "title" (.Params.ueberschrift | default "Padel in acht Schritten") "text" .Description) }}
+    <div class="mx-auto flex max-w-[1180px] flex-col gap-12 px-6 pt-10 pb-16">
+      <nav aria-label="Schritte" class="schritte-nav flex flex-col gap-4 rounded-[22px] bg-sand p-5">
+        {{- range $groups }}
+        <div class="flex flex-col gap-1">
+          {{- with .titel }}<p class="m-0 px-2 text-sm font-semibold tracking-[0.08em] text-court uppercase">{{ . }}</p>{{ end }}
+          <ol start="{{ (index .schritte 0).nr }}" class="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-1 p-0">
+            {{- range .schritte }}
+            <li><a href="#schritt-{{ .nr }}"><span>{{ .nr }}</span>{{ .titel }}</a></li>
+            {{- end }}
+          </ol>
+        </div>
+        {{- end }}
+      </nav>
+
+      {{- range $g := $groups }}
+      {{- with $g.titel }}
+      <h2 id="teil-{{ add $g.nr 1 }}" class="m-0 -mb-6 scroll-mt-6 border-t-4 border-ink pt-8 font-display text-5xl leading-none font-extrabold uppercase md:text-6xl">{{ . }}</h2>
+      {{- end }}
+      {{- range $s := $g.schritte }}
+      {{- $n := $s.nr }}
+      <section id="schritt-{{ $n }}" aria-labelledby="schritt-{{ $n }}-titel" class="schritt">
+        <div class="flex min-w-0 flex-[1_1_300px] flex-col gap-4">
+          <p class="schritt-nr">{{ printf "%02d" $n }}</p>
+                    {{- if $grouped }}
+          <h3 id="schritt-{{ $n }}-titel" class="schritt-titel">{{ $s.titel }}</h3>
+          {{- else }}
+          <h2 id="schritt-{{ $n }}-titel" class="schritt-titel">{{ $s.titel }}</h2>
+          {{- end }}
+          <p class="m-0 text-[17px] leading-[1.7] text-body">{{ $s.text }}</p>
+          <ul class="m-0 flex list-none flex-col gap-2 p-0 text-base leading-normal *:flex *:items-start *:gap-2.5">
+            {{- range $s.punkte }}
+            <li><svg class="mt-0.5 size-5 flex-none text-court" aria-hidden="true"><use href="#haken"/></svg><span>{{ . }}</span></li>
+            {{- end }}
+          </ul>
+          {{- with $s.mehr }}{{ with site.GetPage . }}
+          <a href="{{ partial "fn/href.html" . }}" class="inline-flex min-h-11 items-center gap-2 self-start font-bold">Mehr dazu: {{ .Title }} <svg class="size-[18px]" aria-hidden="true"><use href="#pfeil"/></svg></a>
+          {{- end }}{{ end }}
+        </div>
+        {{- with $s.court }}
+        <figure class="court-scope schritt-figur">
+          {{ partial "court.html" (dict "d" . "animate" true) }}
+          <figcaption class="text-[15px] leading-normal font-semibold">{{ .cap }}</figcaption>
+          {{ partial "court-legend.html" (dict "d" . "sprite" true) }}
+        </figure>
+        {{- end }}
+      </section>
+      {{- end }}
+      {{- end }}
+
+      {{- with site.GetPage .Params.weiter }}
+      <section aria-labelledby="weiter" class="flex flex-wrap items-center justify-between gap-5 rounded-[22px] bg-ink p-7 text-paper">
+        <div class="flex max-w-[640px] flex-col gap-2">
+          <h2 id="weiter" class="m-0 font-display text-4xl leading-none font-extrabold uppercase">{{ $.Params.weiterTitel | default "Bereit für den Court?" }}</h2>
+          <p class="m-0 text-[15px] leading-normal text-fog">{{ .Title }}: {{ .Description }}</p>
+        </div>
+        {{ partial "ui/button.html" (dict "href" .RelPermalink "label" ($.Params.weiterLabel | default "Lernpfad starten") "size" "lg" "icon" "arrow-right") }}
+      </section>
+      {{- end }}
+    </div>
+  </main>
+  {{ partial "site-footer.html" . }}
+</div>
+{{ end }}

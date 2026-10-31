@@ -140,6 +140,28 @@
   }
 }
 
+/* One-page guides (layouts/schritte.html): repeated markup as short classes, so long pages stay small. */
+@layer components {
+  .schritte-nav a {
+    @apply flex min-h-11 items-center gap-3 rounded-xl px-2 text-[15px] font-semibold no-underline hover:bg-white/60;
+  }
+  .schritte-nav a > span {
+    @apply inline-flex size-7 flex-none items-center justify-center rounded-full bg-ink text-[13px] font-bold text-lime;
+  }
+  .schritt {
+    @apply flex scroll-mt-6 flex-wrap items-start gap-8 border-t border-line pt-10;
+  }
+  .schritt-nr {
+    @apply m-0 font-display text-[56px] leading-none font-extrabold text-court;
+  }
+  .schritt-titel {
+    @apply m-0 font-display text-4xl leading-none font-extrabold uppercase hyphens-auto md:text-5xl;
+  }
+  .schritt-figur {
+    @apply -mx-6 m-0 flex min-w-0 flex-[1_1_300px] flex-col gap-3.5 bg-court px-3 py-5 text-paper sm:mx-0 sm:rounded-[22px] sm:p-6;
+  }
+}
+
 /*
   Court animations without JavaScript. Balls and your movement follow the drawn paths (offset-path);
   per-diagram keyframes come from court.html. Only with motion allowed, and only where a pause

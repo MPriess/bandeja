@@ -36,10 +36,17 @@ Entwürfe in der Vorschau sehen: `npx hugo server -D`.
 | Probelektion, Grafik und Lektionsauswahl auf der Startseite | `content/_index.md` |
 | Probelektion im Lernpfad | `content/lernpfad/_index.md` |
 | Schnellstart (8 Schritte auf einer Seite, mit Grafiken) | `content/schnellstart.md` |
+| Stellungsspiel (Angriff, Abwehr, Rückkehr in die Ausgangsposition – 11 Schritte auf einer Seite) | `content/stellungsspiel.md` |
 | Eine Stufe: Lektionen, Drills, Stufen-Check | `content/lernpfad/stufe-N/_index.md` |
 | Lektion: Bewegungsablauf, Kapitel, Quiz | `content/lektionen/<name>/` |
 | Wissensartikel und Kategorie-Farben | `content/wissen/<kategorie>/` |
 | Impressum, Datenschutz | `content/impressum.md`, `content/datenschutz.md` |
+
+## Seiten in Schritten
+
+Schnellstart und Stellungsspiel nutzen dieselbe Vorlage (`layout: schritte`). Jeder Eintrag unter `schritte` hat `titel`, `text`, `punkte`, optional `court` (Grafik) und `mehr` (Link). Mit `teil` fasst du Schritte unter einer Zwischenüberschrift zusammen (z. B. „Angriff“). `eyebrow` und `ueberschrift` ändern den Seitenkopf, `weiter`, `weiterTitel` und `weiterLabel` den Kasten am Ende.
+
+Stichpunkte mit Komma in Anführungszeichen setzen, sonst werden sie geteilt. Eine HTML-Seite darf höchstens 60 kB groß sein; jede Grafik kostet etwa 3,5 kB – `npm run check` meldet, wenn es zu viel wird.
 
 ## Lernvideos
 
