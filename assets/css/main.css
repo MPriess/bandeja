@@ -189,7 +189,33 @@
     .court-scope:has(.court-pause:checked) .court-anim {
       animation-play-state: paused;
     }
+    /* Startseite: Flugbahn läuft in Flugrichtung, Zielpunkt und Video-Teaser pulsieren. */
+    .court-richtung path[data-r="ball"] {
+      animation: richtung 0.7s linear infinite;
+    }
+    .court-richtung circle[data-r="ball"] {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: ziel-puls 1.6s ease-in-out infinite;
+    }
+    .probe-teaser:not(:has(:checked)) {
+      animation: teaser-puls 2s ease-out infinite;
+    }
+    .court-scope:has(.court-pause:checked) :is(.court-richtung path, .court-richtung circle, .probe-teaser) {
+      animation-play-state: paused;
+    }
   }
+}
+
+@keyframes richtung {
+  to { stroke-dashoffset: -14; }
+}
+@keyframes ziel-puls {
+  50% { transform: scale(1.35); }
+}
+@keyframes teaser-puls {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-lime) 70%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 14px transparent; }
 }
 
 /*
