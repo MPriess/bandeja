@@ -90,6 +90,12 @@ npm run video -- vibora-oder-bandeja --vorschau
 Halbe Größe, 15 Bilder pro Sekunde – zum schnellen Anschauen.
 
 ```bash
+npm run videos -- --entwurf
+```
+
+Entwurf: 480 × 270 (bzw. 270 × 480), 12 Bilder pro Sekunde, ohne Kantenglättung – etwa eine Minute pro Clip statt 13 Minuten in Full HD. Zum Abstimmen von Bewegung, Kamera und Text; erst wenn alles sitzt, in voller Qualität rendern.
+
+```bash
 npm run video -- smash --standbild 1.2 --kamera seite
 ```
 

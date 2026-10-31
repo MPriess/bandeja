@@ -51,8 +51,10 @@ window.vorbereiten = async (j) => {
   buehne.className = j.format;
   buehne.style.width = `${breite}px`;
   buehne.style.height = `${hoehe}px`;
-  R = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-  R.setPixelRatio(1);
+  // Draft quality: render at the reduced pixel size directly (not full HD scaled down afterwards),
+  // without antialiasing and with a small shadow map – several times faster for quick iterations.
+  R = new THREE.WebGLRenderer({ antialias: !j.entwurf, preserveDrawingBuffer: true });
+  R.setPixelRatio(j.pixelRatio ?? 1);
   R.setSize(breite, hoehe);
   R.shadowMap.enabled = true;
   R.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -68,6 +70,7 @@ window.vorbereiten = async (j) => {
   scene.background = himmel();
   cam = new THREE.PerspectiveCamera(40, breite / hoehe, 0.1, 200);
   baueLicht(scene);
+  if (j.entwurf) scene.traverse((o) => { if (o.isDirectionalLight && o.castShadow) o.shadow.mapSize.set(512, 512); });
   scene.add(baueCourt());
   scene.add(await baueUmgebung());
   sz = szene(j.d);

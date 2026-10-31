@@ -5,6 +5,7 @@
 //   npm run video -- --quelle content/lektionen/bandeja/kapitel-2.md   standard script
 //   npm run video -- <clip> --standbild 1.5 --kamera tv                one PNG at 1.5 s
 //   npm run video -- <clip> --vorschau          half size, 15 fps (quick look)
+//   npm run video -- <clip> --entwurf           480 × 270, 12 fps, no antialiasing (fast drafts)
 //   npm run video -- <clip> --nur-ton           jingle and voice-over into existing MP4s
 //   npm run video -- <clip> --sprechertext      script for the voice-over with time per section
 //   npm run videos                              every clip in clips/
@@ -118,7 +119,7 @@ export function tonDazu(clip, mp4) {
   console.log(`  Ton: Jingle${sprache ? ` + ${sprache} Sprachaufnahmen` : ""} → ${path.relative(root, mp4)}`);
 }
 
-export async function rendern(clip, { format, fps = 30, vorschau = false, standbild = null, kamera = null } = {}) {
+export async function rendern(clip, { format, fps = 30, vorschau = false, entwurf = false, standbild = null, kamera = null } = {}) {
   const { chromium } = createRequire(import.meta.url)("playwright");
   fs.mkdirSync(OUT, { recursive: true });
   const site = await server();
@@ -127,8 +128,8 @@ export async function rendern(clip, { format, fps = 30, vorschau = false, standb
   try {
     for (const f of format ? [format] : clip.formate) {
       const buch = kamera ? { ...clip.buch, abschnitte: [{ kamera, abspielen: true, ab: "start" }], abspann: null } : clip.buch;
-      const job = { format: f, d: clip.d, buch, markierungen: clip.markierungen };
-      const skala = vorschau ? 0.5 : 1;
+      const skala = entwurf ? 0.25 : vorschau ? 0.5 : 1;
+      const job = { format: f, d: clip.d, buch, markierungen: clip.markierungen, pixelRatio: skala, entwurf };
       const { page, info } = await seite(browser, site.url, job, skala);
       if (standbild !== null) {
         await page.evaluate((t) => window.bild(t), Number(standbild));
@@ -138,15 +139,15 @@ export async function rendern(clip, { format, fps = 30, vorschau = false, standb
         await page.close();
         continue;
       }
-      const rate = vorschau ? 15 : fps;
+      const rate = entwurf ? 12 : vorschau ? 15 : fps;
       const n = Math.round(info.dauer * rate);
-      const ziel = path.join(OUT, `${clip.name}-${f}${vorschau ? "-vorschau" : ""}.mp4`);
+      const ziel = path.join(OUT, `${clip.name}-${f}${entwurf ? "-entwurf" : vorschau ? "-vorschau" : ""}.mp4`);
       const enc = ffmpeg(ziel, rate);
       const start = Date.now();
       for (let i = 0; i < n; i++) {
         await page.evaluate((t) => window.bild(t), i / rate);
         // JPEG (q 95) is twice as fast as PNG; H.264 at CRF 20 hides the difference.
-        const bild = await page.screenshot({ type: "jpeg", quality: 95 });
+        const bild = await page.screenshot({ type: "jpeg", quality: entwurf ? 80 : 95 });
         if (!enc.stdin.write(bild)) await new Promise((r) => enc.stdin.once("drain", r));
         if (i % rate === 0 || i === n - 1) {
           const s = (Date.now() - start) / 1000;
@@ -181,7 +182,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     clips = [{ name: path.basename(path.dirname(a.quelle)) + "-" + name, d, formate: ["quer", "short"], markierungen: true, buch: { titel: null, abschnitte: std.abschnitte, abspann: std.abspann } }];
   } else if (a._[0]) clips = [clipLaden(a._[0])];
   else {
-    console.log("Aufruf: npm run video -- <clip> [--format quer|short] [--vorschau] [--standbild <s>] [--kamera <name>]");
+    console.log("Aufruf: npm run video -- <clip> [--format quer|short] [--entwurf | --vorschau] [--standbild <s>] [--kamera <name>]");
     console.log("        npm run video -- --quelle content/<datei>.md[#pfad]");
     console.log("        npm run videos");
     process.exit(1);
@@ -197,7 +198,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         continue;
       }
       for (const fmt of a.format ? [a.format] : c.formate) {
-        const mp4 = path.join(OUT, `${c.name}-${fmt}${a.vorschau ? "-vorschau" : ""}.mp4`);
+        const mp4 = path.join(OUT, `${c.name}-${fmt}${a.entwurf ? "-entwurf" : a.vorschau ? "-vorschau" : ""}.mp4`);
         if (fs.existsSync(mp4)) tonDazu(c, mp4);
         else console.log(`  ${path.relative(root, mp4)} fehlt – erst rendern`);
       }
@@ -213,7 +214,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     }
     const plan = zeitplan(szene(c.d), c.buch);
     console.log(`${c.name}: ${plan.dauer.toFixed(1)} s, ${plan.abschnitte.length} Abschnitte`);
-    const out = await rendern(c, { format: a.format, vorschau: !!a.vorschau, standbild: a.standbild ?? null, kamera: a.kamera ?? null, fps: Number(a.fps ?? 30) });
+    const out = await rendern(c, { format: a.format, vorschau: !!a.vorschau, entwurf: !!a.entwurf, standbild: a.standbild ?? null, kamera: a.kamera ?? null, fps: Number(a.fps ?? 30) });
     for (const f of out) console.log(`  → ${path.relative(root, f)}`);
   }
 }
