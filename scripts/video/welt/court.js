@@ -276,11 +276,11 @@ export async function baueUmgebung() {
   })();
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
     const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.1, 8, 10), stahl);
-    mast.position.set(sx * 7, 4, sz * 14);
+    mast.position.set(sx * 12, 4, sz * 14);
     mast.castShadow = true;
     g.add(mast);
     const kopf = new THREE.Group();
-    kopf.position.set(sx * 7, 8.05, sz * 14);
+    kopf.position.set(sx * 12, 8.05, sz * 14);
     kopf.lookAt(sx * 5, 0, -sz * 1);
     const gehaeuse = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.5, 0.12), stahl);
     const flaeche = new THREE.Mesh(new THREE.PlaneGeometry(0.8, 0.4), lampe);
