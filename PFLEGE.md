@@ -117,6 +117,8 @@ Alle Drehbücher in `clips/`.
 | `formate` | `[quer, short]` (Standard) oder nur eines davon |
 | `ablauf` | Abschnitte nacheinander (fehlt er, gilt der Standard-Ablauf) |
 | `abspann` | `{ text, dauer }` oder `false` |
+| `jingle` | `false` schaltet den Jingle ab (Standard: an) |
+| `ton` | `false`: Video ohne Tonspur |
 
 Ein Abschnitt im `ablauf`:
 
@@ -129,12 +131,35 @@ Ein Abschnitt im `ablauf`:
 | `tempo` | z. B. `0.5` für Zeitlupe (im Video als „Zeitlupe“ markiert) |
 | `dauer` | Sekunden; bei `abspielen` ergibt sie sich sonst aus der Szene |
 | `text` | Einblendung in diesem Abschnitt |
+| `sprecher` | Text für den Voice-over in diesem Abschnitt |
 
 Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf der Seite. Die Ballhöhe ergibt sich aus `type` (ein Lob steigt auf 6,5 m, eine Bandeja fällt ab 2,3 m). `npm run check` prüft alle Szenen und Drehbücher in 3D, ohne zu rendern: Ball über dem Netz (mit Durchhang), erst Boden dann Wand, höchstens ein Aufprall, nie durchs Glas oder über die Wand; Aufschlag höchstens in Hüfthöhe und ins diagonale Feld; der Schläger trifft den Ball (± 10 cm), der Ball fliegt durch niemanden, niemand läuft ans Netz oder in die Wand; Shorts höchstens 60 s. `npm run video` rendert nur Szenen, die diese Regeln einhalten.
 
+### Ton: Jingle und Voice-over
+
+Jedes Video bekommt den bandeja.-Jingle: einen Ball-„Pock“ mit kurzem Marimba-Motiv unter dem Titel und einen Schlussakkord unter dem Logo. Der Jingle wird im Skript erzeugt (`scripts/video/jingle.mjs`), es ist keine fremde Musik – frei nutzbar auf der Seite und auf YouTube (keine Content-ID-Treffer). Lautheit etwa −14 LUFS wie bei YouTube üblich.
+
+Voice-over, Schritt für Schritt:
+
+1. Im Drehbuch je Abschnitt `sprecher:` ausfüllen.
+2. Skript mit Zeitbudget je Abschnitt erzeugen:
+
+```bash
+npm run video -- aufschlag --sprechertext
+```
+
+3. Je Abschnitt eine Aufnahme ablegen: `clips/sprache/aufschlag/1.wav`, `2.wav` … (auch `.mp3`, `.m4a`). Eigene Stimme oder ein Sprachdienst (z. B. ElevenLabs, Piper) – Nutzungsrechte der Stimme beachten.
+4. Neu rendern. Ist eine Aufnahme länger als ihr Abschnitt, wird der Abschnitt automatisch verlängert. Die Sprache wird auf −16 LUFS gebracht, der Jingle darunter leiser.
+
+Nur den Ton neu mischen, ohne das Bild neu zu rendern (wenn sich die Länge nicht ändert):
+
+```bash
+npm run video -- aufschlag --nur-ton
+```
+
 ### Hochladen
 
-- **YouTube Shorts:** die Datei `…-short.mp4` hochladen. Text steht oben, unten und rechts bleibt Platz für die YouTube-Knöpfe. Musik in YouTube hinzufügen (Lizenzen).
+- **YouTube Shorts:** die Datei `…-short.mp4` hochladen. Text steht oben, unten und rechts bleibt Platz für die YouTube-Knöpfe. Jingle ist drin; zusätzliche Musik am besten in YouTube hinzufügen (Lizenzen).
 - **Seite:** MP4-Dateien nicht ins Git. Auf YouTube hochladen und wie bisher unter `content/videos/` eintragen.
 
 ## Einnahmen (standardmäßig aus)

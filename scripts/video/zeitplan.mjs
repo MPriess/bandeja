@@ -26,7 +26,8 @@ export function zeitplan(sz, buch) {
     else if (a.ab === "ende") szeneT = sz.T;
     else if (typeof a.ab === "number") szeneT = a.ab;
     const tempo = a.abspielen ? a.tempo ?? 1 : 0;
-    const dauer = a.dauer ?? (tempo ? (sz.T - szeneT) / tempo : 2);
+    // `mindestens`: room for a voice-over that is longer than the section would be.
+    const dauer = Math.max(a.dauer ?? (tempo ? (sz.T - szeneT) / tempo : 2), a.mindestens ?? 0);
     const kamera = a.kamera ?? a.fahrt;
     if (!kamera) throw new Error("Abschnitt ohne kamera oder fahrt");
     out.push({ t0: t, t1: t + dauer, kamera, von: a.fahrt ? letzte : null, szeneT0: szeneT, tempo, text: a.text ?? null, titel: a.titel ?? null });

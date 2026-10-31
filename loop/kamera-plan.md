@@ -40,6 +40,11 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 
 ## Nächste Runde
 
+- [x] Jingle (selbst erzeugt, −14 LUFS) am Anfang und im Abspann jedes Videos; `--nur-ton` mischt in fertige Videos
+- [x] Voice-over eingeplant: `sprecher` je Abschnitt, `--sprechertext` mit Zeitbudget, Aufnahmen aus `clips/sprache/<clip>/<nr>.wav`, Abschnitt verlängert sich bei langen Aufnahmen
+- [ ] Voice-over aufnehmen oder per TTS erzeugen (Piper-Stimmen liegen auf Hugging Face, hier gesperrt) und für alle Clips Sprechertexte schreiben
+- [ ] Short: Seitenkamera näher und tiefer, lange Einblendungen kürzen
+
 - [x] Regeln und Ballposition in 3D prüfen (`51-video-regeln.mjs` mit Selbsttest); `npm run video` rendert nur regelkonforme Szenen
 
 - [ ] Volle Renders aller Clips prüfen (Kontaktbogen je Clip), Auffälligkeiten beheben

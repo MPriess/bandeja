@@ -5,6 +5,8 @@
 //   npm run video -- --quelle content/lektionen/bandeja/kapitel-2.md   standard script
 //   npm run video -- <clip> --standbild 1.5 --kamera tv                one PNG at 1.5 s
 //   npm run video -- <clip> --vorschau          half size, 15 fps (quick look)
+//   npm run video -- <clip> --nur-ton           jingle and voice-over into existing MP4s
+//   npm run video -- <clip> --sprechertext      script for the voice-over with time per section
 //   npm run videos                              every clip in clips/
 //
 // Output: video-out/<clip>-<format>.mp4 and .jpg (poster). Needs ffmpeg and Chromium (Playwright).
@@ -19,6 +21,7 @@ import { szene } from "./szene.mjs";
 import { standardDrehbuch, zeitplan } from "./zeitplan.mjs";
 import { FORMATE } from "./kameras.mjs";
 import { pruefen } from "./regeln.mjs";
+import { tonspur, mischen, sprachDatei, dauerVon, sprecherText, VO_VERSATZ } from "./ton.mjs";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const OUT = path.join(root, "video-out");
@@ -54,11 +57,18 @@ export function clipLaden(name) {
   const d = { ...grafik(c.quelle), ...(c.court ?? {}) };
   const sz = szene(d);
   const std = standardDrehbuch(sz);
+  // A section with a voice recording lasts at least as long as the recording.
+  const abschnitte = (c.ablauf ?? std.abschnitte).map((a, i) => {
+    const f = sprachDatei(name, i + 1);
+    return f ? { ...a, mindestens: dauerVon(f) + VO_VERSATZ + 0.4 } : a;
+  });
   return {
     name, d,
     formate: c.formate ?? ["quer", "short"],
     markierungen: c.markierungen ?? true,
-    buch: { titel: c.titel ?? null, abschnitte: c.ablauf ?? std.abschnitte, abspann: c.abspann === false ? null : { ...std.abspann, ...(c.abspann ?? {}) } },
+    ton: c.ton ?? true,
+    jingle: c.jingle ?? true,
+    buch: { titel: c.titel ?? null, abschnitte, abspann: c.abspann === false ? null : { ...std.abspann, ...(c.abspann ?? {}) } },
   };
 }
 
@@ -94,6 +104,16 @@ function ffmpeg(ziel, fps) {
     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-movflags", "+faststart", ziel], { stdio: ["pipe", "inherit", "inherit"] });
   const done = new Promise((res, rej) => p.on("close", (c) => (c === 0 ? res() : rej(new Error(`ffmpeg beendet mit ${c}`)))));
   return { stdin: p.stdin, done };
+}
+
+// Jingle and voice-over into a finished MP4.
+export function tonDazu(clip, mp4) {
+  const plan = zeitplan(szene(clip.d), clip.buch);
+  const wav = mp4.replace(/\.mp4$/, ".wav");
+  const { sprache } = tonspur(clip.name, plan, wav, { jingle: clip.jingle !== false });
+  mischen(mp4, wav);
+  fs.rmSync(wav);
+  console.log(`  Ton: Jingle${sprache ? ` + ${sprache} Sprachaufnahmen` : ""} → ${path.relative(root, mp4)}`);
 }
 
 export async function rendern(clip, { format, fps = 30, vorschau = false, standbild = null, kamera = null } = {}) {
@@ -134,6 +154,7 @@ export async function rendern(clip, { format, fps = 30, vorschau = false, standb
       enc.stdin.end();
       await enc.done;
       process.stdout.write("\n");
+      if (clip.ton !== false) tonDazu(clip, ziel);
       // Poster: the moment of the first contact in the first played section.
       await page.evaluate((t) => window.bild(t), Math.min(info.dauer - 0.1, 2.0));
       await page.screenshot({ path: ziel.replace(/\.mp4$/, ".jpg"), type: "jpeg", quality: 85 });
@@ -162,6 +183,24 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log("        npm run video -- --quelle content/<datei>.md[#pfad]");
     console.log("        npm run videos");
     process.exit(1);
+  }
+  if (a["nur-ton"] || a.sprechertext) {
+    for (const c of clips) {
+      const plan = zeitplan(szene(c.d), c.buch);
+      if (a.sprechertext) {
+        const f = path.join(OUT, `${c.name}-sprechertext.txt`);
+        fs.mkdirSync(OUT, { recursive: true });
+        fs.writeFileSync(f, sprecherText(c.name, c.buch, plan));
+        console.log(`  → ${path.relative(root, f)}`);
+        continue;
+      }
+      for (const fmt of a.format ? [a.format] : c.formate) {
+        const mp4 = path.join(OUT, `${c.name}-${fmt}${a.vorschau ? "-vorschau" : ""}.mp4`);
+        if (fs.existsSync(mp4)) tonDazu(c, mp4);
+        else console.log(`  ${path.relative(root, mp4)} fehlt – erst rendern`);
+      }
+    }
+    process.exit(0);
   }
   for (const c of clips) {
     // Only scenes that keep the padel rules are rendered (override with --trotzdem).

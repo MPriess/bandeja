@@ -1,4 +1,30 @@
-# Drehbuch: Der Aufschlag (Standard-Ablauf, nur Titel und Abspann gesetzt)
+# Drehbuch: Der Aufschlag
+# sprecher: Text für den Voice-over (Aufnahme als clips/sprache/aufschlag/<Nr>.wav ablegen;
+#           npm run video -- aufschlag --sprechertext zeigt, wie viel Zeit jeder Abschnitt hat)
 titel: Der Aufschlag
 quelle: content/lektionen/der-aufschlag/kapitel-1.md
+ablauf:
+  - kamera: oben
+    dauer: 2.2
+    ab: start
+    text: Diagonal ins Aufschlagfeld
+    sprecher: Der Aufschlag im Padel geht immer diagonal.
+  - fahrt: tv
+    dauer: 1.6
+    ab: start
+    sprecher: Du stehst hinter der Aufschlaglinie.
+  - kamera: tv
+    abspielen: true
+    ab: start
+    text: Ball aufspringen lassen, unter Hüfthöhe treffen
+    sprecher: Lass den Ball einmal aufspringen und triff ihn höchstens auf Hüfthöhe.
+  - kamera: seite
+    abspielen: true
+    ab: start
+    tempo: 0.6
+    sprecher: Der Ball muss im gegenüberliegenden Aufschlagfeld landen.
+  - kamera: hinten
+    abspielen: true
+    ab: start
+    sprecher: Danach rückst du neben deinen Partner ans Netz.
 abspann: { text: "Ganze Lektion: Der Aufschlag" }
