@@ -19,18 +19,39 @@
           <p class="m-0 max-w-[520px] text-xl leading-relaxed text-fog">Vom ersten Aufschlag bis zur Vibora: Lektionen mit Court-Grafiken, Drills für deinen Platz und ein Lernpfad in vier Stufen.</p>
           <div class="flex flex-wrap gap-3">
             {{ partial "ui/button.html" (dict "href" $first.RelPermalink "label" "Lernpfad starten" "size" "lg" "icon" "arrow-right") }}
-            {{ partial "ui/button.html" (dict "href" ("schnellstart/" | relURL) "label" "Schnellstart in 10 Minuten" "size" "lg" "variant" "ghost" "iconBefore" "court") }}
           </div>
           <p class="m-0 text-sm text-fog-3">Kostenlos und ohne Anmeldung. Für Anfänger, Wiedereinsteiger und Tennisspieler, die umsteigen.</p>
         </div>
 
-        <div class="min-w-0 flex-[1_1_480px]">
-          <a href="{{ partial "fn/href.html" $probe }}" class="flex flex-col gap-5 rounded-3xl bg-court p-7 text-paper no-underline hover:text-paper">
+        {{/* Probelektion: Court-Grafik und Lernvideo, umgeschaltet mit Radio-Buttons und :has() wie auf den Lektionsseiten */}}
+        {{- $video := index (where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $probe.Path) 0 }}
+        <div class="group/probe min-w-0 flex-[1_1_480px]">
+          <div class="flex flex-col gap-5 rounded-3xl bg-court p-5 text-paper sm:p-7">
             <div class="flex flex-wrap items-center justify-between gap-3">
-              <p class="m-0 font-display text-[26px] font-bold tracking-wide uppercase">{{ $probe.Title }}</p>
+              <a href="{{ partial "fn/href.html" $probe }}" class="inline-flex min-h-11 items-center font-display text-[26px] font-bold tracking-wide text-paper uppercase no-underline hover:text-lime">{{ $probe.Title }}</a>
               <span class="rounded-full bg-ink/35 px-3 py-1.5 text-[13px] font-semibold">Stufe {{ $probe.Params.stufe }} · {{ $probe.Params.stufeName }}</span>
             </div>
-            {{ partial "court.html" (dict "d" .Params.probe.court) }}
+            {{- with $video }}
+            <div role="radiogroup" aria-label="Ansicht" class="flex gap-1.5 self-start rounded-full bg-ink/35 p-1">
+              <label class="inline-flex min-h-11 cursor-pointer items-center rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+                <input type="radio" name="probe-ansicht" id="probe-court" class="sr-only" checked>Court
+              </label>
+              <label class="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-4 text-sm font-bold has-[:checked]:bg-paper has-[:checked]:text-ink has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-lime">
+                <input type="radio" name="probe-ansicht" id="probe-video" class="sr-only">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-4") }}Video
+              </label>
+            </div>
+            {{- end }}
+            <div class="{{ if $video }}group-has-[#probe-video:checked]/probe:hidden{{ end }}">
+              {{ partial "court.html" (dict "d" .Params.probe.court) }}
+            </div>
+            {{- with $video }}
+            <div class="hidden overflow-hidden rounded-2xl bg-ink group-has-[#probe-video:checked]/probe:block">
+              <video class="block aspect-video w-full bg-ink" controls preload="none" playsinline poster="{{ .Params.poster | relURL }}" aria-label="{{ .Title }}">
+                <source src="{{ .Params.datei | relURL }}" type="video/mp4">
+                <a href="{{ .Params.datei | relURL }}">Video herunterladen (MP4)</a>
+              </video>
+            </div>
+            {{- end }}
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {{- range .Params.probe.fakten }}
               <div class="rounded-[14px] bg-ink/30 p-3.5">
@@ -39,7 +60,8 @@
               </div>
               {{- end }}
             </div>
-          </a>
+            <a href="{{ partial "fn/href.html" $probe }}" class="link-light inline-flex min-h-11 items-center gap-1.5 self-start font-semibold">Zur Lektion {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-4") }}</a>
+          </div>
         </div>
       </div>
     </section>
