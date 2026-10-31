@@ -6,7 +6,7 @@ import path from "node:path";
 import { collectCourts } from "../lib/courts.mjs";
 import { szene, NETZ_MITTE } from "../video/szene.mjs";
 import { zeitplan } from "../video/zeitplan.mjs";
-import { KAMERAS } from "../video/kameras.mjs";
+import { KAMERAS, kamera } from "../video/kameras.mjs";
 import { clipLaden } from "../video/render.mjs";
 
 export const name = "Video-Szenen";
@@ -46,7 +46,7 @@ export default async ({ root, pub, htmlFiles }) => {
       const c = clipLaden(n);
       for (const a of c.buch.abschnitte) {
         const k = a.kamera ?? a.fahrt;
-        if (!KAMERAS[k]) errors.push(`clips/${f}: unbekannte Kamera „${k}“ (erlaubt: ${Object.keys(KAMERAS).join(", ")})`);
+        if (!kamera(k)) errors.push(`clips/${f}: unbekannte Kamera „${k}“ (erlaubt: ${Object.keys(KAMERAS).join(", ")})`);
       }
       for (const fmt of c.formate) if (!["quer", "short"].includes(fmt)) errors.push(`clips/${f}: unbekanntes Format „${fmt}“`);
       const plan = zeitplan(szene(c.d), c.buch);

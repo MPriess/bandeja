@@ -17,6 +17,12 @@ function tiefster(sz) {
 }
 export const seiteVonDu = (sz) => (du(sz)?.seite ?? 1);
 
+// "nah-a", "nah-q", … : the close-up on another player.
+export function kamera(name) {
+  const m = /^nah-([pqab])$/.exec(name);
+  return m ? (sz, f, t) => KAMERAS.nah(sz, f, t, m[1]) : KAMERAS[name];
+}
+
 export const KAMERAS = {
   oben: (sz, f) => {
     const s = seiteVonDu(sz);
@@ -48,9 +54,10 @@ export const KAMERAS = {
       : { pos: [s * x, 2.4, z], ziel: [-s * 4, 1.0, p.z * 0.25], fov: 44, folgen: true };
   },
   // Close-up of you from the front-side (for details and for close shots in scripts).
-  nah: (sz, f, t) => {
-    const s = seiteVonDu(sz);
-    const p = position(du(sz), t);
+  nah: (sz, f, t, id = "p") => {
+    const person = sz.personen.find((x) => x.id === id) ?? du(sz);
+    const s = person.seite;
+    const p = position(person, t);
     return { pos: [p.x - s * 3.2, 1.7, p.z + 1.6], ziel: [p.x, 1.25, p.z], fov: f === "short" ? 55 : 35, folgen: true };
   },
   // Over your shoulder: what you see on court.

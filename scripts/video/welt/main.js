@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { baueCourt, baueLicht, baueMarkierungen, baueUmgebung, FARBEN } from "./court.js";
 import { Steuerung } from "./steuerung.js";
 import { szene, ballBei } from "../szene.mjs";
-import { KAMERAS, FORMATE, fahrt } from "../kameras.mjs";
+import { kamera, FORMATE, fahrt } from "../kameras.mjs";
 import { zeitplan, bei, KAMERA_NAMEN, VORLAUF } from "../zeitplan.mjs";
 
 let R, scene, cam, steuerung, sz, plan, job, ballMesh, schatten, spur, ringe, ebene;
@@ -117,7 +117,7 @@ window.vorbereiten = async (j) => {
 // after the hit and out before the ball arrives, so the camera never jerks.
 const FOLGT = { tv: [0.12, 0.25], seite: [0.25, 0.1], schraeg: [0.12, 0.2] };
 function kameraBei(name, t) {
-  const k = KAMERAS[name](sz, job.format, t);
+  const k = kamera(name)(sz, job.format, t);
   const f = FOLGT[name];
   if (!f) return k;
   for (const b of sz.baelle) {
