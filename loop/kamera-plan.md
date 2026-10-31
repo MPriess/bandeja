@@ -25,14 +25,21 @@ Erst mit JavaScript (three.js im Headless-Chromium, Bild für Bild, ffmpeg). Ein
 
 ## Schritte
 
-- [ ] Szene: Grafik → Meter, Zeiten wie `court.html`, Ballhöhe nach Schlagtyp (Netz überquert > 0,88 m), Wandkontakt, Schlagender und Annehmender
-- [ ] Court in 3D: Kunstrasen, Linien, Netz mit Pfosten, Glaswände, Gitter, Licht und Schatten
-- [ ] Schläger nach Regelmaß (45,5 × 26 cm, 38 mm, Lochmuster, Griff, Schlaufe)
-- [ ] Spieler: Körper mit Skelett, Kleidung je Team, Arme und Beine per IK
-- [ ] Posen: Bereitschaft, Laufen, Seitschritt; Schläge Vorhand, Rückhand, Volley, Aufschlag, Bandeja, Vibora, Smash, Lob, Chiquita
-- [ ] Kameras und Fahrten, beide Formate
-- [ ] Einblendungen: Titel, Text je Abschnitt, Abspann mit Logo; im Short sichere Ränder
-- [ ] Render-CLI mit ffmpeg (H.264, yuv420p, faststart), Vorschau-Modus, Standbild
-- [ ] Drehbücher: Format `clips/*.yaml`, Standard-Drehbuch, erste Clips (Aufschlag, Lob, Bandeja, Vibora, Smash, Rückwand)
-- [ ] Prüfung: Szene-Selbsttest (Zeiten = Seite, Ballhöhen) in `npm run check`, ohne Rendern
-- [ ] `PFLEGE.md`: Abschnitt „Videos erzeugen“
+- [x] Szene: Grafik → Meter, Zeiten wie `court.html`, Ballhöhe nach Schlagtyp (Netz überquert > 0,88 m), Wandkontakt, Schlagender und Annehmender
+- [x] Court in 3D: Kunstrasen, Linien, Netz mit Pfosten, Glaswände, Gitter, Licht und Schatten
+- [x] Schläger nach Regelmaß (45,5 × 26 cm, 38 mm, Lochmuster, Griff, Schlaufe)
+- [x] Spieler: Körper mit Skelett, Kleidung je Team, Arme und Beine per IK
+- [x] Posen: Bereitschaft, Laufen, Seitschritt; Schläge Vorhand, Rückhand, Volley, Aufschlag, Bandeja, Vibora, Smash, Lob, Chiquita
+- [x] Kameras und Fahrten, beide Formate
+- [x] Einblendungen: Titel, Text je Abschnitt, Abspann mit Logo; im Short sichere Ränder
+- [x] Render-CLI mit ffmpeg (H.264, yuv420p, faststart), Vorschau-Modus, Standbild
+- [x] Drehbücher: Format `clips/*.yaml`, Standard-Drehbuch, erste Clips (Aufschlag, Lob, Bandeja, Vibora, Smash, Rückwand)
+- [x] Prüfung: Szene-Selbsttest (Zeiten = Seite, Ballhöhen) in `npm run check`, ohne Rendern
+- [x] `PFLEGE.md`: Abschnitt „Videos erzeugen“
+
+## Nächste Runde
+
+- [ ] Volle Renders aller Clips prüfen (Kontaktbogen je Clip), Auffälligkeiten beheben
+- [ ] Renderzeit senken (Screenshot als JPEG oder Canvas direkt auslesen; Ziel < 1 s pro Bild in 1080p)
+- [ ] Laufen: Seitschritte statt Vorwärtslauf, wenn der Weg quer zur Blickrichtung geht (Bandeja Kapitel 2, Smash Kapitel 2)
+- [ ] Gegner und Partner reagieren (Split-Step beim gegnerischen Schlag, Blick zum Ball) – teilweise erledigt (Blick)

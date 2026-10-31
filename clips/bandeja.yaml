@@ -1,0 +1,9 @@
+titel: Die Bandeja
+quelle: content/lektionen/bandeja/kapitel-6.md
+ablauf:
+  - { kamera: oben, dauer: 2.2, ab: start, text: "Bandeja aus der Netzposition" }
+  - { fahrt: hinten, dauer: 1.6, ab: start }
+  - { kamera: hinten, abspielen: true, ab: start, text: "Nach dem Schlag sofort zurück ans Netz" }
+  - { kamera: seite, abspielen: true, ab: start, tempo: 0.5 }
+  - { kamera: tv, abspielen: true, ab: start }
+abspann: { text: "Ganze Lektion: Die Bandeja" }

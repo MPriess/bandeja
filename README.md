@@ -37,6 +37,7 @@ Wie du Inhalte anlegst, prüfst und Court-Grafiken baust, steht in [PFLEGE.md](P
 | `content/wissen/<kategorie>/` | Die 100 Wissensseiten; Farben der Kategorie in `_index.md` |
 | `layouts/_partials/ui/` | Basis-Bausteine: Button, Icon, Chip, Logo, Fortschrittsbalken |
 | `layouts/_partials/court.html` | Der Padelcourt als SVG (Positionen, Flugbahn, Zielzonen) |
+| `scripts/video/`, `clips/` | Court-Videos (MP4) mit Spielern und Kameras, `npm run video` – nur zum Erzeugen, nicht auf der Seite |
 | `assets/css/main.css` | Tailwind-Import, Design-Tokens (`@theme`), Schriften, Zähler |
 
 ## Interaktion ohne JavaScript

@@ -43,11 +43,20 @@ const len = (pts) => pts.reduce((l, p, i) => (i ? l + Math.hypot(p.x - pts[i - 1
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const smooth = (t) => t * t * (3 - 2 * t);
 
+// Path length exactly as court.html measures it: straight lines between the end points of the
+// commands (M, L, Q, C), not the curve itself – so video and site share the same timing.
+export function sehnenLaenge(d) {
+  const { start, segs } = parsePath(d);
+  let l = 0, p = start;
+  for (const s of segs) { const e = s.p.at(-1); l += Math.hypot(e.x - p.x, e.y - p.y); p = e; }
+  return l;
+}
+
 // Time of flight like court.html: path length / speed, 0.8–4 s.
 export function flugzeit(d, typ) {
   const v = TEMPO[typ];
   if (!d || !v) return 0;
-  return clamp(len(sample(d)) / PX / v, 0.8, 4);
+  return clamp(sehnenLaenge(d) / PX / v, 0.8, 4);
 }
 
 // Samples a path evenly by arc length: [{x, y, s}] with s from 0 to 1.
@@ -152,7 +161,7 @@ export function szene(d) {
   const typ = d.type ?? "schlag";
   const F = d.ball ? flugzeit(d.ball, TEMPO[typ] ? typ : "schlag") : 0;
   const F2 = d.ball2 ? flugzeit(d.ball2, TEMPO[d.typ2 ?? typ] ? d.typ2 ?? typ : "schlag") : 0;
-  const M = d.mv ? Math.max(0.8, len(sample(d.mv)) / LAUF_PX) : 0;
+  const M = d.mv ? Math.max(0.8, sehnenLaenge(d.mv) / LAUF_PX) : 0;
   let own = true;
   if (d.ball) {
     const s = parsePath(d.ball).start;
@@ -199,7 +208,7 @@ export function szene(d) {
       const rec = naechste(d, ziel.x, ziel.y, ["p", "q", "a", "b"]);
       if (rec.k && rec.k !== wer && rec.dist < 90) {
         const tz = t0 + (t1 - t0) * w.sZiel;
-        schlaege.push({ wer: rec.k, t: tz, art: annahme(btyp), ball: null, kontakt: w.punkte.find((p) => p.s >= w.sZiel) ?? w.punkte.at(-1) });
+        schlaege.push({ wer: rec.k, t: tz, art: d.annahme ?? annahme(btyp), ball: null, kontakt: w.punkte.find((p) => p.s >= w.sZiel) ?? w.punkte.at(-1) });
       }
     }
   };

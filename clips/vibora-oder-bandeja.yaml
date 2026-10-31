@@ -1,4 +1,14 @@
 # Drehbuch: Bandeja oder Vibora?
+# quelle: Datei mit der Court-Grafik (optional mit #pfad, z. B. #diag)
+# court: Felder, die nur im Video gelten (hier: du spielst die Vibora)
 titel: Bandeja oder Vibora?
 quelle: content/lektionen/die-vibora/kapitel-1.md
+court: { annahme: vibora }
 formate: [quer, short]
+ablauf:
+  - { kamera: oben, dauer: 2.4, ab: start, text: "Der Gegner lobt etwas zu kurz." }
+  - { fahrt: tv, dauer: 1.6, ab: start }
+  - { kamera: tv, abspielen: true, ab: start, text: "Gelegenheit für die Vibora" }
+  - { kamera: seite, abspielen: true, ab: 0.4, tempo: 0.5, text: "Treffpunkt vor dem Körper, Seitschnitt" }
+  - { kamera: hinten, abspielen: true, ab: start, text: "Ziel: das Seitenglas" }
+abspann: { text: "Ganze Lektion: Die Vibora", dauer: 2.5 }

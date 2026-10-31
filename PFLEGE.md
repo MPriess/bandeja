@@ -73,6 +73,70 @@ Eine Grafik ist eine Liste von Koordinaten im Feld 440 × 230 (Court von oben, N
 
 Ballflug und Laufweg werden in Artikeln und Lektionen automatisch animiert. Die Prüfung meldet, wenn etwas den Padel-Regeln widerspricht, z. B. „Aufschläger steht vor seiner Aufschlaglinie“. Alle Regeln stehen in `loop/regeln.md`.
 
+## Court-Videos erzeugen (MP4)
+
+Aus jeder Court-Grafik lässt sich ein Video mit Spielern, Schlägern und mehreren Kameras machen: quer (1920 × 1080) für die Seite und hochkant (1080 × 1920) für YouTube Shorts. Das läuft nur auf deinem Rechner, nicht auf der Seite (dort bleibt alles ohne JavaScript). Nötig sind `ffmpeg` und Playwright mit Chromium (einmalig: `npm install --no-save playwright` und `npx playwright install chromium`).
+
+```bash
+npm run video -- vibora-oder-bandeja
+```
+
+Rendert `clips/vibora-oder-bandeja.yaml` in beiden Formaten nach `video-out/` (MP4 und Vorschaubild). Der Ordner kommt nicht ins Git.
+
+```bash
+npm run video -- vibora-oder-bandeja --vorschau
+```
+
+Halbe Größe, 15 Bilder pro Sekunde – zum schnellen Anschauen.
+
+```bash
+npm run video -- smash --standbild 1.2 --kamera seite
+```
+
+Ein einzelnes Bild bei 1,2 s aus einer Kamera, zum Prüfen von Schlag und Ausschnitt.
+
+```bash
+npm run video -- --quelle content/wissen/schlagtechniken/t11.md
+```
+
+Video direkt aus einer Grafik mit dem Standard-Ablauf, ohne Drehbuch.
+
+```bash
+npm run videos
+```
+
+Alle Drehbücher in `clips/`.
+
+### Drehbuch (`clips/<name>.yaml`)
+
+| Feld | Bedeutung |
+| --- | --- |
+| `titel` | Großer Titel am Anfang |
+| `quelle` | Datei mit der Court-Grafik, bei mehreren Grafiken mit `#pfad`, z. B. `content/schnellstart.md#schritte[4].court` |
+| `court` | Felder, die nur im Video gelten, z. B. `{ annahme: vibora }` (welchen Schlag du am Treffpunkt spielst) oder `{ hoehe: [1, 6.5, 0] }` (Ballhöhe Start, Scheitel, Ende in Metern) |
+| `formate` | `[quer, short]` (Standard) oder nur eines davon |
+| `ablauf` | Abschnitte nacheinander (fehlt er, gilt der Standard-Ablauf) |
+| `abspann` | `{ text, dauer }` oder `false` |
+
+Ein Abschnitt im `ablauf`:
+
+| Feld | Bedeutung |
+| --- | --- |
+| `kamera` | `oben`, `tv`, `seite`, `schraeg`, `hinten` (hinter dir, durchs Glas), `spieler` (über deine Schulter) |
+| `fahrt` | statt `kamera`: weiche Kamerafahrt von der vorigen Kamera zu dieser |
+| `abspielen` | `true`: die Spielszene läuft; sonst steht sie |
+| `ab` | `start` (Szene von vorn), `ende` oder eine Sekundenzahl |
+| `tempo` | z. B. `0.5` für Zeitlupe (im Video als „Zeitlupe“ markiert) |
+| `dauer` | Sekunden; bei `abspielen` ergibt sie sich sonst aus der Szene |
+| `text` | Einblendung in diesem Abschnitt |
+
+Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf der Seite. Die Ballhöhe ergibt sich aus `type` (ein Lob steigt auf 6,5 m, eine Bandeja fällt ab 2,3 m). `npm run check` prüft alle Szenen und Drehbücher, ohne zu rendern: Ball über dem Netz, nie unter dem Boden, Shorts höchstens 60 s.
+
+### Hochladen
+
+- **YouTube Shorts:** die Datei `…-short.mp4` hochladen. Text steht oben, unten und rechts bleibt Platz für die YouTube-Knöpfe. Musik in YouTube hinzufügen (Lizenzen).
+- **Seite:** MP4-Dateien nicht ins Git. Auf YouTube hochladen und wie bisher unter `content/videos/` eintragen.
+
 ## Einnahmen (standardmäßig aus)
 
 Alle Bausteine sind in `hugo.toml` unter `[params.monetarisierung]` ausgeschaltet. Einschalten erst, wenn Impressum, Datenschutz und Partnerprogramm rechtlich geklärt sind.

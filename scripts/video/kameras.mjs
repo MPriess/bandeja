@@ -9,13 +9,19 @@ export const FORMATE = {
 };
 
 const du = (sz) => sz.personen.find((p) => p.id === "p") ?? sz.personen[0];
+// Deepest |x| du reaches (own position, path, step towards a ball).
+function tiefster(sz) {
+  const d = du(sz);
+  const xs = [d.pos.x, ...(d.weg?.punkte ?? []).map((q) => q.x), ...sz.schlaege.filter((s) => s.wer === d.id).map((s) => s.kontakt.x)];
+  return Math.max(...xs.map(Math.abs));
+}
 export const seiteVonDu = (sz) => (du(sz)?.seite ?? 1);
 
 export const KAMERAS = {
   oben: (sz, f) => {
     const s = seiteVonDu(sz);
     return f === "short"
-      ? { pos: [0, 40, 0], ziel: [0, 0, 0], up: [-s, 0, 0], fov: 33 }
+      ? { pos: [-s * 2.4, 40, 0], ziel: [-s * 2.4, 0, 0], up: [-s, 0, 0], fov: 37 }
       : { pos: [0, 40, 0], ziel: [0, 0, 0], up: [0, 0, -1], fov: 19 };
   },
   tv: (sz, f) => {
@@ -24,16 +30,21 @@ export const KAMERAS = {
       ? { pos: [s * 17, 10.5, 0], ziel: [-s * 1.5, 0, 0], fov: 62 }
       : { pos: [s * 18, 8, 0], ziel: [-s * 0.5, 0.4, 0], fov: 40 };
   },
-  seite: (sz, f) => (f === "short" ? { pos: [0, 7, 19], ziel: [0, 0.6, 0], fov: 46 } : { pos: [0, 3.6, 13], ziel: [0, 1.2, 0], fov: 50 }),
+  seite: (sz, f) => (f === "short" ? { pos: [seiteVonDu(sz) * 5, 4.2, 16], ziel: [seiteVonDu(sz) * 0.8, 1.3, 0], fov: 62 } : { pos: [0, 3.6, 13], ziel: [0, 1.2, 0], fov: 50 }),
   schraeg: (sz, f) => {
     const s = seiteVonDu(sz);
     return f === "short" ? { pos: [s * 15, 13, 13], ziel: [0, 0.5, 0], fov: 58 } : { pos: [s * 16, 10, 13], ziel: [-s * 0.5, 0.5, 0], fov: 40 };
   },
-  // Low, just inside your back glass, centred on you.
+  // Behind you like a spectator behind the back glass: below the top rail (3 m), between two posts
+  // (posts stand at odd z), at least 3 m behind the deepest point you reach.
   hinten: (sz, f, t) => {
     const s = seiteVonDu(sz);
     const p = position(du(sz), t);
-    return { pos: [s * 9.7, 3.0, p.z * 0.5], ziel: [-s * 4, 0.9, p.z * 0.2], fov: f === "short" ? 78 : 56, folgen: true };
+    const x = Math.max(12.5, tiefster(sz) + 3.3);
+    const z = Math.round((f === "short" ? p.z * 0.9 : p.z * 0.5) / 2) * 2;
+    return f === "short"
+      ? { pos: [s * x, 2.4, z], ziel: [-s * 4, 0.7, p.z * 0.75], fov: 60, folgen: true }
+      : { pos: [s * x, 2.4, z], ziel: [-s * 4, 1.0, p.z * 0.25], fov: 44, folgen: true };
   },
   // Over your shoulder: what you see on court.
   spieler: (sz, f, t) => {
