@@ -13,7 +13,7 @@
           <p class="m-0 inline-flex items-center gap-2.5 self-start text-sm font-semibold tracking-[0.08em] text-fog-2 uppercase">
             <span class="size-2.5 rounded-full bg-lime"></span>Online-Padelschule · offen für alle
           </p>
-          <h1 class="m-0 font-display text-[64px] leading-[0.9] font-extrabold tracking-tight uppercase sm:text-[84px] lg:text-[104px]">
+          <h1 class="m-0 font-display text-[64px] leading-none font-extrabold tracking-tight uppercase sm:text-[84px] lg:text-[104px]">
             Lerne Padel.<br><span class="text-lime">Schlag für Schlag.</span>
           </h1>
           <p class="m-0 max-w-[520px] text-xl leading-relaxed text-fog">Vom ersten Aufschlag bis zur Vibora: Lektionen mit Court-Grafiken, Drills für deinen Platz und ein Lernpfad in vier Stufen.</p>
@@ -50,7 +50,7 @@
         <div class="flex flex-wrap items-end justify-between gap-6">
           <div class="flex max-w-[640px] flex-col gap-3">
             {{ partial "ui/eyebrow.html" (dict "text" "Dein Lernpfad") }}
-            <h2 class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-[64px]">Vier Stufen vom ersten Ballwechsel zum Turnier</h2>
+            <h2 class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-[64px]">Vier Stufen vom ersten Ballwechsel zum Turnier</h2>
           </div>
           <p class="m-0 max-w-[400px] text-[17px] leading-relaxed text-mute">Starte dort, wo du stehst – jede Stufe ist frei zugänglich. Am Ende jeder Stufe zeigt dir der Stufen-Check, ob alles sitzt.</p>
         </div>
@@ -91,7 +91,7 @@
     <section id="lektionen" class="bg-white px-6 py-24">
       <div class="mx-auto flex max-w-[1240px] flex-col gap-10">
         <div class="flex flex-wrap items-end justify-between gap-4">
-          <h2 class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-[64px]">{{ .Params.auswahlTitel | default "Lektionen" }}</h2>
+          <h2 class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-[64px]">{{ .Params.auswahlTitel | default "Lektionen" }}</h2>
           <a href="{{ "lernpfad/" | relURL }}" class="inline-flex min-h-11 items-center text-base font-semibold">Ganzen Lernpfad ansehen →</a>
         </div>
         <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
@@ -120,7 +120,7 @@
     <section id="offen" class="px-6 py-24">
       <div class="mx-auto flex max-w-[1240px] flex-col gap-10">
         <div class="flex flex-col items-center gap-3 text-center">
-          <h2 class="m-0 font-display text-5xl leading-[0.95] font-extrabold uppercase md:text-[64px]">Offen für alle</h2>
+          <h2 class="m-0 font-display text-5xl leading-none font-extrabold uppercase md:text-[64px]">Offen für alle</h2>
           <p class="m-0 max-w-[560px] text-[17px] leading-relaxed text-mute">Kein Konto, keine Anmeldung, keine Zahlungsdaten. Öffne einfach die Seite, die du brauchst.</p>
         </div>
         <div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] items-stretch gap-5">

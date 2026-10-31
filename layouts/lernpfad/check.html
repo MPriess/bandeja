@@ -27,7 +27,7 @@
         </div>
         <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-4">
           {{ partial "ui/eyebrow.html" (dict "text" (printf "Stufen-Check · %s" $level.Title) "class" "text-lime") }}
-          <h1 class="m-0 font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-[88px]">{{ $level.Params.checkTitle }}</h1>
+          <h1 class="m-0 font-display text-6xl leading-none font-extrabold uppercase md:text-[88px]">{{ $level.Params.checkTitle }}</h1>
           <p class="m-0 max-w-[560px] text-lg leading-relaxed text-fog">Geh die Punkte ehrlich durch. Was du abhaken kannst, sitzt. Was noch hakt, wiederholst du mit den passenden Lektionen. Nichts davon wird gespeichert – die Liste ist nur für dich.</p>
         </div>
       </div>

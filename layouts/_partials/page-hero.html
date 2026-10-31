@@ -2,7 +2,7 @@
 <section class="bg-ink px-6 pt-10 pb-16 text-paper">
   <div class="mx-auto flex max-w-[1240px] flex-col gap-6">
     {{ partial "ui/eyebrow.html" (dict "text" .eyebrow "class" "text-lime") }}
-    <h1 class="m-0 max-w-[960px] font-display text-6xl leading-[0.9] font-extrabold uppercase md:text-8xl">{{ .title }}</h1>
+    <h1 class="m-0 max-w-[960px] font-display text-6xl leading-none font-extrabold uppercase md:text-8xl">{{ .title }}</h1>
     {{- with .text }}<p class="m-0 max-w-[640px] text-[19px] leading-relaxed text-fog">{{ . }}</p>{{ end }}
   </div>
 </section>
