@@ -39,7 +39,7 @@ export function collectCourts(root) {
     const fm = frontMatter(file);
     (fm.schritte ?? []).forEach((st, i) => { if (st.court) out.push({ file: rel, where: `schritte[${i}].court`, kind: "schnellstart", d: st.court }); });
     if (fm.vorschau) out.push({ file: rel, where: "vorschau", kind: "vorschau", d: fm.vorschau });
-    if (fm.probe?.court) out.push({ file: rel, where: "probe.court", kind: "start", d: fm.probe.court });
+    (fm.situationen ?? []).forEach((st, i) => { if (st.court) out.push({ file: rel, where: `situationen[${i}].court`, kind: "start", d: st.court }); });
     if (fm.diag) out.push({ file: rel, where: "diag", kind: "wissen", d: fm.diag });
     if (rel.startsWith("content/lektionen/") && fm.layout !== "quiz" && !rel.endsWith("_index.md")) {
       out.push({ file: rel, where: "court", kind: "kapitel", d: { ...KAPITEL_DEFAULTS, ...(fm.court ?? {}) } });
