@@ -6,9 +6,9 @@ quelle: content/lektionen/die-vibora/kapitel-1.md
 court: { annahme: vibora }
 formate: [quer, short]
 ablauf:
-  - { kamera: oben, dauer: 2.4, ab: start, text: "Der Gegner lobt etwas zu kurz." }
-  - { fahrt: tv, dauer: 1.6, ab: start }
-  - { kamera: tv, abspielen: true, ab: start, text: "Gelegenheit für die Vibora" }
-  - { kamera: seite, abspielen: true, ab: 0.4, tempo: 0.5, text: "Treffpunkt vor dem Körper, Seitschnitt" }
-  - { kamera: hinten, abspielen: true, ab: start, text: "Ziel: das Seitenglas" }
+  - { kamera: oben, dauer: 2.4, ab: start, text: "Der Gegner lobt etwas zu kurz.", sprecher: "Der Gegner lobt etwas zu kurz." }
+  - { fahrt: tv, dauer: 1.6, ab: start, sprecher: "Deine Chance." }
+  - { kamera: tv, abspielen: true, ab: start, text: "Gelegenheit für die Vibora", sprecher: "Die Vibora: mehr Tempo als die Bandeja." }
+  - { kamera: seite, abspielen: true, ab: 0.4, tempo: 0.5, text: "Treffpunkt vor dem Körper, Seitschnitt", sprecher: "Triff den Ball seitlich vor dem Körper, mit Seitschnitt." }
+  - { kamera: hinten, abspielen: true, ab: start, text: "Ziel: das Seitenglas", sprecher: "Ziel ist das Seitenglas in der gegnerischen Ecke." }
 abspann: { text: "Ganze Lektion: Die Vibora", dauer: 2.5 }

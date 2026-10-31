@@ -131,7 +131,7 @@ Ein Abschnitt im `ablauf`:
 | `tempo` | z. B. `0.5` für Zeitlupe (im Video als „Zeitlupe“ markiert) |
 | `dauer` | Sekunden; bei `abspielen` ergibt sie sich sonst aus der Szene |
 | `text` | Einblendung in diesem Abschnitt |
-| `sprecher` | Text für den Voice-over in diesem Abschnitt |
+| `sprecher` | Text für den Voice-over in diesem Abschnitt (ohne eigenen `ablauf`: als Liste `sprecher:` oben im Drehbuch, je Abschnitt des Standard-Ablaufs eine Zeile) |
 
 Die Zeiten von Ballflug und Laufweg sind dieselben wie in den Animationen auf der Seite. Die Ballhöhe ergibt sich aus `type` (ein Lob steigt auf 6,5 m, eine Bandeja fällt ab 2,3 m). `npm run check` prüft alle Szenen und Drehbücher in 3D, ohne zu rendern: Ball über dem Netz (mit Durchhang), erst Boden dann Wand, höchstens ein Aufprall, nie durchs Glas oder über die Wand; Aufschlag höchstens in Hüfthöhe und ins diagonale Feld; der Schläger trifft den Ball (± 10 cm), der Ball fliegt durch niemanden, niemand läuft ans Netz oder in die Wand; Shorts höchstens 60 s. `npm run video` rendert nur Szenen, die diese Regeln einhalten.
 
@@ -148,7 +148,19 @@ Voice-over, Schritt für Schritt:
 npm run video -- aufschlag --sprechertext
 ```
 
-3. Je Abschnitt eine Aufnahme ablegen: `clips/sprache/aufschlag/1.wav`, `2.wav` … (auch `.mp3`, `.m4a`). Eigene Stimme oder ein Sprachdienst (z. B. ElevenLabs, Piper) – Nutzungsrechte der Stimme beachten.
+3. Je Abschnitt eine Aufnahme ablegen: `clips/sprache/aufschlag/1.wav`, `2.wav` … (auch `.mp3`, `.m4a`). Eigene Stimme oder ein Sprachdienst – Nutzungsrechte der Stimme beachten. Alle Texte stehen gesammelt in `clips/SPRECHERTEXTE.md` (neu erzeugen mit `npm run sprache -- --text`). Automatisch vertonen auf deinem Rechner:
+
+```bash
+npm run sprache -- --alle --piper ~/piper/de_DE-thorsten-high.onnx
+```
+
+Mit [Piper](https://github.com/rhasspy/piper) (kostenlos, lokal; deutsche Stimmen z. B. `de_DE-thorsten-high`). Auf dem Mac geht auch die eingebaute Stimme:
+
+```bash
+npm run sprache -- --alle --say Anna
+```
+
+Vorhandene Aufnahmen bleiben erhalten (eigene Stimme hat Vorrang), `--neu` ersetzt sie.
 4. Neu rendern. Ist eine Aufnahme länger als ihr Abschnitt, wird der Abschnitt automatisch verlängert. Die Sprache wird auf −16 LUFS gebracht, der Jingle darunter leiser.
 
 Nur den Ton neu mischen, ohne das Bild neu zu rendern (wenn sich die Länge nicht ändert):

@@ -58,7 +58,9 @@ export function clipLaden(name) {
   const sz = szene(d);
   const std = standardDrehbuch(sz);
   // A section with a voice recording lasts at least as long as the recording.
+  // `sprecher` as a list at the top level fills the voice-over of the standard sections.
   const abschnitte = (c.ablauf ?? std.abschnitte).map((a, i) => {
+    if (Array.isArray(c.sprecher) && c.sprecher[i] && !a.sprecher) a = { ...a, sprecher: c.sprecher[i] };
     const f = sprachDatei(name, i + 1);
     return f ? { ...a, mindestens: dauerVon(f) + VO_VERSATZ + 0.4 } : a;
   });
