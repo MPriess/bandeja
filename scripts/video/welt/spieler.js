@@ -145,6 +145,7 @@ export class Spieler {
       this.kopf.rotation.set(pitch, yaw_, 0);
       this.kopf.updateMatrixWorld(true);
     }
+    this.gelenke = {};
     const rq = this.root.getWorldQuaternion(new THREE.Quaternion());
     const welt = (a) => this.root.localToWorld(v(a));
     const richtung = (a) => v(a).applyQuaternion(rq);
@@ -154,6 +155,7 @@ export class Spieler {
       const sch = this.brust.localToWorld(new THREE.Vector3(sx * MASS.schulter, MASS.schulterY, 0));
       const t = welt(ziel);
       const { mitte, ende } = zweiGlieder(sch, t, MASS.oberarm, MASS.unterarm, sch.clone().add(richtung(pol)));
+      Object.assign(this.gelenke, { [`schulter_${s}`]: sch.clone(), [`ellbogen_${s}`]: mitte.clone(), [`handgelenk_${s}`]: ende.clone() });
       const [oa, aermel] = this.glieder[`oberarm${s}`];
       zwischen(oa, sch, mitte);
       zwischen(aermel, sch, mitte, 0.15);
@@ -178,6 +180,7 @@ export class Spieler {
       if (!fuss) fuss = this.root.localToWorld(new THREE.Vector3(0, 0, 0)).add(new THREE.Vector3(sx * 0.23, 0, sx * 0.04).applyQuaternion(bq)).setY(MASS.knoechel);
       const pol = h.clone().add(vorn.clone().multiplyScalar(1)).add(new THREE.Vector3(sx * 0.15, 0, 0).applyQuaternion(bq));
       const { mitte, ende } = zweiGlieder(h, fuss, MASS.oberschenkel, MASS.unterschenkel, pol);
+      Object.assign(this.gelenke, { [`huefte_${s}`]: h.clone(), [`knie_${s}`]: mitte.clone(), [`knoechel_${s}`]: ende.clone() });
       const [os, hose] = this.glieder[`oberschenkel${s}`];
       zwischen(os, h, mitte);
       zwischen(hose, h, mitte, 0.22);
@@ -188,6 +191,12 @@ export class Spieler {
       schuh.position.copy(ende).add(vorn.clone().multiplyScalar(0.05)).add(new THREE.Vector3(0, -0.02, 0));
       schuh.rotation.set(0, Math.atan2(vorn.x, vorn.z), 0);
     }
+  }
+
+  // Joint positions in world space after stellen(): pelvis, chest, head and the limb joints.
+  gelenkeWelt() {
+    const w = (o) => o.getWorldPosition(new THREE.Vector3());
+    return { becken: w(this.becken), brust: w(this.brust), kopf: w(this.kopf), ...this.gelenke, sweetspot: this.sweetspot() };
   }
 
   #schlaegerStellen(griff, dir, norm) {

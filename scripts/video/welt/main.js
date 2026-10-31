@@ -184,3 +184,74 @@ window.bild = (tau) => {
 };
 
 window.bereit = true;
+
+// ---- Export for other tools (Blender, own analysis): data per frame and an animated glTF. ----
+
+const r3 = (v) => [+v.x.toFixed(4), +v.y.toFixed(4), +v.z.toFixed(4)];
+
+// Everything that changes, sampled at `fps`: players (root, joints, racket), ball, camera, overlay text.
+window.exportDaten = (fps = 30) => {
+  const frames = [];
+  const n = Math.round(plan.dauer * fps);
+  for (let i = 0; i < n; i++) {
+    const tau = i / fps;
+    window.bild(tau);
+    const { abschnitt: a, szeneT } = bei(plan, Math.min(tau, plan.abspann?.t0 - 1e-6 || tau));
+    frames.push({
+      bild: i, zeit: +tau.toFixed(4), szeneZeit: +Math.max(-VORLAUF, Math.min(sz.T, szeneT)).toFixed(4),
+      abschnitt: plan.abschnitte.indexOf(a) + 1, abspann: !!(plan.abspann && tau >= plan.abspann.t0),
+      kamera: { name: a.kamera, pos: r3(cam.position), blick: r3(new THREE.Vector3(0, 0, -1).applyQuaternion(cam.quaternion)), fov: +cam.fov.toFixed(2) },
+      ball: ballMesh.visible ? r3(ballMesh.position) : null,
+      spieler: Object.fromEntries(steuerung.figuren.map((f) => {
+        const g = f.figur.gelenkeWelt();
+        return [f.person.id, {
+          wurzel: r3(f.figur.root.position), yaw: +f.figur.root.rotation.y.toFixed(4),
+          gelenke: Object.fromEntries(Object.entries(g).map(([k, v]) => [k, r3(v)])),
+          schlaeger: { pos: r3(f.figur.schlaeger.position), quat: f.figur.schlaeger.quaternion.toArray().map((x) => +x.toFixed(5)) },
+        }];
+      })),
+      text: ebene.text.style.opacity > 0 ? ebene.text.textContent : null,
+    });
+  }
+  return { fps, dauer: plan.dauer, frames };
+};
+
+// The whole 3D scene as binary glTF with one animation (every moving part sampled per frame).
+window.exportGlb = async (fps = 30) => {
+  const { GLTFExporter } = await import("/node_modules/three/examples/jsm/exporters/GLTFExporter.js");
+  cam.name = "Kamera";
+  scene.add(cam);
+  ballMesh.name = "Ball";
+  const bewegt = [ballMesh, cam];
+  steuerung.figuren.forEach((f) => {
+    const id = f.person.id;
+    f.figur.gruppe.name = `Spieler_${id}`;
+    for (const [k, o] of [["wurzel", f.figur.root], ["becken", f.figur.becken], ["brust", f.figur.brust], ["kopf", f.figur.kopf], ["schlaeger", f.figur.schlaeger], ["band", f.figur.band]]) { o.name = `${id}_${k}`; bewegt.push(o); }
+    for (const [k, meshes] of Object.entries(f.figur.glieder)) meshes.forEach((m, i) => { m.name = `${id}_${k}_${i}`; bewegt.push(m); });
+  });
+  const n = Math.round(plan.dauer * fps), zeiten = [];
+  const spuren = bewegt.map(() => ({ p: [], q: [], s: [] }));
+  for (let i = 0; i < n; i++) {
+    window.bild(i / fps);
+    zeiten.push(i / fps);
+    bewegt.forEach((o, j) => {
+      spuren[j].p.push(...o.position.toArray());
+      spuren[j].q.push(...o.quaternion.toArray());
+      const sc = o === ballMesh && !o.visible ? 0 : 1;
+      spuren[j].s.push(sc, sc, sc);
+    });
+  }
+  const tracks = [];
+  bewegt.forEach((o, j) => {
+    tracks.push(new THREE.VectorKeyframeTrack(`${o.name}.position`, zeiten, spuren[j].p));
+    tracks.push(new THREE.QuaternionKeyframeTrack(`${o.name}.quaternion`, zeiten, spuren[j].q));
+    if (o === ballMesh) tracks.push(new THREE.VectorKeyframeTrack(`${o.name}.scale`, zeiten, spuren[j].s));
+  });
+  const clip = new THREE.AnimationClip("Szene", plan.dauer, tracks);
+  ballMesh.visible = true;
+  const glb = await new GLTFExporter().parseAsync(scene, { binary: true, animations: [clip], onlyVisible: false });
+  const bytes = new Uint8Array(glb);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+};

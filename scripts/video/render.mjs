@@ -75,7 +75,7 @@ export function clipLaden(name) {
 }
 
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".woff2": "font/woff2" };
-async function server() {
+export async function server() {
   const erlaubt = ["scripts/", "node_modules/three/", "node_modules/@fontsource/", "node_modules/@fontsource-variable/"];
   const s = http.createServer((req, res) => {
     const rel = decodeURIComponent(req.url.split("?")[0]).replace(/^\/+/, "");
@@ -88,7 +88,7 @@ async function server() {
   return { url: `http://127.0.0.1:${s.address().port}`, close: () => s.close() };
 }
 
-async function seite(browser, url, job, skala) {
+export async function seite(browser, url, job, skala) {
   const { breite, hoehe } = FORMATE[job.format];
   const page = await browser.newPage({ viewport: { width: breite, height: hoehe }, deviceScaleFactor: skala });
   const fehler = [];

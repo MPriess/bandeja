@@ -169,6 +169,14 @@ Nur den Ton neu mischen, ohne das Bild neu zu rendern (wenn sich die Länge nich
 npm run video -- aufschlag --nur-ton
 ```
 
+### Szene exportieren (für Blender oder eigene Auswertung)
+
+```bash
+npm run export -- vibora-oder-bandeja
+```
+
+Legt `video-out/export/vibora-oder-bandeja.zip` an: die animierte 3D-Szene als `szene.glb` (in Blender: Datei → Import → glTF 2.0), alle Bilder mit Gelenken, Schläger, Ball und Kamera als JSON und CSV, Szene, Zeitplan, Drehbuch, Sprechertext und – falls schon gerendert – das Video. Erklärung der Dateien in `LIESMICH.md` im Zip.
+
 ### Hochladen
 
 - **YouTube Shorts:** die Datei `…-short.mp4` hochladen. Text steht oben, unten und rechts bleibt Platz für die YouTube-Knöpfe. Jingle ist drin; zusätzliche Musik am besten in YouTube hinzufügen (Lizenzen).
