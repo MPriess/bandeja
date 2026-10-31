@@ -98,9 +98,9 @@
         {{- $path := index $d $part.k }}
         {{- $typ := cond (eq $part.k "ball2") (or $d.typ2 $d.type) (cond (eq $part.k "mv") "lauf" $d.type) }}
         {{- if eq $part.k "mv" }}
-  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
+  <circle class="court-anim" data-anim="mv" data-typ="lauf" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="13" fill="var(--color-ink)" stroke="var(--color-paper)" stroke-width="2.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-mv; animation-duration: {{ printf "%.3f" $T }}s"/>
         {{- else }}
-  <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ $part.from }}" data-end="{{ $part.to }}" data-cycle="{{ $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s"/>
+  <circle class="court-anim" data-anim="{{ $part.k }}" data-typ="{{ $typ }}" data-start="{{ printf "%.3f" $part.from }}" data-end="{{ printf "%.3f" $part.to }}" data-cycle="{{ printf "%.3f" $T }}" r="7" fill="var(--color-lime)" stroke="var(--color-ink)" stroke-width="1.5" style="offset-path: path('{{ $path }}'); animation-name: {{ $id }}-{{ $part.k }}; animation-duration: {{ printf "%.3f" $T }}s"/>
         {{- end }}
       {{- end }}
     {{- end }}

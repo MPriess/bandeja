@@ -1,6 +1,6 @@
 ---
 title: Schnellstart
-layout: schnellstart
+layout: schritte
 description: Alles, was du vor deiner ersten Stunde wissen musst – auf einer Seite. Lesezeit etwa zehn Minuten.
 review: true
 weiter: /lernpfad/stufe-1
@@ -36,7 +36,7 @@ schritte:
     text: Ihr steht immer als Team auf gleicher Höhe – entweder beide am Netz oder beide hinten. Wer das Netz hat, macht die Punkte. Bewegt euch zusammen, als wärt ihr mit einem Seil verbunden.
     punkte: [Beide vorn oder beide hinten, Am Netz wird gepunktet, Gemeinsam verschieben]
     court: { type: aufstellung, cap: "Netzposition: Du und dein Partner stehen nebeneinander am Netz, die Gegner hinten.", px: 268, py: 70, qx: 268, qy: 160, ax: 60, ay: 70, bx: 60, by: 160 }
-    mehr: /wissen/training/tr13
+    mehr: /stellungsspiel
   - titel: Zählen
     text: Gezählt wird wie im Tennis – 15, 30, 40, Spiel. Steht es 40:40, entscheidet oft der Golden Point – ein einziger Ball, bei dem die Rückschläger die Seite wählen.
     punkte: ["15, 30, 40, Spiel", Sechs Spiele sind ein Satz, "40:40 – oft Golden Point"]
