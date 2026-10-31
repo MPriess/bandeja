@@ -73,18 +73,13 @@ export class Spieler {
     // Rounded at the top (no flat lid that shows when the upper body leans back).
     const hose_ = drehkoerper([[0, 0.15], [0.08, 0.145], [0.13, 0.12], [0.158, 0.06], [0.166, -0.02], [0.17, -0.12], [0, -0.12]], mHose, 0.78);
     this.becken.add(hose_);
-    // Shirt collar and a stripe on the shorts in the accent colour.
+    // Shirt collar in the accent colour.
     const mAkzent = mat(akzent, 0.7);
     const kragen = new THREE.Mesh(new THREE.TorusGeometry(0.058, 0.012, 6, 20), mAkzent);
     kragen.rotation.x = Math.PI / 2;
     kragen.scale.set(1, 0.75, 1);
     kragen.position.y = 0.465;
     this.brust.add(kragen);
-    for (const sx of [-1, 1]) {
-      const streifen = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.16, 0.045), mAkzent);
-      streifen.position.set(sx * 0.166, -0.03, 0);
-      this.becken.add(streifen);
-    }
     // Head: skull, hair, nose and ears so the facing reads from far away.
     const schaedel = new THREE.Mesh(new THREE.SphereGeometry(0.1, 20, 14), mHaut);
     schaedel.scale.set(0.9, 1.12, 1);
@@ -155,6 +150,9 @@ export class Spieler {
       g(`oberarm${s}`, kapsel(0.05, MASS.oberarm, mHaut), kapsel(0.064, 0.11, mTrikot));
       g(`unterarm${s}`, kapsel(0.041, MASS.unterarm, mHaut));
       g(`hand${s}`, kapsel(0.041, 0.05, mHaut));
+      // Round joints, so elbows and knees do not show a kink between the two capsules.
+      g(`ellbogen${s}`, new THREE.Mesh(new THREE.SphereGeometry(0.046, 12, 10), mHaut));
+      g(`knie${s}`, new THREE.Mesh(new THREE.SphereGeometry(0.068, 12, 10), mHaut));
       g(`oberschenkel${s}`, kapsel(0.08, MASS.oberschenkel, mHaut), kapsel(0.097, 0.19, mHose));
       g(`unterschenkel${s}`, kapsel(0.058, MASS.unterschenkel, mHaut), kapsel(0.061, 0.1, mat(socken, 0.9)));
       const schuh = new THREE.Group();
@@ -172,6 +170,15 @@ export class Spieler {
     this.gruppe.add(this.band);
     this.schlaeger = baueSchlaeger(schlaeger);
     this.gruppe.add(this.schlaeger);
+    // Racket hand: a fist closed around the grip (lives in the racket, so it always holds it),
+    // with the thumb across the grip.
+    const faust = kapsel(0.037, 0.055, mHaut);
+    faust.scale.set(1.05, 1, 1.25);
+    faust.position.set(0, 0.045, 0);
+    const daumen = kapsel(0.013, 0.04, mHaut);
+    daumen.position.set(0.02, 0.07, 0.03);
+    daumen.rotation.z = -0.9;
+    this.schlaeger.add(faust, daumen);
   }
 
   // state: { x, z, yaw, pose, blick (world point or null), fuesse: { l, r } world ankle targets or null }
@@ -207,8 +214,11 @@ export class Spieler {
       zwischen(aermel, sch, mitte, 0.15);
       zwischen(this.glieder[`unterarm${s}`][0], mitte, ende);
       const fdir = ende.clone().sub(mitte).normalize();
+      this.glieder[`ellbogen${s}`][0].position.copy(mitte);
       const hand = this.glieder[`hand${s}`][0];
-      zwischen(hand, ende, ende.clone().add(fdir.clone().multiplyScalar(0.12)), 0.45);
+      // The racket hand is the fist in the racket; here only the wrist knuckle remains.
+      if (s === "r") zwischen(hand, ende, ende.clone().add(fdir.clone().multiplyScalar(0.04)), 0.5);
+      else zwischen(hand, ende, ende.clone().add(fdir.clone().multiplyScalar(0.12)), 0.45);
       if (s === "r") {
         zwischen(this.band, mitte, ende, 0.88);
         this.handgelenk = ende.clone();
@@ -232,6 +242,7 @@ export class Spieler {
       zwischen(hose, h, mitte, 0.22);
       const [us, socke] = this.glieder[`unterschenkel${s}`];
       zwischen(us, mitte, ende);
+      this.glieder[`knie${s}`][0].position.copy(mitte);
       zwischen(socke, mitte, ende, 0.86);
       const schuh = this.glieder[`schuh${s}`][0];
       schuh.position.copy(ende).add(vorn.clone().multiplyScalar(0.05)).add(new THREE.Vector3(0, -0.02, 0));
