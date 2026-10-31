@@ -135,7 +135,7 @@
       </section>
       {{- end }}
 
-      {{- /* Videos for this lesson: only a card here; the YouTube player sits on the video page. */}}
+      {{- /* Videos for this lesson: only a card here; the player sits on the video page. */}}
       {{- with where (site.GetPage "/videos").RegularPages.ByWeight "Params.lektion" $lesson.Path }}
       <section aria-labelledby="videos" class="flex flex-col gap-3">
         <h2 id="videos" class="m-0 ml-2 text-base font-bold">Im Video</h2>

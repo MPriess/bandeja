@@ -1,3 +1,4 @@
+// Own animations: one local <video> with controls, poster and preload="none", nothing from other hosts.
 // YouTube only behind a click (two-click solution, no JavaScript):
 // - only video pages (videos/<name>/) embed anything from another host, and only
 //   one youtube-nocookie.com player with a title;
@@ -21,7 +22,22 @@ export default async ({ pub, htmlFiles }) => {
     const rel = path.relative(pub, file);
     const frames = [...html.matchAll(/<iframe\b[^>]*>/g)].map((m) => m[0]);
     const external = [...html.matchAll(/<(?:script|img|iframe|link|source|video|audio|embed|object)\b[^>]*?\s(?:src|href|data)="?(?:https?:)?\/\/[^"\s>]+/g)].map((m) => m[0]).filter((t) => !/<link[^>]*rel="?(canonical|alternate)/.test(t));
-    if (VIDEO_PAGE.test(rel)) {
+    const videos = [...html.matchAll(/<video\b[\s\S]*?<\/video>/g)].map((m) => m[0]);
+    if (VIDEO_PAGE.test(rel) && videos.length) {
+      // Own animation: exactly one local <video>, nothing loads before play, nothing from other hosts.
+      players += videos.length;
+      if (videos.length !== 1 || frames.length) errors.push(`${rel}: genau ein eigener Player und kein <iframe> erwartet`);
+      const v = videos[0], tag = v.match(/<video\b[^>]*>/)[0];
+      const attr = (t, k) => t.match(new RegExp(`\\s${k}=(?:"([^"]*)"|([^\\s>]+))`))?.slice(1).find((x) => x !== undefined);
+      const lokal = (u) => u && !/^(https?:)?\/\//.test(u) && fs.existsSync(path.join(pub, decodeURIComponent(u.split("?")[0])));
+      if (!/\scontrols[\s>=]/.test(tag)) errors.push(`${rel}: <video> ohne controls`);
+      if (attr(tag, "preload") !== "none") errors.push(`${rel}: <video> lädt vor dem Abspielen (preload="none" fehlt)`);
+      if (!lokal(attr(tag, "poster"))) errors.push(`${rel}: Vorschaubild (poster) fehlt oder liegt nicht auf der Seite`);
+      if (!attr(tag, "aria-label")) errors.push(`${rel}: <video> ohne aria-label (Screenreader)`);
+      const src = v.match(/<source\b[^>]*>/)?.[0];
+      if (!src || !lokal(attr(src, "src")) || attr(src, "type") !== "video/mp4") errors.push(`${rel}: <source> fehlt, liegt nicht auf der Seite oder ist kein video/mp4`);
+      if (external.length) errors.push(`${rel}: eigene Animation lädt etwas von anderen Hosts`);
+    } else if (VIDEO_PAGE.test(rel)) {
       players += frames.length;
       if (frames.length !== 1) errors.push(`${rel}: ${frames.length} Player statt genau 1`);
       for (const f of frames) {

@@ -46,6 +46,7 @@ Wie du Inhalte anlegst, prüfst und Court-Grafiken baust, steht in [PFLEGE.md](P
 - **Quiz-Punktzahl** und **Treffer im Drill**: CSS-Counter (`.tally` in `main.css`).
 - **Neu starten**: `<button type="reset">`.
 - Nichts wird gespeichert; Kapitel, Stufen und Seiten sind einfache Links.
+- **Eigene 3D-Animationen** (`static/media/animationen/`): lokales `<video>` mit `preload="none"` – lädt erst beim Abspielen, nichts von Dritten.
 - **YouTube-Videos per Zwei-Klick**: Lektionen und `/videos/` zeigen nur eine Karte. Der Player (youtube-nocookie.com) steckt allein auf der Video-Seite `/videos/<name>/`, die nie vorgeladen wird. Alle anderen Seiten laden nichts von Drittanbietern; `npm run check` prüft das.
 
 Schriften (Barlow Condensed, Inter) werden über `@fontsource` selbst gehostet – keine Anfragen an Drittanbieter.

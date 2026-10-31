@@ -3,6 +3,8 @@
 title: "Situation: der Schlag"
 description: Ein Satz, was das Video zeigt und wer es erklärt.
 weight: 10
+# Eigene Animation statt YouTube: youtube weglassen, dafür
+# datei: media/animationen/<clip>.mp4 und poster: media/animationen/<clip>.jpg (npm run videos:web)
 # Video-ID: der Teil nach v= in der YouTube-Adresse
 youtube: XXXXXXXXXXX
 # Optional: Start und Ende in Sekunden, um genau die Szene zu zeigen

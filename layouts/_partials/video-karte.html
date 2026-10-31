@@ -1,14 +1,18 @@
 {{- /*
   Card that links to a video page. Loads nothing from YouTube: the player only appears on the
-  video page itself (two-click solution). The link carries .ohne-vorladen so hovering does not
+  video page itself (two-click solution). Own animations (`datei`) show their local poster. The link carries .ohne-vorladen so hovering does not
   prerender the page (and with it the YouTube player).
   Usage: partial "video-karte.html" (dict "page" $video "level" 3)   (level: heading level, 2 or 3)
 */ -}}
 {{- $v := .page -}}
+{{- $eigen := isset $v.Params "datei" -}}
 <a href="{{ $v.RelPermalink }}" class="ohne-vorladen flex flex-col gap-3 rounded-[22px] border border-line bg-white p-6 text-ink no-underline hover:border-ink hover:text-ink">
+  {{- with and $eigen $v.Params.poster }}
+  <img src="{{ . | relURL }}" alt="" width="1280" height="720" loading="lazy" decoding="async" class="block aspect-video w-full rounded-2xl bg-ink object-cover">
+  {{- end }}
   <span class="flex items-center gap-2.5">
     <span class="inline-flex size-10 flex-none items-center justify-center rounded-full bg-ink text-lime">{{ partial "ui/icon.html" (dict "name" "play" "class" "size-[22px]") }}</span>
-    {{ partial "ui/eyebrow.html" (dict "text" "Video · Spielsituation" "class" "text-[13px] text-court") }}
+    {{ partial "ui/eyebrow.html" (dict "text" (cond $eigen "Animation · Spielsituation" "Video · Spielsituation") "class" "text-[13px] text-court") }}
   </span>
   {{- if eq .level 3 }}
   <h3 class="m-0 text-xl font-bold">{{ $v.Title }}</h3>
@@ -20,7 +24,11 @@
     {{- with $v.Params.sprache }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
     {{- with $v.Params.kanal }}{{ partial "ui/chip.html" (dict "text" .) }}{{ end }}
   </span>
+  {{- if $eigen }}
+  <span class="text-[13px] leading-normal text-mute">Eigene 3D-Animation – lädt nichts von YouTube.</span>
+  {{- else }}
   <span class="text-[13px] leading-normal text-mute">Öffnet den YouTube-Player. Erst dann werden Daten an YouTube übertragen.</span>
+  {{- end }}
   <span class="mt-auto inline-flex items-center gap-2 text-[15px] font-bold text-court">Video ansehen {{ partial "ui/icon.html" (dict "name" "arrow-right" "class" "size-[18px]") }}</span>
 </a>
 {{- /**/ -}}

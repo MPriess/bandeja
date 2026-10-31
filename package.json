@@ -10,7 +10,8 @@
     "videos": "node scripts/video/render.mjs --alle",
     "sprache": "node scripts/video/sprache.mjs",
     "export": "node scripts/video/export.mjs",
-    "referenz": "node scripts/video/referenz.mjs"
+    "referenz": "node scripts/video/referenz.mjs",
+    "videos:web": "node scripts/video/web.mjs"
   },
   "devDependencies": {
     "@fontsource-variable/inter": "5.3.0",

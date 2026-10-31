@@ -1,14 +1,19 @@
 {{ define "main" }}
 {{- /*
-  Video page = second click of the two-click solution: only this page embeds YouTube
-  (youtube-nocookie.com). Links to it carry .ohne-vorladen and the speculation rules exclude it,
-  so it is never prerendered. Checked by scripts/checks/68-videos.mjs.
+  Video page. Two kinds:
+  - own animation (`datei`): a local <video> with poster, preload="none" – nothing loads until
+    play is pressed, nothing comes from another host, no JavaScript;
+  - YouTube (`youtube`): second click of the two-click solution, the only place that embeds
+    youtube-nocookie.com. Links to video pages carry .ohne-vorladen and the speculation rules
+    exclude them, so they are never prerendered.
+  Checked by scripts/checks/68-videos.mjs.
 */ -}}
 {{- $p := .Params -}}
-{{- $lesson := site.GetPage $p.lektion -}}
+{{- $lesson := false -}}{{ with $p.lektion }}{{ $lesson = site.GetPage . }}{{ end -}}
+{{- $artikel := false -}}{{ with $p.wissen }}{{ $artikel = site.GetPage . }}{{ end -}}
 {{- $start := int ($p.start | default 0) -}}
-{{- $embed := printf "https://www.youtube-nocookie.com/embed/%s?rel=0" $p.youtube -}}
-{{- $watch := printf "https://www.youtube.com/watch?v=%s" $p.youtube -}}
+{{- $embed := printf "https://www.youtube-nocookie.com/embed/%s?rel=0" ($p.youtube | default "") -}}
+{{- $watch := printf "https://www.youtube.com/watch?v=%s" ($p.youtube | default "") -}}
 {{- if gt $start 0 }}{{ $embed = printf "%s&start=%d" $embed $start }}{{ $watch = printf "%s&t=%ds" $watch $start }}{{ end -}}
 {{- with $p.ende }}{{ $embed = printf "%s&end=%d" $embed (int .) }}{{ end -}}
 <div class="min-h-screen">
@@ -16,11 +21,23 @@
   <main id="inhalt" class="mx-auto flex max-w-[1240px] flex-wrap items-start gap-6 px-6 pt-8 pb-20">
     <div class="flex min-w-0 flex-[999_1_640px] flex-col gap-5">
       <div class="flex flex-col gap-3">
-        {{ partial "ui/eyebrow.html" (dict "text" "Video · Spielsituation" "class" "text-[13px] text-court") }}
+        {{ partial "ui/eyebrow.html" (dict "text" (cond (isset $p "datei") "Animation · Spielsituation" "Video · Spielsituation") "class" "text-[13px] text-court") }}
         <h1 class="m-0 font-display text-[44px] leading-none font-extrabold uppercase">{{ .Title }}</h1>
         <p class="m-0 max-w-[720px] text-[17px] leading-relaxed text-mute">{{ .Description }}</p>
       </div>
 
+      {{- if $p.datei }}
+      <figure class="m-0 flex flex-col overflow-hidden rounded-[22px] bg-ink text-paper">
+        <video class="aspect-video w-full bg-ink" controls preload="none" playsinline poster="{{ $p.poster | relURL }}" aria-label="{{ .Title }}">
+          <source src="{{ $p.datei | relURL }}" type="video/mp4">
+          <a href="{{ $p.datei | relURL }}">Video herunterladen (MP4)</a>
+        </video>
+        <figcaption class="flex flex-wrap items-center justify-between gap-3 px-[18px] py-3.5 text-sm text-fog">
+          <span>3D-Animation von bandeja. · lädt erst beim Abspielen, nichts von anderen Anbietern</span>
+          <a href="{{ $p.datei | relURL }}" download class="link-light inline-flex min-h-11 items-center font-semibold">MP4 herunterladen</a>
+        </figcaption>
+      </figure>
+      {{- else }}
       <figure class="m-0 flex flex-col overflow-hidden rounded-[22px] bg-ink text-paper">
         <div class="aspect-video w-full">
           <iframe class="size-full border-0" src="{{ $embed }}" title="YouTube-Video: {{ .Title }}" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -32,6 +49,7 @@
       </figure>
 
       {{ partial "video-hinweis.html" (dict "text" "Der Player kommt von YouTube (Google Ireland Ltd.). Mit dem Öffnen dieser Seite überträgt dein Browser Daten wie deine IP-Adresse an YouTube; wir nutzen den erweiterten Datenschutzmodus (youtube-nocookie.com).") }}
+      {{- end }}
     </div>
 
     <aside class="flex min-w-0 flex-[1_1_320px] flex-col gap-5">
@@ -51,6 +69,14 @@
         {{- end }}
       </section>
 
+      {{- with $artikel }}
+      <section aria-labelledby="artikel" class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-6 text-paper">
+        {{ partial "ui/eyebrow.html" (dict "text" "Wissen zum Video" "class" "text-[13px] text-lime") }}
+        <h2 id="artikel" class="m-0 text-xl font-bold">{{ .Title }}</h2>
+        <p class="m-0 text-sm leading-normal text-fog">{{ .Description }}</p>
+        {{ partial "ui/button.html" (dict "href" (partial "fn/href.html" .) "label" "Zum Artikel") }}
+      </section>
+      {{- end }}
       {{- with $lesson }}
       <section aria-labelledby="lektion" class="flex flex-col gap-3.5 rounded-[22px] bg-ink p-6 text-paper">
         {{ partial "ui/eyebrow.html" (dict "text" "Lektion zum Video" "class" "text-[13px] text-lime") }}

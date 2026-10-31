@@ -70,9 +70,9 @@ export function tonspur(clipName, plan, ausgabe, { jingle = true } = {}) {
 }
 
 // Put the soundtrack into an existing MP4 (picture is copied, not re-encoded).
-export function mischen(mp4, wav) {
+export function mischen(mp4, wav, bitrate = "192k") {
   const tmp = mp4.replace(/\.mp4$/, ".ton.mp4");
-  execFileSync("ffmpeg", ["-y", "-v", "error", "-i", mp4, "-i", wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", tmp]);
+  execFileSync("ffmpeg", ["-y", "-v", "error", "-i", mp4, "-i", wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", bitrate, "-shortest", "-movflags", "+faststart", tmp]);
   fs.renameSync(tmp, mp4);
 }
 

@@ -45,11 +45,20 @@ export default async ({ root }) => {
       need(!fm.lesson || exists(fm.lesson), `\`lesson: ${fm.lesson}\` gibt es nicht`);
     } else if (rel.startsWith("videos/") && !isIndex) {
       for (const k of ["title", "description", "situation"]) need(text(fm[k]), `\`${k}\` fehlt`);
-      need(/^[\w-]{11}$/.test(fm.youtube ?? ""), "`youtube` fehlt oder ist keine YouTube-ID (11 Zeichen, z. B. 45OvqqQtpjQ)");
       need(posInt(fm.weight), "`weight` fehlt");
-      need(fm.start === undefined || (Number.isInteger(fm.start) && fm.start >= 0), "`start` muss eine ganze Zahl ab 0 sein (Sekunden)");
-      need(fm.ende === undefined || (Number.isInteger(fm.ende) && fm.ende > (fm.start ?? 0)), "`ende` muss eine ganze Zahl größer als `start` sein (Sekunden)");
-      need(exists(fm.lektion), `\`lektion: ${fm.lektion}\` gibt es nicht`);
+      const statisch = (f) => typeof f === "string" && !f.startsWith("/") && fs.existsSync(path.join(root, "static", f));
+      if (fm.datei !== undefined) {
+        // Own animation: local MP4 and poster in static/, linked to a lesson or an article.
+        need(fm.youtube === undefined, "`datei` und `youtube` zusammen – ein Video ist entweder eigene Animation oder YouTube");
+        need(/\.mp4$/.test(fm.datei) && statisch(fm.datei), `\`datei: ${fm.datei}\` fehlt in static/ (MP4, Pfad ohne / am Anfang, erzeugen mit npm run videos:web)`);
+        need(/\.(jpe?g|png|webp)$/.test(fm.poster ?? "") && statisch(fm.poster), `\`poster: ${fm.poster}\` fehlt in static/ (Vorschaubild)`);
+        need(exists(fm.lektion) || exists(fm.wissen), "`lektion` oder `wissen` fehlt oder gibt es nicht");
+      } else {
+        need(/^[\w-]{11}$/.test(fm.youtube ?? ""), "`youtube` fehlt oder ist keine YouTube-ID (11 Zeichen, z. B. 45OvqqQtpjQ)");
+        need(fm.start === undefined || (Number.isInteger(fm.start) && fm.start >= 0), "`start` muss eine ganze Zahl ab 0 sein (Sekunden)");
+        need(fm.ende === undefined || (Number.isInteger(fm.ende) && fm.ende > (fm.start ?? 0)), "`ende` muss eine ganze Zahl größer als `start` sein (Sekunden)");
+        need(exists(fm.lektion), `\`lektion: ${fm.lektion}\` gibt es nicht`);
+      }
       need(fm.achte === undefined || list(fm.achte), "`achte` muss eine Liste sein");
     } else if (/^lektionen\/[^/]+\/_index\.md$/.test(rel)) {
       for (const k of ["title", "description"]) need(text(fm[k]), `\`${k}\` fehlt`);

@@ -54,6 +54,14 @@ Ein Video ist eine Datei in `content/videos/`. Es erscheint in der Video-Übersi
 | `situation` | Ein bis zwei Sätze: Was passiert auf dem Court? |
 | `achte` | Zwei bis drei Punkte, worauf man im Video achtet |
 
+**Eigene Animationen** (3D-Videos aus `npm run videos:web`) haben statt `youtube` die Felder `datei` und `poster` (Pfade in `static/`, z. B. `media/animationen/smash.mp4`) und statt `lektion` wahlweise `wissen` (z. B. `/wissen/schlagtechniken/t10`). Sie laufen in einem eigenen Player ohne YouTube: nichts lädt vor dem Klick auf Play, nichts kommt von anderen Anbietern. Neu rendern und in die Seite übernehmen:
+
+```bash
+npm run videos:web
+```
+
+Schreibt `static/media/animationen/<clip>.mp4` (1280 × 720, ca. 1–2 MB) und `<clip>.jpg` für jedes Drehbuch in `clips/`.
+
 `review: true` heißt: Video noch nicht angeschaut – Inhalt und Startzeit prüfen, dann auf `false` setzen. Der YouTube-Player lädt nur auf der Video-Seite selbst; Lektionen zeigen eine Karte ohne Bild von YouTube. Bitte keine Vorschaubilder von YouTube einbauen, sonst lädt jede Lektion wieder Daten von Google.
 
 ## Court-Grafiken
