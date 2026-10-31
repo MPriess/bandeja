@@ -31,7 +31,7 @@ export const KAMERAS = {
       : { pos: [s * 18, 8, 0], ziel: [-s * 0.5, 0.4, 0], fov: 40 };
   },
   // In portrait the side view frames your half: centred a little in front of you, towards the net.
-  seite: (sz, f) => (f === "short" ? (() => { const s = seiteVonDu(sz), x = du(sz).pos.x - s * 2.2; return { pos: [x - s * 0.8, 3.2, 11.5], ziel: [x, 1.1, -0.5], fov: 62 }; })() : { pos: [0, 3.6, 13], ziel: [0, 1.2, 0], fov: 50 }),
+  seite: (sz, f) => (f === "short" ? (() => { const s = seiteVonDu(sz), x = du(sz).pos.x - s * 2.2; return { pos: [x - s * 0.8, 3.2, 11.5], ziel: [x, 1.1, -0.5], fov: 62 }; })() : (() => { const x = du(sz).pos.x * 0.45; return { pos: [x, 3.4, 12.5], ziel: [x, 1.3, 0], fov: 52 }; })()),
   schraeg: (sz, f) => {
     const s = seiteVonDu(sz);
     return f === "short" ? { pos: [s * 15, 13, 13], ziel: [0, 0.5, 0], fov: 58 } : { pos: [s * 16, 10, 13], ziel: [-s * 0.5, 0.5, 0], fov: 40 };
@@ -51,7 +51,8 @@ export const KAMERAS = {
   spieler: (sz, f, t) => {
     const s = seiteVonDu(sz);
     const p = position(du(sz), t);
-    return { pos: [p.x + s * 1.6, 2.2, p.z + 0.35], ziel: [p.x - s * 8, 1.3, p.z * 0.5], fov: f === "short" ? 75 : 55, folgen: true };
+    // Higher and further back than the head, so your own head does not fill the bottom of the frame.
+    return { pos: [p.x + s * 2.4, 2.7, p.z + 0.9], ziel: [p.x - s * 8, 1.0, p.z * 0.4], fov: f === "short" ? 70 : 50, folgen: true };
   },
 };
 

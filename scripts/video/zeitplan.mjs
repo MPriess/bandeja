@@ -11,7 +11,8 @@ export function standardDrehbuch(sz) {
       { kamera: "oben", dauer: 2.2, ab: "start", text: sz.cap },
       { fahrt: "tv", dauer: 1.6, ab: "start" },
       { kamera: "tv", abspielen: true, ab: "start" },
-      { kamera: "seite", abspielen: true, ab: "start", tempo: 0.6 },
+      // Slow motion, but at most about 6.5 s, so long scenes (a lob) do not drag.
+      { kamera: "seite", abspielen: true, ab: "start", tempo: Math.min(1, Math.max(0.6, (sz.T + VORLAUF) / 6.5)) },
       { kamera: "hinten", abspielen: true, ab: "start" },
     ],
     abspann: { text: "Mehr auf bandeja.", dauer: 2.5 },
