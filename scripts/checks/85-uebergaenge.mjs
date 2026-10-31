@@ -60,7 +60,7 @@ export default async ({ pub, htmlFiles }) => {
     for (const url of Object.values(SAMPLES)) {
       await p.goto(base + url);
       const dup = await p.evaluate(() => {
-        const n = [...document.querySelectorAll("*")].map((e) => getComputedStyle(e).viewTransitionName).filter((x) => x !== "none");
+        const n = [...document.querySelectorAll("*")].map((e) => getComputedStyle(e).viewTransitionName).filter((x) => x && x !== "none"); // "" = not rendered (e.g. <source> in <video>)
         return [...new Set(n.filter((x, i) => n.indexOf(x) !== i))];
       });
       if (dup.length) errors.push(`${url}: view-transition-name doppelt: ${dup.join(", ")}`);
