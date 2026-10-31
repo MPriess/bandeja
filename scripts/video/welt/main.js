@@ -117,6 +117,17 @@ window.vorbereiten = async (j) => {
 // after the hit and out before the ball arrives, so the camera never jerks.
 const FOLGT = { tv: [0.12, 0.25], seite: [0.25, 0.1], schraeg: [0.12, 0.2] };
 function kameraBei(name, t) {
+  // Close-ups follow the posed body (including the step towards the ball) and aim between head
+  // and racket, so a smash stays in frame.
+  const nah = /^nah(?:-([pqab]))?$/.exec(name);
+  if (nah) {
+    const f = steuerung.figuren.find((x) => x.person.id === (nah[1] ?? "p")) ?? steuerung.figuren[0];
+    const r = f.figur.root.position, s = f.person.seite;
+    const kopf = f.figur.kopf.getWorldPosition(new THREE.Vector3()), ss = f.figur.sweetspot();
+    const y = Math.min(1.9, Math.max(1.1, (kopf.y + Math.max(ss.y, 0.6)) / 2));
+    const hoch = Math.max(0, ss.y - 2) * 1.2;
+    return { pos: [r.x - s * (3.2 + hoch), 1.7, r.z + 1.6], ziel: [r.x, y, r.z], fov: job.format === "short" ? 55 : 38 };
+  }
   const k = kamera(name)(sz, job.format, t);
   const f = FOLGT[name];
   if (!f) return k;
